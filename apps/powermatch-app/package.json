@@ -1,0 +1,14 @@
+{
+  "name": "energitune.powermatch",
+  "version": "1.0.0",
+  "description": "PowerMatch",
+  "scripts": {
+    "start": "ui5 serve -o main.html"
+  },
+  "devDependencies": {
+    "@ui5/cli": "^4.0.23"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.0"
+  }
+}
