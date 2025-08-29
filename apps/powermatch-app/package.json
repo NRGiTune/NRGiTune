@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "PowerMatch",
   "scripts": {
-    "start": "ui5 serve -o main.html"
+    "start": "ui5 serve -o index.html"
   },
   "devDependencies": {
     "@ui5/cli": "^4.0.23"

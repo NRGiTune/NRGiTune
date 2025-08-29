@@ -1,0 +1,35 @@
+name: Deploy OpenUI5 App to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Copy OpenUI5 App to artifact folder
+        run: |
+          mkdir -p artifact/powermatch-app
+          cp -r apps/powermatch-app/* artifact/powermatch-app/
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: artifact
+
+      - name: Deploy OpenUI5 App
+        id: deployment
+        uses: actions/deploy-pages@v4

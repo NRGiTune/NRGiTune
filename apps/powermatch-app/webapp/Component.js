@@ -6,7 +6,7 @@ sap.ui.define([
    "use strict";
 
    return UIComponent.extend("energitune.powermatch.Component", {
-      metadata : {
+      metadata: {
          interfaces: ["sap.ui.core.IAsyncContentCreation"],
          manifest: "json"
       },
@@ -22,24 +22,24 @@ sap.ui.define([
          this.setModel(i18nModel, "i18n");
 
          // set tariffs global model
-	fetch("data/powermatch_tarifas.csv")
-  	.then(res => res.text())   // read as text
-  	.then(text => {
-      		// Split rows
-      		var rows = text.split("\n").map(r => r.split(","));
+         fetch("data/powermatch_tarifas.csv")
+            .then(res => res.text())   // read as text
+            .then(text => {
+               // Split rows
+               var rows = text.split("\n").map(r => r.split(","));
 
-	      	// Convert to JSON (header + rows)
-      		var headers = rows[0];
-      		var data = rows.slice(1).map(row => {
-          		let obj = {};
-          		headers.forEach((h, i) => obj[h.trim()] = row[i]?.trim());
-          		return obj;
-      		});
+               // Convert to JSON (header + rows)
+               var headers = rows[0];
+               var data = rows.slice(1).map(row => {
+                  let obj = {};
+                  headers.forEach((h, i) => obj[h.trim()] = row[i]?.trim());
+                  return obj;
+               });
 
-      		// Create tariffs global model
-      		var oModel = new JSONModel({ rows: data });
-      		this.setModel(oModel, "tariffs");
-  	});
+               // Create tariffs global model
+               var oModel = new JSONModel({ rows: data });
+               this.setModel(oModel, "tariffs");
+            });
 
       }
 

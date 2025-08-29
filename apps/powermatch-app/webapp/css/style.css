@@ -1,6 +1,7 @@
 /* aumenta altura do header */
 .customHeaderBar {
-    height: 4rem !important; /* maior que o default 3rem */
+    height: 4rem !important;
+    /* maior que o default 3rem */
 }
 
 /* garante que o conteúdo fica alinhado verticalmente */
@@ -13,7 +14,9 @@
 
 /* estilo do título central */
 .headerTitle {
-    font-size: 1.8rem;   /* maior destaque */
+    font-size: 1.8rem;
+    /* maior destaque */
     font-weight: bold;
-    color: #2c3e50;     /* tom mais elegante */
+    color: #2c3e50;
+    /* tom mais elegante */
 }
