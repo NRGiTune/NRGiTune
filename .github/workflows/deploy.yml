@@ -1,4 +1,4 @@
-name: Deploy Website to GitHub Pages
+name: Deploy Website + PowerMatch App to GitHub Pages
 
 on:
   push:
@@ -13,21 +13,34 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+
     steps:
+      # 1️⃣ Clonar o repositório
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Configurar GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload website
+      # 3️⃣ Preparar artefactos
+      - name: Copy Website and OpenUI5 App
+        run: |
+          mkdir -p artifact
+          # Copiar site para raiz
+          cp -r website/* artifact/
+          # Copiar OpenUI5 app para subpasta
+          mkdir -p artifact/powermatch-app
+          cp -r apps/powermatch-app/* artifact/powermatch-app/
+
+      # 4️⃣ Fazer upload do artefacto
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./website   # 👈 pasta do teu site
+          path: artifact
 
-      - name: Deploy to GitHub Pages
+      # 5️⃣ Deploy para GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
-
