@@ -1,4 +1,4 @@
-name: Deploy PowerMatch App to GitHub Pages
+name: Deploy OpenUI5 App to GitHub Pages
 
 on:
   push:
@@ -24,20 +24,20 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # 3️⃣ Preparar artefactos
-      - name: Copy Website and OpenUI5 App
+      # 3️⃣ Copiar a app para artifact
+      - name: Copy OpenUI5 App
         run: |
           mkdir -p artifact
-          # Copiar site para raiz
-          cp -r apps/powermatch-app/* artifact/
+          rsync -av apps/powermatch-app/ artifact/
 
-      # 4️⃣ Fazer upload do artefacto
+      # 4️⃣ Upload do artifact
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: artifact
 
-      # 5️⃣ Deploy para GitHub Pages
+      # 5️⃣ Deploy
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
