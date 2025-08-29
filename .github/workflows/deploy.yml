@@ -27,15 +27,15 @@ jobs:
       # 3️⃣ Preparar artefactos
       - name: Copy Website and OpenUI5 App
         run: |
-          mkdir -p artifact
           # Copiar site para raiz
-          cp -r website/* artifact/
-          # Copiar OpenUI5 app para subpasta
-          mkdir -p artifact/webapp
-          cp -r apps/powermatch-app/* artifact/webapp/
-
           mkdir -p artifact
-          rsync -av apps/powermatch-app/ artifact/
+          cp -r website/* artifact/
+
+          # Copiar PowerMatch app para subpasta
+          mkdir -p artifact/powermatch-app/webapp
+          # cp -r apps/powermatch-app/* artifact/powermatch-app/webapp/
+          # mkdir -p artifact
+          rsync -av apps/powermatch-app/ artifact/powermatch-app
 
 
       # 4️⃣ Fazer upload do artefacto
