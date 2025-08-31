@@ -22,15 +22,40 @@
 	<div id="wrapper">
 
 		<!-- Header -->
-		<header id="header">			
+		<header id="header">
 			<!--
 			<div class="logo">
 				<span style="font-size: 45px; margin-top: 20px; margin-left: 3px;" class="fas fa-bolt"></span>
 			</div>
 			 -->
 			<div class="content">
+				<!-- Logo -->
+				<svg width="100%" height="100%" viewBox="0 0 600 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<!-- Transparent background by default -->
+					<defs>
+						<style>
+							.text-fill {
+								fill: #FFFFFF;
+								font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+								font-weight: 500;
+							}
+						</style>
+					</defs>
+					<!-- Logo Image -->
+					<image href="images/logo_img.png" x="75" y="50" height="115" width="115" />
+					<!-- Logo Text -->
+					<text id="logo-text" class="text-fill" x="202" y="130" font-size="65" letter-spacing="1">
+						NRGiTune
+					</text>
+				</svg>
+
 				<div class="inner">
-					<span><img src="images/EnergiTuneLogo.png" alt=""/></span>
+					<span>
+						<!--
+						<img src="images/EnergiTuneLogo.png" alt=""/>
+						<img src="images/EnergiTune_logo_img.png" alt=""/>
+						 -->
+					</span>
 					<h2>Potencialize a energia que usa</h2>
 				</div>
 			</div>
@@ -94,11 +119,26 @@
 					cruzando dados reais do seu consumo, ajudando-o a encontrar a melhor oferta para o seu perfil de
 					consumo.
 					<br /><a href="#primeiros-passos">Primeiros Passos...</a>.
-					<br /><a href="https://pedromcneves.github.io/EnergiTune/powermatch-app/webapp/main.html" target="_blank">Abrir PowerMatxh app em novo Tab...</a>.
+					<br /><a href="#powermatch">Abrir simulador...</a>.
+					<!-- 
+					<br /><a href="https://pedromcneves.github.io/EnergiTune/powermatch-app/webapp/main.html"
+						target="_blank">Abrir PowerMatxh app em novo separador...</a>.
+					 -->
 				</p>
+				<!-- 
 				<span class="image main">
-					<iframe src="https://pedromcneves.github.io/EnergiTune/powermatch-app/webapp/main.html" width="100%" height="950"
-						style="border:none;"></iframe>
+					<iframe src="https://pedromcneves.github.io/EnergiTune/powermatch-app/webapp/main.html" width="100%"
+						height="950" style="border:none;"></iframe>
+				</span>
+				 -->
+			</article>
+
+			<!-- PowerMatch -->
+			<article id="powermatch">
+				<h3 class="major">PowerMatch</h3>
+				<span>
+					<iframe src="https://pedromcneves.github.io/EnergiTune/powermatch-app/webapp/main.html" width="100%"
+						height="950" style="border:none;"></iframe>
 				</span>
 			</article>
 
