@@ -21,133 +21,101 @@
 
                <content>
 
-                  <VBox class="sapUiSmallMargin sapUiResponsiveContentPadding" renderType="Bare">
+                  <l:Grid defaultSpan="L6 M6 S12" hSpacing="1" vSpacing="1" xmlns:l="sap.ui.layout">
 
+                     <l:content>
+                        <!-- Painel de Grafico -->
+                        <Panel expandable="false" headerText="{i18n>consumptionPanel}" width="100%">
+                           <FlexBox justifyContent="Center" fitContainer="false">
+                              <core:HTML id="myChart" content="&lt;canvas id='chartCanvas' 
+                              style='max-width:300px; max-height:300px;'&gt;&lt;/canvas&gt;"
+                                 xmlns:core="sap.ui.core" />
+                           </FlexBox>
+                        </Panel>
+                     </l:content>
 
-                     <HBox alignItems="Top" renderType="Bare">
+                     <l:content>
+                        <!-- Painel de Detalhes -->
+                        <Panel expandable="false" headerText="{i18n>detailsPanel}">
+                           <l:Grid defaultSpan="L6 M6 S6" hSpacing="0" vSpacing="1" xmlns:l="sap.ui.layout">
+                              <l:content>
+                                 <ObjectStatus title="{i18n>hdrDateFrom}"
+                                    text="{readingsModel>/header/4/hdrDateFrom}" />
+                                 <ObjectStatus title="{i18n>hdrDateTo}" text="{readingsModel>/header/3/hdrDateTo}" />
+                              </l:content>
+                           </l:Grid>
+                           <l:Grid defaultSpan="L12 M12 S12" hSpacing="0" vSpacing="1" xmlns:l="sap.ui.layout">
+                              <l:content>
+                                 <ObjectStatus title="{i18n>hdrCPE}" text="{readingsModel>/header/1/hdr2}" />
+                                 <ObjectStatus title="{i18n>hdrCounterNr}" text="{readingsModel>/header/2/hdr3}" />
+                              </l:content>
+                           </l:Grid>
+                           <l:Grid defaultSpan="L12 M12 S12" hSpacing="0" vSpacing="1" xmlns:l="sap.ui.layout">
+                              <l:content>
+                                 <ObjectStatus title="{i18n>hdrAddress}" text="{readingsModel>/header/0/hdr1}" />
+                              </l:content>
+                           </l:Grid>
+                        </Panel>
+                     </l:content>
 
-                        <layout:Grid defaultSpan="L12 M12 S12" hSpacing="1" vSpacing="0">
-                           <layout:content>
+                     <l:content>
+                        <!-- Painel de Consumos -->
+                        <Panel expandable="false" headerText="{i18n>consumptionPanelKwh}">
+                           <l:Grid defaultSpan="L6 M6 S6" hSpacing="0" vSpacing="1" xmlns:l="sap.ui.layout">
+                              <l:content>
+                                 <ObjectStatus title="{i18n>hdrTtlConsEmpty}"
+                                    text="{readingsModel>/header/5/hdrTtlConsEmpty}" />
+                                 <ObjectStatus title="{i18n>hdrTtlCons}" text="{readingsModel>/header/8/hdrTtlCons}" />
+                              </l:content>
+                           </l:Grid>
+                           <l:Grid defaultSpan="L12 M12 S12" hSpacing="0" vSpacing="1" xmlns:l="sap.ui.layout">
+                              <l:content>
+                                 <ObjectStatus title="{i18n>hdrTtlConsRush}"
+                                    text="{readingsModel>/header/6/hdrTtlConsRush}" />
+                                 <ObjectStatus title="{i18n>hdrTtlConsFull}"
+                                    text="{readingsModel>/header/7/hdrTtlConsFull}" />
+                              </l:content>
+                           </l:Grid>
+                        </Panel>
+                     </l:content>
 
+                  </l:Grid>
 
-                              <!-- Painel de Consumos -->
-                              <Panel expandable="false" headerText="{i18n>consumptionPanel}"
-                                 class="sapUiSmallMarginBottom">
-                                 <layout:Grid defaultSpan="L12 M12 S12" hSpacing="2" vSpacing="1">
-                                    <core:HTML id="myChart" content="&lt;canvas id='chartCanvas'&gt;&lt;/canvas&gt;"
-                                       xmlns:core="sap.ui.core" />
+                  <l:Grid defaultSpan="L12 M12 S12" hSpacing="1" vSpacing="1" xmlns:l="sap.ui.layout">
 
-                                 </layout:Grid>
-                              </Panel>
-                           </layout:content>
-                        </layout:Grid>
+                     <l:content>
+                        <!-- Upload de ficheiro -->
+                        <u:FileUploader id="fileUploader" name="uploadExcel" fileType="xlsx" change=".onFileUpload"
+                           placeholder="{i18n>fileUpdPalceHolder}" width="30rem" class="sapUiSmallMarginBottom" />
 
-                        <layout:Grid defaultSpan="L12 M12 S12" hSpacing="1" vSpacing="0">
-                           <layout:content>
+                        <!-- Tabela de Totais -->
+                        <Table id="excelTable" items="{readingsModel>/data}" inset="false" growing="true"
+                           growingScrollToLoad="true">
+                           <columns>
+                              <Column><Text text="{i18n>colHdrSupplierName}" /></Column>
+                              <Column><Text text="{i18n>colHdrTariff}" /></Column>
+                              <Column hAlign="End"><Text text="{i18n>colHdrTotalSimple}" /></Column>
+                              <Column hAlign="End"><Text text="{i18n>colHdrTotalBiHourly}" /></Column>
+                              <Column hAlign="End"><Text text="{i18n>colHdrTotalTriHourly}" /></Column>
+                           </columns>
+                           <items>
+                              <ColumnListItem>
+                                 <cells>
+                                    <Text text="{readingsModel>supplierName}" />
+                                    <Text text="{readingsModel>tariff}" />
+                                    <Text
+                                       text="{path: 'readingsModel>totalSimple', formatter: '.formatter.formatCurrency'}" />
+                                    <Text
+                                       text="{path: 'readingsModel>totalBiHourly', formatter: '.formatter.formatCurrency'}" />
+                                    <Text
+                                       text="{path: 'readingsModel>totalTriHourly', formatter: '.formatter.formatCurrency'}" />
+                                 </cells>
+                              </ColumnListItem>
+                           </items>
+                        </Table>
+                     </l:content>
 
-
-                              <!-- Painel de Detalhes -->
-                              <Panel expandable="false" headerText="{i18n>detailsPanel}" class="sapUiSmallMarginBottom">
-                                 <layout:Grid defaultSpan="L12 M12 S12" hSpacing="2" vSpacing="1">
-
-                                    <layout:content>
-                                       <layout:Grid defaultSpan="L4 M12 S12" hSpacing="0" vSpacing="0">
-
-                                          <layout:content>
-                                             <ObjectStatus title="{i18n>hdrDateFrom}"
-                                                text="{readingsModel>/header/4/hdrDateFrom}" />
-                                          </layout:content>
-                                          <layout:content>
-                                             <ObjectStatus title="{i18n>hdrDateTo}"
-                                                text="{readingsModel>/header/3/hdrDateTo}" />
-                                          </layout:content>
-
-                                       </layout:Grid>
-                                    </layout:content>
-
-                                    <layout:content>
-                                       <ObjectStatus title="{i18n>hdrCPE}" text="{readingsModel>/header/1/hdr2}" />
-                                    </layout:content>
-                                    <layout:content>
-                                       <ObjectStatus title="{i18n>hdrCounterNr}"
-                                          text="{readingsModel>/header/2/hdr3}" />
-                                    </layout:content>
-                                    <layout:content>
-                                       <ObjectStatus title="{i18n>hdrAddress}" text="{readingsModel>/header/0/hdr1}" />
-                                    </layout:content>
-
-                                 </layout:Grid>
-                              </Panel>
-
-                              <!-- Painel de Consumos -->
-                              <Panel expandable="false" headerText="{i18n>consumptionPanelKwh}"
-                                 class="sapUiSmallMarginBottom">
-                                 <layout:Grid defaultSpan="L12 M12 S12" hSpacing="2" vSpacing="1">
-
-                                    <layout:content>
-                                       <layout:Grid defaultSpan="L6 M12 S12" hSpacing="0" vSpacing="0">
-                                          <layout:content>
-                                             <ObjectStatus title="{i18n>hdrTtlConsEmpty}"
-                                                text="{readingsModel>/header/5/hdrTtlConsEmpty}" />
-                                          </layout:content>
-                                          <layout:content>
-                                             <ObjectStatus title="{i18n>hdrTtlCons}"
-                                                text="{readingsModel>/header/8/hdrTtlCons}" />
-                                          </layout:content>
-                                       </layout:Grid>
-                                    </layout:content>
-
-                                    <layout:content>
-                                       <ObjectStatus title="{i18n>hdrTtlConsRush}"
-                                          text="{readingsModel>/header/6/hdrTtlConsRush}" />
-                                    </layout:content>
-                                    <layout:content>
-                                       <ObjectStatus title="{i18n>hdrTtlConsFull}"
-                                          text="{readingsModel>/header/7/hdrTtlConsFull}" />
-                                    </layout:content>
-                                    <layout:content>
-                                    </layout:content>
-
-                                 </layout:Grid>
-                              </Panel>
-
-
-                           </layout:content>
-                        </layout:Grid>
-
-                     </HBox>
-
-                     <!-- Upload de ficheiro -->
-                     <u:FileUploader id="fileUploader" name="uploadExcel" fileType="xlsx" change=".onFileUpload"
-                        placeholder="{i18n>fileUpdPalceHolder}" width="30rem" class="sapUiSmallMarginBottom" />
-
-                     <!-- Tabela de Totais -->
-                     <Table id="excelTable" items="{readingsModel>/data}" inset="false" growing="true"
-                        growingScrollToLoad="true">
-                        <columns>
-                           <Column><Text text="{i18n>colHdrSupplierName}" /></Column>
-                           <Column><Text text="{i18n>colHdrTariff}" /></Column>
-                           <Column hAlign="End"><Text text="{i18n>colHdrTotalSimple}" /></Column>
-                           <Column hAlign="End"><Text text="{i18n>colHdrTotalBiHourly}" /></Column>
-                           <Column hAlign="End"><Text text="{i18n>colHdrTotalTriHourly}" /></Column>
-                        </columns>
-                        <items>
-                           <ColumnListItem>
-                              <cells>
-                                 <Text text="{readingsModel>supplierName}" />
-                                 <Text text="{readingsModel>tariff}" />
-                                 <Text
-                                    text="{path: 'readingsModel>totalSimple', formatter: '.formatter.formatCurrency'}" />
-                                 <Text
-                                    text="{path: 'readingsModel>totalBiHourly', formatter: '.formatter.formatCurrency'}" />
-                                 <Text
-                                    text="{path: 'readingsModel>totalTriHourly', formatter: '.formatter.formatCurrency'}" />
-                              </cells>
-                           </ColumnListItem>
-                        </items>
-                     </Table>
-
-                  </VBox>
+                  </l:Grid>
                </content>
             </Page>
          </pages>

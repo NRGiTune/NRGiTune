@@ -18,7 +18,6 @@ sap.ui.define([
 
       },
 
-
       onAfterRendering: function () {
          // Cria o gráfico na primeira vez que a view renderiza
          var ctx = document.getElementById("chartCanvas");
@@ -39,7 +38,6 @@ sap.ui.define([
             });
          }
       },
-
 
       onFileUpload: function (oEvent) {
          var oFile = oEvent.getParameter("files")[0];
