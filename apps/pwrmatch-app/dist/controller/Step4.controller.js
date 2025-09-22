@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/mvc/Controller"],function(e){"use strict";return e.extend("simulador.controller.Step4",{onNewSimulation:function(){var e=this.getOwnerComponent().getModel("viewModel");e.setProperty("/stepData",{});e.setProperty("/hasFile",true);e.setProperty("/invoiceOption","leituras");this.getOwnerComponent().getRouter().navTo("main")},onBack:function(){this.getOwnerComponent().getRouter().navTo("step3")}})});
+//# sourceMappingURL=Step4.controller.js.map

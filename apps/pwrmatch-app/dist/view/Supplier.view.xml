@@ -1,0 +1,130 @@
+<mvc:View controllerName="simulador.controller.Supplier"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:m="sap.m"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  xmlns:layout="sap.ui.layout">
+  <Page title="{i18n>supplierTitle}">
+    <content>
+      <l:Grid defaultSpan="L6 M6 S12" hSpacing="1" vSpacing="1"
+        xmlns:l="sap.ui.layout">
+
+        <l:content>
+          <!-- Supplier options panel -->
+          <Panel headerText="{i18n>tableTtl}" visible="true">
+            <VBox fitContainer="true">
+
+              <Label text="{i18n>selectSupplier}" />
+              <Select items="{path: 'suppliers>/suppliers'}" change=".onSupplierChange" selectedKey="{/selectedSupplier}">
+                <core:Item key="{suppliers>id}" text="{suppliers>name}" />
+              </Select>
+
+              <Label text="{i18n>selectTariff}" class="sapUiSmallMarginTop" />
+              <HBox>
+                <Select items="{/tariffs}" change=".onTariffChange" selectedKey="{/selectedTariff}">
+                  <core:Item key="{key}" text="{text}" />
+                </Select>
+                <core:Icon src="sap-icon://message-information" size="1rem" class="sapUiMediumMarginStart sapUiTinyMarginEnd" />
+                <Link text="{i18n>details}" press=".onShowDetails" />
+              </HBox>
+
+              <Label text="{i18n>selectPower}" class="sapUiSmallMarginTop" />
+              <Select items="{/powers}" selectedKey="{/selectedPower}">
+                <core:Item key="{key}" text="{text}" />
+              </Select>
+            </VBox>
+          </Panel>
+        </l:content>
+
+        <l:content>
+          <!-- Supplier tariff prices panel -->
+
+          <Panel headerText="Preços" visible="true" fitContainer="true">
+            <VBox>
+
+              <l:Grid defaultSpan="L12 M12 S12" hSpacing="0" vSpacing="0"
+                xmlns:l="sap.ui.layout">
+
+                <l:content>
+                  <VBox justifyContent="Center" alignItems="Start" class="sapUiSmallMarginTop sapUiSmallMarginBottom">
+                    <HBox>
+                      <Label text=" Potência {= ${/selectedPower} + ' kW:'}" class="sapUiSmallMarginEnd"/>
+                      <Text text="0,40€" />
+                    </HBox>
+                  </VBox>
+                </l:content>
+
+              </l:Grid>
+
+              <l:Grid defaultSpan="L4 M4 S12" hSpacing="0" vSpacing="0"
+                xmlns:l="sap.ui.layout">
+
+
+                <l:content>
+                  <VBox justifyContent="Center" alignItems="Start">
+                    <Text text="Simples" class="sapUiSmallMarginBottom"/>
+                    <HBox>
+                      <Label text="Simples:" class="sapUiSmallMarginEnd "/>
+                      <Text text="0,16€" />
+                    </HBox>
+                  </VBox>
+                </l:content>
+
+                <l:content>
+                  <VBox justifyContent="Center" alignItems="Start">
+                    <Text text="Bi-Horário" class="sapUiSmallMarginBottom" />
+                    <HBox>
+                      <Label text="Vazio:" class="sapUiSmallMarginEnd"/>
+                      <Text text="0,14€" />
+                    </HBox>
+                    <HBox class="sapUiTinyMarginTop">
+                      <Label text="Fora do Vazio:" class="sapUiSmallMarginEnd"/>
+                      <Text text="0,20€"/>
+                    </HBox>
+                  </VBox>
+                </l:content>
+
+                <l:content>
+                  <VBox justifyContent="Center" alignItems="Start">
+                    <Text text="Tri-Horário" class="sapUiSmallMarginBottom"/>
+                    <HBox>
+                      <Label text="Vazio:" class="sapUiSmallMarginEnd"/>
+                      <Text text="0,14€" />
+                    </HBox>
+                    <HBox class="sapUiTinyMarginTop">
+                      <Label text="Cheio:" class="sapUiSmallMarginEnd"/>
+                      <Text text="0,18€" />
+                    </HBox>
+                    <HBox class="sapUiTinyMarginTop">
+                      <Label text="Ponta:" class="sapUiSmallMarginEnd"/>
+                      <Text text="0,25€" />
+                    </HBox>
+                  </VBox>
+                </l:content>
+
+              </l:Grid>
+
+            </VBox>
+          </Panel>
+        </l:content>
+
+      </l:Grid>
+
+
+      <!-- Footer buttons -->
+      <l:Grid defaultSpan="L12 M12 S12" hSpacing="1" vSpacing="1"
+        xmlns:l="sap.ui.layout">
+
+        <l:content>
+          <HBox justifyContent="SpaceBetween" class="sapUiSmallMarginTop">
+            <Button text="{i18n>back}" press=".onBack" />
+            <Button text="{i18n>simulate}" press=".onSimulate" type="Accept" />
+          </HBox>
+        </l:content>
+
+      </l:Grid>
+
+
+    </content>
+  </Page>
+</mvc:View>

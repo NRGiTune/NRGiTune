@@ -1,0 +1,205 @@
+<mvc:View controllerName="simulador.controller.Supplier"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:m="sap.m"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  xmlns:layout="sap.ui.layout">
+  <Page title="{i18n>appTitle}" class="sapUiResponsivePadding--header sapUiResponsivePadding--footer" showNavButton="false" floatingFooter="true">
+    <content>
+      <l:Grid defaultSpan="L6 M6 S12" hSpacing="1" vSpacing="1"
+        xmlns:l="sap.ui.layout">
+
+        <l:content>
+          <!-- Supplier selection panel -->
+          <Panel headerText="{i18n>supplierTitle}" visible="true">
+            <VBox >
+
+              <Label text="{i18n>selectSupplier}" />
+              <!--
+              <Select items="{path: 'suppliers>/suppliers'}" change=".onSupplierChange" selectedKey="{/selectedSupplier}">
+              -->
+              <Select items="{/suppliers}" change=".onSupplierChange" selectedKey="{/selectedSupplier}">
+                <core:Item key="{id}" text="{name}" />
+              </Select>
+
+              <Label text="{i18n>selectOffer}" class="sapUiSmallMarginTop" />
+              <l:Grid defaultSpan="L6 M6 S12" hSpacing="0" vSpacing="0"
+                xmlns:l="sap.ui.layout">
+
+                <l:content>
+                  <Select items="{/offers}" change=".onOfferChange" selectedKey="{/selectedOffer}">
+                    <core:Item key="{key}" text="{text}" />
+                  </Select>
+                </l:content>
+
+              </l:Grid>
+              <Label text="{i18n>selectPower}" class="sapUiSmallMarginTop" />
+              <Select items="{/powers}" change=".onPowerChange" selectedKey="{/selectedPower}">
+                <core:Item key="{key}" text="{text}" />
+              </Select>
+            </VBox>
+          </Panel>
+        </l:content>
+
+        <l:content>
+
+          <!-- Supplier offer details panel -->
+          <Panel headerText="{i18n>offerDescrTtl}" visible="true">
+            <VBox>
+              <l:Grid defaultSpan="L12 M12 S12" hSpacing="0" vSpacing="0"
+                xmlns:l="sap.ui.layout">
+                <l:content>
+
+                  <l:Grid defaultSpan="L12 M12 S12" hSpacing="0" vSpacing="0"
+                    xmlns:l="sap.ui.layout">
+
+                    <l:content>
+                      <VBox justifyContent="Center" alignItems="Start" class="sapUiSmallMarginTop">
+                        <Text text="{/selectedOfferName}" wrapping="true" />
+                      </VBox>
+                    </l:content>
+
+                    <l:content>
+                      <VBox justifyContent="Center" alignItems="End">
+                        <Link text="{i18n>offerDetails}" endIcon="sap-icon://inspect" press=".onShowOfferDetails" />
+                      </VBox>
+                    </l:content>
+
+                  </l:Grid>
+
+                  <l:Grid defaultSpan="L4 M12 S12" hSpacing="0" vSpacing="0"
+                    xmlns:l="sap.ui.layout">
+
+                    <l:content>
+                      <HBox class="sapUiSmallMarginTop">
+                        <Label text="{i18n>offerDescrStartDateLbl}" class="sapUiSmallMarginEnd "/>
+                        <Text text="{/offerStartDate}" />
+                      </HBox>
+                      <HBox class="sapUiSmallMarginTop">
+                        <Label text="{i18n>offerDescrEndDateLbl}" class="sapUiSmallMarginEnd"/>
+                        <Text text="{/offerEndDate}" />
+                      </HBox>
+                      <HBox class="sapUiSmallMarginTop">
+                        <Label text="{i18n>offerDescrSuplyTypeLbl}" class="sapUiSmallMarginEnd"/>
+                        <Text text="{/offerSupplyType}"/>
+                      </HBox>
+                    </l:content>
+
+                  </l:Grid>
+
+                  <l:Grid defaultSpan="L4 M12 S12" hSpacing="0" vSpacing="0"
+                    xmlns:l="sap.ui.layout">
+
+                    <l:content>
+                      <HBox class="sapUiSmallMarginTop">
+                        <Label text="{i18n>offerCountTypeLbl}" class="sapUiSmallMarginEnd "/>
+                        <Text text="{/offerCountType}" />
+                      </HBox>
+                      <HBox class="sapUiSmallMarginTop">
+                        <Label text="{i18n>offerSegmentLbl}" class="sapUiSmallMarginEnd"/>
+                        <Text text="{/offerSegment}" />
+                      </HBox>
+                      <HBox class="sapUiSmallMarginTop">
+                        <Label text="{i18n>offerContractDurationLbl}" class="sapUiSmallMarginEnd"/>
+                        <Text text="{/offerContractDuration}"/>
+                      </HBox>
+                    </l:content>
+
+                  </l:Grid>
+
+                </l:content>
+
+              </l:Grid>
+            </VBox>
+          </Panel>
+
+
+
+          <!-- Supplier offer prices panel -->
+          <Panel headerText="{i18n>offerPricesTtl}" visible="true">
+            <VBox>
+              <l:Grid defaultSpan="L12 M12 S12" hSpacing="0" vSpacing="0"
+                xmlns:l="sap.ui.layout">
+                <l:content>
+
+                  <l:Grid defaultSpan="L4 M12 S12" hSpacing="0" vSpacing="0"
+                    xmlns:l="sap.ui.layout">
+
+                    <l:content>
+                      <VBox justifyContent="Center" alignItems="Start">
+                        <Text text="{i18n>offerCicleSimpleLbl}" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <HBox>
+                          <Label text="{i18n>offerPricePwrLbl}" class="sapUiSmallMarginEnd "/>
+                          <Text text="{/pricePwrSimple}" />
+                        </HBox>
+                        <HBox class="sapUiTinyMarginTop">
+                          <Label text="{i18n>offerPriceSimpleLbl}" class="sapUiSmallMarginEnd "/>
+                          <Text text="{/priceSimple}" />
+                        </HBox>
+                      </VBox>
+                    </l:content>
+
+                    <l:content>
+                      <VBox justifyContent="Center" alignItems="Start">
+                        <Text text="{i18n>offerCicleCBiHLbl}" class="sapUiSmallMarginTop sapUiSmallMarginBottom" />
+                        <HBox>
+                          <Label text="{i18n>offerPricePwrLbl}" class="sapUiSmallMarginEnd "/>
+                          <Text text="{/pricePwrBi}" />
+                        </HBox>
+                        <HBox class="sapUiTinyMarginTop">
+                          <Label text="{i18n>offerPriceBiEmptyLbl}" class="sapUiSmallMarginEnd"/>
+                          <Text text="{/priceBiEmpty}" />
+                        </HBox>
+                        <HBox class="sapUiTinyMarginTop">
+                          <Label text="{i18n>offerPriceBiOutEmptyLbl}" class="sapUiSmallMarginEnd"/>
+                          <Text text="{/priceBiOutEmpty}"/>
+                        </HBox>
+                      </VBox>
+                    </l:content>
+
+                    <l:content>
+                      <VBox justifyContent="Center" alignItems="Start">
+                        <Text text="{i18n>offerCicleTriHLbl}" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <HBox>
+                          <Label text="{i18n>offerPricePwrLbl}" class="sapUiSmallMarginEnd "/>
+                          <Text text="{/pricePwrTri}" />
+                        </HBox>
+                        <HBox class="sapUiTinyMarginTop">
+                          <Label text="{i18n>offerPriceTriEmptyLbl}" class="sapUiSmallMarginEnd"/>
+                          <Text text="{/priceTriEmpty}" />
+                        </HBox>
+                        <HBox class="sapUiTinyMarginTop">
+                          <Label text="{i18n>offerPriceTriFullLbl}" class="sapUiSmallMarginEnd"/>
+                          <Text text="{/priceTriFull}" />
+                        </HBox>
+                        <HBox class="sapUiTinyMarginTop">
+                          <Label text="{i18n>offerPriceTriRushLbl}" class="sapUiSmallMarginEnd"/>
+                          <Text text="{/priceTriRush}" />
+                        </HBox>
+                      </VBox>
+                    </l:content>
+
+                  </l:Grid>
+                </l:content>
+
+              </l:Grid>
+            </VBox>
+          </Panel>
+
+        </l:content>
+
+      </l:Grid>
+
+    </content>
+
+    <!-- Footer buttons -->
+    <footer>
+      <OverflowToolbar>
+        <Button text="{i18n>toMain}" icon="sap-icon://navigation-left-arrow" press=".onBack" />
+        <ToolbarSpacer/>
+        <Button text="{i18n>toSimulation}" icon="sap-icon://navigation-right-arrow" press=".onSimulate"></Button>
+      </OverflowToolbar>
+    </footer>
+
+  </Page>
+</mvc:View>

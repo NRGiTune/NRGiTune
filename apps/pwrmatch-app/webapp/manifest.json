@@ -1,0 +1,68 @@
+{
+  "_version": "1.12.0",
+  "sap.app": {
+    "id": "simulador",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "title": "Simulador"
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "rootView": {
+      "viewName": "simulador.view.App",
+      "type": "XML",
+      "id": "appView",
+      "async": true
+    },
+    "dependencies": {
+      "minUI5Version": "1.84.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.layout": {},
+        "sap.ui.unified": {}
+      }
+    },
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "simulador.i18n.i18n",
+					"supportedLocales": [
+						""
+					],
+					"fallbackLocale": ""
+				}
+			}
+		},
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "viewPath": "simulador.view",
+        "controlId": "app",
+        "transition": "slide",
+        "controlAggregation": "pages",
+        "async": true
+      },
+      "routes": [
+        { "pattern": "", "name": "main", "target": "main" },
+        { "pattern": "home", "name": "home", "target": "home" },
+        { "pattern": "supplier", "name": "supplier", "target": "supplier" },
+        { "pattern": "simulate", "name": "simulate", "target": "simulate" }
+      ],
+      "targets": {
+        "home": { "viewName": "Home" },
+        "main": { "viewName": "Main" },
+        "supplier": { "viewName": "Supplier" },
+        "simulate": { "viewName": "Simulate" }
+      }
+    }
+  }
+}

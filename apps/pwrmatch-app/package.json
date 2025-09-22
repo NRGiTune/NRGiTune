@@ -1,0 +1,14 @@
+{
+  "name": "simulador",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ui5 serve --open index.html#/supplier"
+  },
+  "keywords": [],
+  "author": "",
+  "devDependencies": {
+    "@ui5/cli": "^4.0.24"
+  }
+}

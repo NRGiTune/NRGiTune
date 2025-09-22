@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/UIComponent","sap/ui/model/json/JSONModel","simulador/model/models"],function(e,i,o){"use strict";return e.extend("simulador.Component",{metadata:{manifest:"json"},init:function(){e.prototype.init.apply(this,arguments);var i=o.createFlowModel();i.setDefaultBindingMode(sap.ui.model.BindingMode.TwoWay);this.setModel(i,"appFlowModel");o.createERSEFilesModel(this);this.getRouter().initialize()}})});
+//# sourceMappingURL=Component.js.map

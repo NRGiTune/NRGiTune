@@ -1,0 +1,30 @@
+<mvc:View controllerName="simulador.controller.Simulate" 
+          xmlns:mvc="sap.ui.core.mvc" 
+          xmlns:m="sap.m"
+          xmlns="sap.m">
+  <Page title="{i18n>step4Title}">
+    <content>
+        <!--
+      <VBox class="sapUiSmallMargin" justifyContent="Center" alignItems="Center" height="80%">
+        <Title text="{i18n>resultTitle}" level="H2" />
+        <Button text="{i18n>newSimulation}" press=".onNewSimulation" class="sapUiSmallMarginTop" type="Emphasized" />
+        -->
+ <VBox class="sapUiSmallMargin">
+        <Title text="{i18n>resultTitle}" level="H2" />
+
+
+      </VBox>
+
+    </content>
+
+    <!-- Footer buttons -->
+    <footer>
+      <OverflowToolbar>
+        <Button text="{i18n>toSupplier}" icon="sap-icon://navigation-left-arrow" press=".onBack" />
+        <ToolbarSpacer/>
+        <Button text="{i18n>toNewSimulation}" icon="sap-icon://navigation-right-arrow" press=".onNewSimulation"></Button>
+      </OverflowToolbar>
+    </footer>
+
+  </Page>
+</mvc:View>

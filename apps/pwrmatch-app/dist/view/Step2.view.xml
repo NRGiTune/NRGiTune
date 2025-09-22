@@ -1,0 +1,75 @@
+<mvc:View 
+  controllerName="simulador.controller.Step2" 
+  xmlns:mvc="sap.ui.core.mvc" 
+  xmlns:m="sap.m"
+  xmlns="sap.m">
+  <Page title="{i18n>step2Title}">
+    <content>
+      <VBox class="sapUiSmallMargin">
+        <!-- Caso: veio do ficheiro -->
+        <Panel headerText="{i18n>tableTitleReadings}" visible="{= ${viewModel>/hasFile} }">
+          <Table id="tblReadings" items="{path: 'viewModel>/stepData/readings'}">
+            <columns>
+              <Column><Text text="{i18n>colDate}"/></Column>
+              <Column><Text text="{i18n>colVazio}"/></Column>
+              <Column><Text text="{i18n>colCheio}"/></Column>
+              <Column><Text text="{i18n>colPonta}"/></Column>
+            </columns>
+            <items>
+              <ColumnListItem>
+                <cells>
+                  <Text text="{date}" />
+                  <Text text="{vazio}" />
+                  <Text text="{cheio}" />
+                  <Text text="{ponta}" />
+                </cells>
+              </ColumnListItem>
+            </items>
+          </Table>
+        </Panel>
+
+        <!-- Caso: no-file and invoice option = leituras or consumos
+        <Panel headerText="{= ${viewModel>/invoiceOption} === 'leituras' ? {i18n>tableTitleLeituras} : {i18n>tableTitleConsumos} }" 
+              visible="{= !${viewModel>/hasFile} &amp;&amp; (${viewModel>/invoiceOption} === 'leituras' || ${viewModel>/invoiceOption} === 'consumos') }">
+ -->
+        <Panel headerText="{i18n>tableTitleLeituras}" 
+              visible="{= !${viewModel>/hasFile} &amp;&amp; (${viewModel>/invoiceOption} === 'leituras' || ${viewModel>/invoiceOption} === 'consumos') }">
+          <Table id="tblManual" items="{/manualRows}">
+            <headerToolbar>
+              <Toolbar><Title text="{i18n>manualTableTitle}"/></Toolbar>
+            </headerToolbar>
+            <columns>
+              <Column><Text text="{i18n>colDate}"/></Column>
+              <Column><Text text="{i18n>colVazio}"/></Column>
+              <Column><Text text="{i18n>colCheio}"/></Column>
+              <Column><Text text="{i18n>colPonta}"/></Column>
+            </columns>
+            <items>
+              <ColumnListItem>
+                <cells>
+                  <DatePicker value="{date}" />
+                  <Input value="{vazio}" />
+                  <Input value="{cheio}" />
+                  <Input value="{ponta}" />
+                </cells>
+              </ColumnListItem>
+            </items>
+          </Table>
+          <Button text="{i18n>addRow}" press=".onAddRow" class="sapUiTinyMarginTop" />
+        </Panel>
+
+        <!-- Caso: apenas consumo simples -->
+        <Panel headerText="{i18n>simpleConsumption}" visible="{= !${viewModel>/hasFile} &amp;&amp; ${viewModel>/invoiceOption} === 'simples' }">
+          <Label text="{i18n>date}" />
+          <DatePicker value="{/simple/date}" />
+          <Label text="{i18n>consumption}" />
+          <Input value="{/simple/value}" type="Number" />
+        </Panel>
+        <HBox justifyContent="SpaceBetween" class="sapUiSmallMarginTop">
+          <Button text="{i18n>back}" press=".onBack" />
+          <Button text="{i18n>next}" press=".onNext" type="Accept" />
+        </HBox>
+      </VBox>
+    </content>
+  </Page>
+</mvc:View>
