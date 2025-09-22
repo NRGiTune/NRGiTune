@@ -41,6 +41,8 @@ jobs:
           ##mkdir -p artifact/pwrmatch-app/webapp
           ##rsync -av apps/powermatch-app/ artifact/pwrmatch-app/
 
+          mkdir -p artifact/pwrmatch-app/webapp
+          rsync -av apps/powermatch-app/ artifact/pwrmatch-app/
 
       # 4️⃣ Fazer upload do artefacto
       - name: Upload artifact
