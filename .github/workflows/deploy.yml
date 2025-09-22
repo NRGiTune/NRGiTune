@@ -32,17 +32,14 @@ jobs:
           cp -r website/* artifact/
 
           # Copiar PowerMatch app para subpasta
-          ##mkdir -p artifact/powermatch-app/webapp
           # cp -r apps/powermatch-app/* artifact/powermatch-app/
           # mkdir -p artifact
-          ##rsync -av apps/powermatch-app/ artifact/powermatch-app/
+          mkdir -p artifact/powermatch-app/webapp
+          rsync -av apps/powermatch-app/ artifact/powermatch-app/
 
           # Copiar PWRMatch app para subpasta
           ##mkdir -p artifact/pwrmatch-app/webapp
           ##rsync -av apps/powermatch-app/ artifact/pwrmatch-app/
-
-          mkdir -p artifact/pwrmatch-app/webapp
-          rsync -av apps/powermatch-app/ artifact/pwrmatch-app/
 
       # 4️⃣ Fazer upload do artefacto
       - name: Upload artifact
