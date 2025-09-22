@@ -1,4 +1,4 @@
-name: Deploy Website + PowerMatch App to GitHub Pages
+name: Deploy Website + App to GitHub Pages
 
 on:
   push:
@@ -32,10 +32,10 @@ jobs:
           cp -r website/* artifact/
 
           # Copiar PowerMatch app para subpasta
-          mkdir -p artifact/powermatch-app/webapp
+          ##mkdir -p artifact/powermatch-app/webapp
           # cp -r apps/powermatch-app/* artifact/powermatch-app/
           # mkdir -p artifact
-          rsync -av apps/powermatch-app/ artifact/powermatch-app/
+          ##rsync -av apps/powermatch-app/ artifact/powermatch-app/
 
           # Copiar PWRMatch app para subpasta
           mkdir -p artifact/pwrmatch-app/webapp
