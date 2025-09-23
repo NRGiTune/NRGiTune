@@ -1,4 +1,4 @@
-# Trigger redeploy on 2025-09-23 - 004
+# Trigger redeploy on 2025-09-23 - 005
 name: Deploy Website + App to GitHub Pages
 
 on:
@@ -39,8 +39,8 @@ jobs:
           rsync -av apps/powermatch-app/ artifact/powermatch-app/
 
           # Copiar PWRMatch app para subpasta
-          mkdir -p artifact/pwrmatch-app/webapp
-          rsync -av apps/pwrmatch-app/ artifact/pwrmatch-app/
+          #mkdir -p artifact/pwrmatch-app/webapp
+          #rsync -av apps/pwrmatch-app/ artifact/pwrmatch-app/
 
       # 4️⃣ Fazer upload do artefacto
       - name: Upload artifact
