@@ -39,7 +39,7 @@ jobs:
           rsync -av apps/powermatch-app/ artifact/powermatch-app/
 
           # Copiar PWRMatch app para subpasta
-          mkdir -p artifact/pwrmatch-app/webapp
+          mkdir -p artifact/pwrmatchapp/webapp
           rsync -av apps/pwrmatch-app/ artifact/pwrmatchapp/
 
       # 4️⃣ Fazer upload do artefacto
