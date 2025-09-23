@@ -1,0 +1,15 @@
+{
+  "name": "signup-db-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ui5 serve --open index.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@ui5/cli": "^4.0.25"
+  }
+}

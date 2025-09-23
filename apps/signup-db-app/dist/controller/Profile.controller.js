@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/mvc/Controller","supabase/app/utils/supabase"],function(t,e){"use strict";const n=e.supabase;console.log(n);return t.extend("supabase.app.controller.Profile",{onInit:async function(){const{data:{user:t}}=await n.auth.getUser();if(!t){this.getOwnerComponent().getRouter().navTo("Login");return}this.byId("emailText").setText(t.email);this.byId("idText").setText(t.id)},onLogout:async function(){await n.auth.signOut();this.getOwnerComponent().getRouter().navTo("Login")}})});
+//# sourceMappingURL=Profile.controller.js.map

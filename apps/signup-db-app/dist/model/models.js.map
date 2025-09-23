@@ -1,0 +1,1 @@
+{"version":3,"file":"models.js","names":["sap","ui","define","JSONModel","createUserModel","id","email","name"],"sources":["models-dbg.js"],"mappings":"AACAA,IAAIC,GAAGC,OAAO,CACZ,+BACC,SAASC,GACV,aAEA,MAAO,CACLC,gBAAiB,WACf,OAAO,IAAID,EAAU,CACnBE,GAAI,GACJC,MAAO,GACPC,KAAM,IAEV,EAEJ","ignoreList":[]}

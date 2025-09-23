@@ -1,0 +1,11 @@
+sap.ui.define([
+    "sap/ui/core/mvc/Controller"
+], function (Controller) {
+    "use strict";
+
+    return Controller.extend("simulador.controller.App", {
+        onInit: function () {
+            // Inicialização global (se precisares)
+        }
+    });
+});

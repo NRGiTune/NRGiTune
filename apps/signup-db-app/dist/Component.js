@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/UIComponent","supabase/app/model/models"],function(e,t){"use strict";return e.extend("supabase.app.Component",{metadata:{manifest:"json"},init:function(){e.prototype.init.apply(this,arguments);this.setModel(t.createUserModel(),"user");this.getRouter().initialize()}})});
+//# sourceMappingURL=Component.js.map

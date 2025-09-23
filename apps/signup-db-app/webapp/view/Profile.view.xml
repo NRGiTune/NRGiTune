@@ -1,0 +1,13 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="supabase.app.controller.Profile">
+  <Page title="Perfil">
+    <content>
+      <VBox class="sapUiSmallMargin">
+        <Text text="Email:"/>
+        <Text id="emailText"/>
+        <Text text="ID:"/>
+        <Text id="idText"/>
+        <Button text="Logout" press=".onLogout"/>
+      </VBox>
+    </content>
+  </Page>
+</mvc:View>

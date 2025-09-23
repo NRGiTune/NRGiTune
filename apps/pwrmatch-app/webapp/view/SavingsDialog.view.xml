@@ -1,0 +1,60 @@
+<mvc:View
+  controllerName="simulador.controller.SavingsDialog"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+
+  <ScrollContainer vertical="true" height="100%" width="100%">
+    <VBox class="sapUiMediumMargin">
+
+      <!-- Header -->
+      <HBox justifyContent="SpaceBetween" alignItems="Center">
+        <ObjectStatus text="O que é isto?" state="Information"/>
+      </HBox>
+
+      <Title text="Poupança estimada" level="H2" class="sapUiMediumMarginTop"/>
+
+      <Text text="A poupança estimada corresponde à diferença entre o valor da fatura submetida e o valor estimado desta oferta..." 
+            class="sapUiSmallMarginTop" wrapping="true"/>
+
+      <!-- Oferta verificada -->
+      <MessageStrip text="Oferta verificada (ERSE) - Última atualização: Hoje"
+                    type="Success"
+                    showIcon="true"
+                    class="sapUiSmallMarginTop"/>
+
+      <Text text="As estimativas de poupança têm por base os valores reportados à Entidade Reguladora dos Serviços Energéticos (ERSE) pelos vários comercializadores..."
+            class="sapUiSmallMarginTop"
+            wrapping="true"/>
+
+      <!-- Tabela -->
+      <Table items="{/savings}">
+        <columns>
+          <Column><Text text="Termo"/></Column>
+          <Column hAlign="End"><Text text="Esta oferta"/></Column>
+          <Column hAlign="End"><Text text="vs Atual"/></Column>
+        </columns>
+        <items>
+          <ColumnListItem>
+            <cells>
+              <Text text="{term}"/>
+              <Text text="{offer}"/>
+              <ObjectStatus text="{diff}" state="{state}"/>
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+
+      <!-- Totais -->
+      <HBox justifyContent="SpaceBetween" class="sapUiMediumMarginTop">
+        <Text text="Total" design="Bold"/>
+        <ObjectStatus text="{/total/offer}" state="Success"/>
+        <ObjectStatus text="{/total/diff}" state="Success"/>
+      </HBox>
+
+      <Text text="Caso encontres alguma discrepância nos cálculos, por favor submete um alerta aqui."
+            class="sapUiSmallMarginTop"
+            wrapping="true"/>
+
+    </VBox>
+  </ScrollContainer>
+</mvc:View>
