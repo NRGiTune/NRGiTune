@@ -1,0 +1,44 @@
+<mvc:View
+  controllerName="simulador.controller.ImageSteps"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:l="sap.ui.layout">
+
+  <l:Grid defaultSpan="L6 M6 S12" hSpacing="1" vSpacing="1">
+
+    <!-- Coluna da esquerda: imagens com zoom -->
+    <l:content>
+      <VBox class="sapUiMediumMargin">
+
+        <!-- Carousel de imagens -->
+        <Carousel id="imageCarousel"
+                  pages="{/images}"
+                  pageChanged=".onImageChanged">
+          <pages>
+            <Image src="{src}" densityAware="false"
+                   width="100%" height="auto"
+                   class="zoomableImage"/>
+          </pages>
+        </Carousel>
+
+        <!-- Slider para zoom -->
+        <Slider id="zoomSlider" 
+                min="0.5" max="2" step="0.1" value="1"
+                liveChange=".onZoomChange"/>
+      </VBox>
+    </l:content>
+
+    <!-- Coluna da direita: passos -->
+    <l:content>
+      <VBox class="sapUiMediumMargin">
+        <Title text="Passos" level="H3"/>
+        <List id="stepsList" items="{/activeSteps}">
+          <items>
+            <StandardListItem title="{step}" />
+          </items>
+        </List>
+      </VBox>
+    </l:content>
+
+  </l:Grid>
+</mvc:View>

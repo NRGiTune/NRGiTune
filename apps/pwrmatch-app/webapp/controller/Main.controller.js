@@ -185,6 +185,7 @@ sap.ui.define([
       var ttl = "Invoice Consuption/Readings Values Help"
       this._openEredesReadingsDialog(sup, t, ttl);
     },
+    
     _openEredesReadingsDialog: function (supplier, offer, ttl) {
       var that = this;
       if (this._oDlg) {
@@ -210,6 +211,36 @@ sap.ui.define([
 
       this._oDlg.open();
     },
+
+    onOpenImageStepsDialog: function () {
+      var oView = this.getView();
+
+      if (!this._oImageStepsDialog) {
+        this._oImageStepsDialog = new sap.m.Dialog({
+          title: "Guia Visual",
+          contentWidth: "90%",
+          contentHeight: "90%",
+          resizable: true,
+          draggable: true,
+          content: [
+            new sap.ui.core.mvc.XMLView({
+              viewName: "simulador.view.ImageSteps"
+            })
+          ],
+          beginButton: new sap.m.Button({
+            text: "Fechar",
+            press: function () {
+              this._oImageStepsDialog.close();
+            }.bind(this)
+          })
+        });
+
+        oView.addDependent(this._oImageStepsDialog);
+      }
+
+      this._oImageStepsDialog.open();
+    }
+
 
   });
 });

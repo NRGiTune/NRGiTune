@@ -32,7 +32,7 @@
 
               <l:content>
                 <VBox justifyContent="Center" alignItems="End">
-                  <Link text="{i18n>optionReadingsHelp}" endIcon="sap-icon://inspect" press=".onShowEredesReadingsHelp" />
+                  <Link text="{i18n>optionReadingsHelp}" endIcon="sap-icon://inspect" press=".onOpenImageStepsDialog" />
                 </VBox>
               </l:content>
 
@@ -58,7 +58,7 @@
 
               <l:content>
                 <VBox justifyContent="Center" alignItems="End">
-                  <Link text="{i18n>valEFRHelp}" endIcon="sap-icon://inspect" press=".onShowValEFRHelp" />
+                  <Link text="{i18n>valEFRHelp}" endIcon="sap-icon://inspect" press=".onOpenImageStepsDialog" />
                 </VBox>
               </l:content>
 
