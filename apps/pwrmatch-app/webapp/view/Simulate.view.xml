@@ -1,19 +1,243 @@
-<mvc:View controllerName="simulador.controller.Simulate" 
-          xmlns:mvc="sap.ui.core.mvc" 
-          xmlns:m="sap.m"
-          xmlns="sap.m">
-  <Page title="{i18n>step4Title}">
+<mvc:View controllerName="simulador.controller.Simulate"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:m="sap.m"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  xmlns:layout="sap.ui.layout"
+  xmlns:tnt="sap.tnt">
+  <Page title="{i18n>step4Title}" class="sapUiResponsivePadding--header sapUiResponsivePadding--footer" showNavButton="false" floatingFooter="true">
     <content>
-        <!--
-      <VBox class="sapUiSmallMargin" justifyContent="Center" alignItems="Center" height="80%">
-        <Title text="{i18n>resultTitle}" level="H2" />
-        <Button text="{i18n>newSimulation}" press=".onNewSimulation" class="sapUiSmallMarginTop" type="Emphasized" />
-        -->
- <VBox class="sapUiSmallMargin">
-        <Title text="{i18n>resultTitle}" level="H2" />
+
+      <l:Grid defaultSpan="L12 M12 S12" hSpacing="1" vSpacing="1"
+        xmlns:l="sap.ui.layout">
+
+        <l:content>
+
+          <!-- Contrato Atual -->
+          <Panel headerText="O teu contrato atual" visible="true">
+            <VBox>
+              <l:Grid defaultSpan="L6 M12 S12" hSpacing="0" vSpacing="0"
+                xmlns:l="sap.ui.layout">
+                <l:content>
+                  <HBox class="sapUiSmallMarginStart sapUiSmallMarginTop">
+                    <Image src="{/current/logo}" height="3rem" class="sapUiSmallMarginEnd"/>
+                    <VBox>
+                      <HBox class="sapUiSmallMarginEnd">
+                        <Title text="{/current/name}" level="H3"  class="sapUiSmallMarginEnd"/>
+                        <tnt:InfoLabel text="{/current/type}" colorScheme="8" icon="sap-icon://lightbulb" />
+                      </HBox>
+                      <Text text="{/current/period}"/>
+                    </VBox>
+                  </HBox>
+                </l:content>
+
+                <l:content>
+
+                  <l:Grid defaultSpan="L4 M12 S12" hSpacing="0" vSpacing="0"
+                    xmlns:l="sap.ui.layout">
+
+                    <l:content>
+                      <VBox alignItems="Start"  class="sapUiSmallMarginTop">
+                        <ObjectStatus class="sapUiSmallMarginBottom" text="{/current/cycleType}" icon="sap-icon://date-time" state="Information" />
+                        <ObjectStatus class="sapUiSmallMarginBottom" text="{/current/powerLbl}: {/current/power}" icon="sap-icon://disconnected" state="Information" />
+                      </VBox>
+                    </l:content>
+
+                    <l:content>
+                      <VBox alignItems="Center"  class="sapUiSmallMarginTop">
+                        <Title text="{/current/amount}" level="H1"/>
+                        <Text text="{/current/amountTxt}"/>
+                      </VBox>
+                    </l:content>
+
+                    <l:content>
+                      <VBox alignItems="End"  class="sapUiSmallMarginTop">
+                        <Link text="Detalhes" endIcon="sap-icon://inspect" press=".onShowCurrentDetails" />
+                      </VBox>
+                    </l:content>
+
+                  </l:Grid>
+
+                </l:content>
+
+              </l:Grid>
+
+              <Table inset="false" showSeparators="Inner">
+                <columns>
+                  <Column>
+                    <Text text="Termo fixo"/>
+                  </Column>
+                  <Column>
+                    <Text text="Termo variável"/>
+                  </Column>
+                </columns>
+                <items>
+                  <ColumnListItem>
+                    <cells>
+                      <VBox>
+                        <Text text="Potência contratada: {/current.power}"/>
+                        <Text text="Preço por dia: {/current/fixedPrice}"/>
+                      </VBox>
+                      <VBox>
+                        <Text text="Consumo total: {/current/totalConsumption}"/>
+                        <Text text="Preço por kWh: {/current/variablePrice}"/>
+                      </VBox>
+                    </cells>
+                  </ColumnListItem>
+                </items>
+              </Table>
 
 
-      </VBox>
+
+            </VBox>
+          </Panel>
+
+          <!-- Ofertas -->
+
+          <Panel headerText="Encontrámos {/offersCount} ofertas para ti" expandable="false">
+            <List items="{/offers}">
+              <CustomListItem>
+
+                <l:Grid defaultSpan="L6 M12 S12" hSpacing="0" vSpacing="1"
+                  xmlns:l="sap.ui.layout">
+                  <l:content>
+                    <HBox class="sapUiSmallMarginStart sapUiSmallMarginTop">
+                      <Image src="{logo}" height="3rem" class="sapUiSmallMarginEnd"/>
+                      <VBox>
+                        <HBox >
+                          <Title text="{name}" level="H3" class="sapUiSmallMarginEnd"/>
+                          <tnt:InfoLabel text="{/current/type}" colorScheme="8" icon="sap-icon://lightbulb" />
+                        </HBox>
+                        <Text text="{contractType}"/>
+                        <Text text="{/current/period}"/>
+                      </VBox>
+                    </HBox>
+                  </l:content>
+
+                  <l:content>
+
+                    <l:Grid defaultSpan="L4 M12 S12" hSpacing="0" vSpacing="0"
+                      xmlns:l="sap.ui.layout">
+
+                      <l:content>
+                        <VBox alignItems="Start" class="sapUiSmallMarginTop">
+                          <ObjectStatus class="sapUiSmallMarginBottom" text="{/current/cycleType}" icon="sap-icon://date-time" state="Information" />
+                          <ObjectStatus class="sapUiSmallMarginBottom" text="{/current/powerLbl}: {/current/power}" icon="sap-icon://disconnected" state="Information" />
+                        </VBox>
+                      </l:content>
+
+                      <l:content>
+                        <VBox alignItems="Center" class="sapUiSmallMarginTop">
+                          <Title text="{price}" level="H1"/>
+                          <ObjectStatus class="sapUiSmallMarginBottom" title="" text="{savings}" active="true" state="Success" press=".onOpenSavingsDialog" icon="sap-icon://down" />
+                        </VBox>
+                      </l:content>
+
+                      <l:content>
+                        <VBox alignItems="End" class="sapUiSmallMarginTop">
+                          <Link text="Detalhes" endIcon="sap-icon://inspect" press=".onShowOfferDetails" />
+                        </VBox>
+                      </l:content>
+
+                    </l:Grid>
+
+
+                  </l:content>
+
+                </l:Grid>
+
+                <l:Grid defaultSpan="L12 M12 S12" hSpacing="0" vSpacing="0"
+                  xmlns:l="sap.ui.layout">
+
+                  <l:content>
+                    <VBox alignItems="End" >
+                      <HBox class="sapUiTinyMarginTop">
+                        <Link text="Trocar" endIcon="sap-icon://journey-change" press=".onSwitch" />
+                      </HBox>
+                    </VBox>
+                  </l:content>
+
+                </l:Grid>
+<!--
+                <l:Grid defaultSpan="L12 M12 S12" hSpacing="0" vSpacing="1"
+                  xmlns:l="sap.ui.layout">
+
+                  <l:content class="sapUiSmallMarginEnd">
+                    <VBox alignItems="Start">
+                      <HBox class="sapUiTinyMarginTop sapUiTinyMarginEnd">
+                        <ObjectStatus text="Débito direto obrigatório" state="Warning" visible="{= ${ddMandatory} }" icon="sap-icon://alert" class="sapUiSmallMarginEnd"/>
+                        <MessageStrip class="sapUiSmallMarginEnd" text="Débito direto obrigatório" type="Warning" showIcon="true" visible="{= !${ddMandatory} }">
+                        </MessageStrip>
+                        <ObjectStatus text="Fatura eletrónica obrigatória" state="Warning" visible="{= ${eInvoiceMandatory} }" icon="sap-icon://alert" class="sapUiSmallMarginEnd"/>
+                        <MessageStrip class="sapUiSmallMarginEnd" text="Fatura eletrónica obrigatória" type="Warning" showIcon="true" visible="{= !${ddMandatory} }">
+                        </MessageStrip>
+                        <ObjectStatus text="Sem fidelização" state="Success" visible="{= ${noLoyalty} }" icon="sap-icon://sys-enter-2" class="sapUiSmallMarginEnd"/>
+                        <MessageStrip class="sapUiSmallMarginEnd" text="Sem fidelização" type="Success" showIcon="true" visible="{= !${ddMandatory} }" icon="sap-icon://sys-enter-2">
+                        </MessageStrip>
+                        <ObjectStatus text="Sem condições especiais" state="Success" visible="{= ${noSpecialConditions} }" icon="sap-icon://sys-enter-2" class="sapUiSmallMarginEnd"/>
+                        <MessageStrip class="sapUiSmallMarginEnd" text="Sem condições especiais" type="Success" showIcon="true" visible="{= !${ddMandatory} }">
+                        </MessageStrip>
+                      </HBox>
+                    </VBox>
+                  </l:content>
+
+                </l:Grid>
+-->
+
+                <l:Grid defaultSpan="L3 M12 S12" hSpacing="0" vSpacing="1"
+                  xmlns:l="sap.ui.layout">
+
+                  <l:content class="sapUiSmallMarginEnd">
+                    <VBox alignItems="Start">
+                      <HBox class="sapUiTinyMarginTop sapUiTinyMarginEnd">
+                        <ObjectStatus text="Débito direto obrigatório" state="Warning" visible="{= ${ddMandatory} }" icon="sap-icon://alert" class="sapUiSmallMarginEnd"/>
+                        <MessageStrip class="sapUiSmallMarginEnd" text="Débito direto obrigatório" 
+                        type="Warning" showIcon="true" visible="{= !${ddMandatory} }">
+                        </MessageStrip>
+                      </HBox>
+                    </VBox>
+                  </l:content>
+
+                  <l:content class="sapUiSmallMarginEnd">
+                    <VBox alignItems="Start">
+                      <HBox class="sapUiTinyMarginTop sapUiTinyMarginEnd">
+                        <ObjectStatus text="Fatura eletrónica obrigatória" state="Warning" visible="{= ${eInvoiceMandatory} }" icon="sap-icon://alert" class="sapUiSmallMarginEnd"/>
+                        <MessageStrip class="sapUiSmallMarginEnd" text="Fatura eletrónica obrigatória" type="Warning" showIcon="true" visible="{= !${ddMandatory} }">
+                        </MessageStrip>
+                      </HBox>
+                    </VBox>
+                  </l:content>
+
+                  <l:content class="sapUiSmallMarginEnd">
+                    <VBox alignItems="Start">
+                      <HBox class="sapUiTinyMarginTop sapUiTinyMarginEnd">
+                        <ObjectStatus text="Sem fidelização" state="Success" visible="{= ${noLoyalty} }" icon="sap-icon://sys-enter-2" class="sapUiSmallMarginEnd"/>
+                        <MessageStrip class="sapUiSmallMarginEnd" text="Sem fidelização" type="Success" showIcon="true" visible="{= !${ddMandatory} }" icon="sap-icon://sys-enter-2">
+                        </MessageStrip>
+                      </HBox>
+                    </VBox>
+                  </l:content>
+
+                  <l:content class="sapUiSmallMarginEnd">
+                    <VBox alignItems="Start">
+                      <HBox class="sapUiTinyMarginTop sapUiTinyMarginEnd">
+                        <ObjectStatus text="Sem condições especiais" state="Success" visible="{= ${noSpecialConditions} }" icon="sap-icon://sys-enter-2" class="sapUiSmallMarginEnd"/>
+                        <MessageStrip class="sapUiSmallMarginEnd" text="Sem condições especiais" type="Success" showIcon="true" visible="{= !${ddMandatory} }">
+                        </MessageStrip>
+                      </HBox>
+                    </VBox>
+                  </l:content>
+
+                </l:Grid>
+
+
+              </CustomListItem>
+            </List>
+          </Panel>
+
+        </l:content>
+
+      </l:Grid>
 
     </content>
 

@@ -247,13 +247,11 @@ sap.ui.define([
                     items: {
                       path: "/conditions/conditionsLinks",
                       template: new sap.m.ColumnListItem({
-                        cells: [new sap.m.Text({ text: "{descr}" }), 
-                          new sap.m.Text({ text: "{text}" })
-                        //  new sap.m.Link({
-                        //  text: "Link",   // texto do link
-                        //  href: "{text}",       // URL para abrir
-                        //  target: "_blank"      // abre em nova aba (opcional)
-                        //})
+                        cells: [new sap.m.Text({ text: "{descr}" }), new sap.m.Link({
+                          text: "Link",   // texto do link
+                          href: "{text}",       // URL para abrir
+                          target: "_blank"      // abre em nova aba (opcional)
+                        })
                         ]
                       })
                     }
@@ -356,8 +354,8 @@ sap.ui.define([
 
     onSimulate: function () {
       // guardar seleção para o componente
-      //var oCompModel = this.getOwnerComponent().getModel("viewModel");
-      //var local = this.getView().getModel().getData();
+      var oCompModel = this.getOwnerComponent().getModel("viewModel");
+      var local = this.getView().getModel().getData();
       //oCompModel.setProperty("/stepData/selection", local);
       this.getOwnerComponent().getRouter().navTo("simulate");
     }

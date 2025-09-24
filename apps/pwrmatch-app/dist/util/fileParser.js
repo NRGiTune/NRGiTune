@@ -1,2 +1,0 @@
-sap.ui.define([],function(){"use strict";return{parseCSV:function(r){var t=r.split(/\r?\n/).filter(Boolean);var n=t[0].split(",").map(r=>r.trim().toLowerCase());var e=[];for(var i=1;i<t.length;i++){var a=t[i].split(",");if(a.length>=n.length){var o={};n.forEach(function(r,t){o[r]=a[t]?a[t].trim():""});e.push(o)}}return e}}});
-//# sourceMappingURL=fileParser.js.map

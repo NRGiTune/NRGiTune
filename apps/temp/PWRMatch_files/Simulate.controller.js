@@ -4,7 +4,7 @@ sap.ui.define([
 ], function (Controller, MessageToast) {
   "use strict";
 
-  return Controller.extend("simulador.controller.Main", {
+  return Controller.extend("simulador.controller.Simulate", {
     onInit: function () {
       // Modelo de exemplo
       var oModel = new sap.ui.model.json.JSONModel({
@@ -14,13 +14,10 @@ sap.ui.define([
           type: "Eletricidade",
           period: "22 Jul - 21 Aug",
           power: "6.9 kVA",
-          powerLbl: "Potência",
-          cycleType: "Simples",
           fixedPrice: "0.568 €/dia",
           totalConsumption: "411 kWh",
           variablePrice: "0.164 €/kWh",
-          amount: "102,49€",
-          amountTxt: "Valor do teu consumo"
+          amount: "102,49€"
         },
         offersCount: 2,
         offers: [
@@ -37,28 +34,33 @@ sap.ui.define([
           },
           {
             logo: "imgs/suppliersLogos/G9-Logo.svg",
-            name: "IG9",
+            name: "G9",
             contractType: "Net Promo Verão",
-            price: "93,55€",
+            price: "93,55",
             savings: "8.94€ poupança",
             ddMandatory: false,
             eInvoiceMandatory: false,
             noLoyalty: false,
             noSpecialConditions: false
           }
-
         ]
       });
       this.getView().setModel(oModel);
     },
 
-    onOpenDialog: function () {
+    onShowCurrentDetails: function () {
+      this.onShowOfferDetails();
+      MessageToast.show("Detalhes do contrato atual");
+    },
+
+    onShowOfferDetails: function (oEvent) {
+      MessageToast.show("Detalhes da oferta selecionada");
       var oView = this.getView();
 
       // cria só uma vez
       if (!this._oDialog) {
         this._oDialog = new sap.m.Dialog({
-          title: "Detalhes",
+          title: "Detalhes da Oferta",
           contentWidth: "80%",
           contentHeight: "80%",
           resizable: true,
@@ -111,22 +113,11 @@ sap.ui.define([
       this._oSavingsDialog.open();
     },
 
-    onShowCurrentDetails: function () {
-      this.onOpenDialog();
-      MessageToast.show("Detalhes do contrato atual");
-    },
-
-    onShowOfferDetails: function (oEvent) {
-      this.onOpenDialog();
-      MessageToast.show("Detalhes da oferta selecionada");
-    },
-
     onSwitch: function (oEvent) {
       MessageToast.show("Mudar para este fornecedor");
     },
-
     onNewSimulation: function () {
-      // limpar dados do componente
+      // limpar dados da simulação
 
       // voltar ao início
       this.getOwnerComponent().getRouter().navTo("main");
@@ -135,6 +126,7 @@ sap.ui.define([
     onBack: function () {
       this.getOwnerComponent().getRouter().navTo("supplier");
     }
+
 
   });
 });

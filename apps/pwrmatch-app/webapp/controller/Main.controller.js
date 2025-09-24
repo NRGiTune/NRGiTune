@@ -195,7 +195,7 @@ sap.ui.define([
         this._oDlg = new sap.m.Dialog({
           title: ttl,
           content: [
-            new sap.m.Text({ text: "Olá, mundo!" })
+            new sap.m.Text({ text: "Em construção..." })
           ],
           endButton: new sap.m.Button({
             text: "Fechar",

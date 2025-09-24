@@ -1,2 +1,0 @@
-sap.ui.define([],function(){"use strict";return{formatCurrency:function(t,e="pt-PT",n="EUR"){if(t===null||t===undefined||isNaN(t)){return""}return new Intl.NumberFormat(e,{style:"currency",currency:n}).format(t)},formatDate:function(t,e="pt-PT"){if(!t){return""}let n=t instanceof Date?t:new Date(t);return n.toLocaleDateString(e,{day:"2-digit",month:"2-digit",year:"numeric"})}}});
-//# sourceMappingURL=formatter.js.map
