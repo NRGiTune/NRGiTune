@@ -1,44 +1,24 @@
 sap.ui.define([
   "sap/ui/model/json/JSONModel",
-  "simulador/util/fileParserERSE",
-  "simulador/model/modelsUtils"
-], function (JSONModel, fileParserERSE, modelsUtils) {
+  "simulador/util/fileParserERSE"
+], function (JSONModel, fileParserERSE) {
   "use strict";
 
   return {
 
-
-
-    createSupplierModel_DELETE: function (that) {
+    createDataModel: function () {
       var data = {
-        suppliers: [
-          {
-            id: "sup1",
-            name: "Fornecedor A",
-            offers: [
-              {
-                id: "t1",
-                name: "Tarifa A1",
-                prices: { power: 5.5, vazio: 0.05, cheio: 0.12, ponta: 0.2 },
-                conditions: [{ title: "Cond1", desc: "Descrição 1" }]
-              },
-              { id: "t2", name: "Tarifa A2", prices: { power: 6, vazio: 0.04, cheio: 0.11, ponta: 0.19 }, conditions: [] }
-            ]
-          },
-          {
-            id: "sup2",
-            name: "Fornecedor B",
-            offers: [
-              { id: "t3", name: "Tarifa B1", prices: { power: 5.9, vazio: 0.045, cheio: 0.115, ponta: 0.18 }, conditions: [{ title: "Termo", desc: "..." }] }
-            ]
-          }
-        ]
+        suppliers: [],        // suppliers { supplierId, supplierName, supplierLogo 
+        suppliersOffers: [],  // {supplierId, offerID, offerName, offerFromDate, offerToDate, ... }
+        offersPrices: [],     // {supplierId, offerID, offerFromDate, offerToDate, power, ... }
+        regMarketPrices: [],  // {supplierId, offerID, offerFromDate, offerToDate, power, ... }
+        metadata: [],         // {	prices {id, description}, offers {id, description} }
+        readings: [],         // {readingDate, readingType, origin, status, empty, rush, full}
+        consumptions: [],     // {fromDate, toDate, consumptionSimple, consumptionEmpty, consumptionFull, consumptionRush, readingsEmpty, readingsFull, readingsRush, checkState, checkMsg}
+        offerSimulation: []   
       };
       return new JSONModel(data);
     },
-
-
-
 
     createFlowModel: function () {
       var data = {
@@ -59,7 +39,7 @@ sap.ui.define([
         readingsEredes: [],
         // Comsuption/Readings registration
         consReadRows: [
-          { fromDate: "", toDate: "", simple: "", consEmpty: "", consFull: "", consRush: "", readEmpty: "", readFull: "", readRush: "" }
+          //{ fromDate: "", toDate: "", consSimple: "", consEmpty: "", consFull: "", consRush: "", readEmpty: "", readFull: "", readRush: "" }
         ],
 
         // ## Supplier info Step
@@ -88,30 +68,8 @@ sap.ui.define([
 
       };
       return new JSONModel(data);
-    },
-
-    createEnergySupplierModel: function (oModel) {
-      // supliers, tarifs, prices
-      var data = {
-        suppliers: [
-          {
-            id: "sup1",
-            name: "Fornecedor A",
-            offers: [
-              { id: "t1", name: "Tarifa A1", prices: { power: 5.5, vazio: 0.05, cheio: 0.12, ponta: 0.2 }, conditions: [{ title: "Cond1", desc: "Descrição 1" }] },
-              { id: "t2", name: "Tarifa A2", prices: { power: 6, vazio: 0.04, cheio: 0.11, ponta: 0.19 }, conditions: [] }
-            ]
-          }
-        ]
-      };
-      return new JSONModel(data);
-    },
-
-    createERSEFilesModel: function (that) {
-      // supliers, tarifs, prices
-      fileParserERSE.parseERSEFiles(that);
     }
-
+    
 
   };
 });

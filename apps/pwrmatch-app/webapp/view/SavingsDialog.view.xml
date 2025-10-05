@@ -1,5 +1,4 @@
-<mvc:View
-  controllerName="simulador.controller.SavingsDialog"
+<mvc:View controllerName="simulador.controller.SavingsDialog"
   xmlns:mvc="sap.ui.core.mvc"
   xmlns="sap.m">
 
@@ -7,53 +6,89 @@
     <VBox class="sapUiMediumMargin">
 
       <!-- Header -->
-      <HBox justifyContent="SpaceBetween" alignItems="Center">
-        <ObjectStatus text="O que é isto?" state="Information"/>
-      </HBox>
+      <Text text="As estimativas de poupança têm por base os valores reportados à Entidade Reguladora dos Serviços Energéticos (ERSE) pelos vários comercializadores..." class="sapUiSmallMarginTop" wrapping="true"/>
 
-      <Title text="Poupança estimada" level="H2" class="sapUiMediumMarginTop"/>
+      <!-- Oferta verificada 
+      <MessageStrip text="Ofertas comerciais (ERSE) - Última atualização: {/erse/lastUpdate}" type="Success" showIcon="true" class="sapUiSmallMarginTop"/>
+-->
+      <MessageStrip text="Ofertas comerciais (ERSE) - Última atualização:" type="Success" showCloseButton="false" showIcon="true" class="sapUiSmallMarginTop">
+        <link>
+          <Link text="{/erse/lastUpdate}" target="_blank" href="{/erse/link}" />
+        </link>
+      </MessageStrip>
 
-      <Text text="A poupança estimada corresponde à diferença entre o valor da fatura submetida e o valor estimado desta oferta..." 
-            class="sapUiSmallMarginTop" wrapping="true"/>
 
-      <!-- Oferta verificada -->
-      <MessageStrip text="Oferta verificada (ERSE) - Última atualização: Hoje"
-                    type="Success"
-                    showIcon="true"
-                    class="sapUiSmallMarginTop"/>
 
-      <Text text="As estimativas de poupança têm por base os valores reportados à Entidade Reguladora dos Serviços Energéticos (ERSE) pelos vários comercializadores..."
-            class="sapUiSmallMarginTop"
-            wrapping="true"/>
+      <Text text="A poupança estimada corresponde à diferença entre os valores de consumos submetidos e o valor estimado desta oferta..." class="sapUiSmallMarginTop" wrapping="true"/>
 
       <!-- Tabela -->
-      <Table items="{/savings}">
+      <Table items="{/savings}" class="sapUiSmallMarginTop">
         <columns>
-          <Column><Text text="Termo"/></Column>
-          <Column hAlign="End"><Text text="Esta oferta"/></Column>
-          <Column hAlign="End"><Text text="vs Atual"/></Column>
+          <Column>
+            <!-- <Text text="Termo"/> -->
+          </Column>
+          <Column hAlign="End">
+            <Text text="Atual"/>
+            <footer>
+              <Text text="{/total/current}" design="Bold" />
+            </footer>
+          </Column>
+          <Column hAlign="End">
+            <Text text="Esta oferta"/>
+            <footer>
+              <Text text="{/total/offer}" design="Bold" />
+            </footer>
+          </Column>
+          <Column hAlign="End">
+            <Text text="vs Atual"/>
+            <footer>
+              <!--
+              <Text text="{/total/diff}" design="Bold" state="{/total/state}"/>
+              <ObjectNumber number="{
+						parts:[{path:'{/total/diff}'},{path:'CurrencyCode'}],
+						type: 'sap.ui.model.type.Currency',
+						formatOptions: {showMeasure: false}
+					}" unit="" state="{/total/state}" />
+-->
+
+
+                 <ObjectNumber number="{/total/diff}" unit="" 
+                 emphasized="true" state="{/total/state}" />
+       
+
+
+            </footer>
+          </Column>
         </columns>
         <items>
           <ColumnListItem>
             <cells>
               <Text text="{term}"/>
-              <Text text="{offer}"/>
+              <VBox>
+                <Text text="{current01}"/>
+                <Text text="{current02}" visible="{= ${current02} !== '' ? true : false }"/>
+                <Text text="{current03}" visible="{= ${current03} !== '' ? true : false }"/>
+              </VBox>
+              <VBox>
+                <Text text="{offer01}"/>
+                <Text text="{offer02}" visible="{= ${offer02} !== '' ? true : false }"/>
+                <Text text="{offer03}" visible="{= ${offer03} !== '' ? true : false }"/>
+              </VBox>
               <ObjectStatus text="{diff}" state="{state}"/>
             </cells>
           </ColumnListItem>
         </items>
       </Table>
 
-      <!-- Totais -->
+      <!-- Totais
       <HBox justifyContent="SpaceBetween" class="sapUiMediumMarginTop">
         <Text text="Total" design="Bold"/>
         <ObjectStatus text="{/total/offer}" state="Success"/>
         <ObjectStatus text="{/total/diff}" state="Success"/>
       </HBox>
 
-      <Text text="Caso encontres alguma discrepância nos cálculos, por favor submete um alerta aqui."
-            class="sapUiSmallMarginTop"
-            wrapping="true"/>
+      <Text text="Caso encontres alguma discrepância nos cálculos, por favor submete um alerta aqui." class="sapUiSmallMarginTop" wrapping="true"/>
+       -->
 
     </VBox>
   </ScrollContainer>

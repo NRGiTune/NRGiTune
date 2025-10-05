@@ -5,88 +5,216 @@
   xmlns:core="sap.ui.core"
   xmlns:layout="sap.ui.layout"
   xmlns:tnt="sap.tnt">
-  <Page title="{i18n>step4Title}" class="sapUiResponsivePadding--header sapUiResponsivePadding--footer" showNavButton="false" floatingFooter="true">
+  <Page title="{i18n>simulateTitle}" class="sapUiResponsivePadding--header sapUiResponsivePadding--footer" showNavButton="false" floatingFooter="true">
     <content>
 
       <l:Grid defaultSpan="L12 M12 S12" hSpacing="1" vSpacing="1"
         xmlns:l="sap.ui.layout">
 
         <l:content>
+          <!-- Supplier selection panel -->
+          <Panel headerText="{i18n>supplierTitle}" visible="true">
 
-          <!-- Contrato Atual -->
-          <Panel headerText="O teu contrato atual" visible="true">
+            <l:Grid defaultSpan="L6 M12 S12" hSpacing="0" vSpacing="0"
+              xmlns:l="sap.ui.layout">
+
+              <l:content>
+                <l:Grid defaultSpan="L12 M12 S12" hSpacing="0" vSpacing="0"
+                  xmlns:l="sap.ui.layout">
+
+                  <l:content>
+                    <HBox class="sapUiTinyMarginTop">
+                      <Label text="{i18n>selectSupplier}" class="sapUiSmallMarginEnd"/>
+                      <Select items="{/suppliers}" change=".onSupplierChange" selectedKey="{/selectedSupplier}">
+                        <core:Item key="{supplierId}" text="{supplierName}" />
+                      </Select>
+                    </HBox>
+                    <HBox class="sapUiTinyMarginTop">
+                      <Label text="{i18n>selectOffer}" class="sapUiSmallMarginEnd"/>
+                      <Select items="{/offers}" change=".onOfferChange" selectedKey="{/selectedOffer}">
+                        <core:Item key="{offerId}" text="{offerNameId}" />
+                      </Select>
+                    </HBox>
+                  </l:content>
+
+                </l:Grid>
+              </l:content>
+
+              <l:content>
+                <l:Grid defaultSpan="L6 M12 S12" hSpacing="0" vSpacing="0"
+                  xmlns:l="sap.ui.layout">
+
+                  <l:content>
+                    <HBox class="sapUiTinyMarginTop">
+                      <Label text="{i18n>selectPower}" class="sapUiSmallMarginEnd"/>
+                      <Select items="{/powers}" change=".onPowerChange" selectedKey="{/selectedPower}">
+                        <core:Item key="{power}" text="{power}" />
+                      </Select>
+                    </HBox>
+                  </l:content>
+                  <l:content>
+                    <HBox class="sapUiTinyMarginTop">
+                      <Label text="{i18n>selectedHourlyCycle}" class="sapUiSmallMarginEnd"/>
+                      <Select items="{/hourlyCycles}" change=".onCycleChange" selectedKey="{/selectedHourlyCycle}">
+                        <core:Item key="{key}" text="{text}" />
+                      </Select>
+                    </HBox>
+                  </l:content>
+
+                </l:Grid>
+              </l:content>
+
+            </l:Grid>
+
+          </Panel>
+        </l:content>
+
+        <l:content>
+
+          <!-- Selected offer -->
+          <Panel headerText="{= ${/selectedSupplier} === 'ERSE'
+                            ? ${i18n>contractPanelTtlERSE}
+                            : ${i18n>contractPanelTtl} }" visible="true">
             <VBox>
               <l:Grid defaultSpan="L6 M12 S12" hSpacing="0" vSpacing="0"
                 xmlns:l="sap.ui.layout">
                 <l:content>
                   <HBox class="sapUiSmallMarginStart sapUiSmallMarginTop">
-                    <Image src="{/current/logo}" height="3rem" class="sapUiSmallMarginEnd"/>
-                    <VBox>
-                      <HBox class="sapUiSmallMarginEnd">
-                        <Title text="{/current/name}" level="H3"  class="sapUiSmallMarginEnd"/>
-                        <tnt:InfoLabel text="{/current/type}" colorScheme="8" icon="sap-icon://lightbulb" />
+                    <Image src="{/selectedSupplierLogo}" height="3rem" class="sapUiSmallMarginEnd"/>
+                    <VBox class="sapUiSmallMarginEnd">
+                      <Title text="{/selectedSupplierName}" level="H3" />
+                      <HBox>
+                        <tnt:InfoLabel text="{i18n>offerSupplyTypeEle}" colorScheme="8" icon="sap-icon://lightbulb" class="sapUiSmallMarginTop sapUiSmallMarginEnd" visible="{/offerSupplyTypeEleVisibility}"/>
+                        <tnt:InfoLabel text="{i18n>offerSupplyTypeGas}" colorScheme="6" icon="sap-icon://e-care" class="sapUiSmallMarginTop" visible="{/offerSupplyTypeGasVisibility}" />
                       </HBox>
-                      <Text text="{/current/period}"/>
+                      <!--
+                      -->
+                      <ObjectStatus text="{i18n>offerPricePwrLbl} {/selectedPower} {i18n>offerPricePwrUnitLbl}" icon="sap-icon://disconnected" state="Information" class="sapUiTinyMarginTop"/>
+                      <HBox>
+                        <ObjectStatus text="{path: '/offerFromDate', formatter: '.formatter.formatDate'}"
+                                  icon="sap-icon://workflow-tasks" 
+                                  state="Information" 
+                                  class="sapUiTinyMarginTop sapUiMediumMarginEnd"/>
+                        <ObjectStatus text="{path: '/offerToDate', formatter: '.formatter.formatDate'}" 
+                                  icon="sap-icon://select-appointments" 
+                                  state="Information" 
+                                  class="sapUiTinyMarginTop"/>
+                      </HBox>
+                      <!--<Text text="{/current/period}" class="sapUiTinyMarginTop"/>-->
                     </VBox>
                   </HBox>
                 </l:content>
 
+          <!-- Selected offer hourly cycle simulation -->
                 <l:content>
 
-                  <l:Grid defaultSpan="L4 M12 S12" hSpacing="0" vSpacing="0"
+                  <l:Grid defaultSpan="L12 M12 S12" hSpacing="0" vSpacing="0"
                     xmlns:l="sap.ui.layout">
-
                     <l:content>
-                      <VBox alignItems="Start"  class="sapUiSmallMarginTop">
-                        <ObjectStatus class="sapUiSmallMarginBottom" text="{/current/cycleType}" icon="sap-icon://date-time" state="Information" />
-                        <ObjectStatus class="sapUiSmallMarginBottom" text="{/current/powerLbl}: {/current/power}" icon="sap-icon://disconnected" state="Information" />
-                      </VBox>
-                    </l:content>
 
-                    <l:content>
-                      <VBox alignItems="Center"  class="sapUiSmallMarginTop">
-                        <Title text="{/current/amount}" level="H1"/>
-                        <Text text="{/current/amountTxt}"/>
-                      </VBox>
-                    </l:content>
+                      <l:Grid defaultSpan="L4 M4 S4" hSpacing="0" vSpacing="0"
+                        xmlns:l="sap.ui.layout">
 
-                    <l:content>
-                      <VBox alignItems="End"  class="sapUiSmallMarginTop">
-                        <Link text="Detalhes" endIcon="sap-icon://inspect" press=".onShowCurrentDetails" />
-                      </VBox>
+                        <!-- Simple cycle -->
+                        <l:content>
+                          <VBox alignItems="Center" class="sapUiSmallMarginTop">
+                            <!--
+                        <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleSimple}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '1' ? 'Success' : 'Information' }" inverted="{= ${/selectedHourlyCycle} === '1' ? true : false }" />
+                                  number="{/offerSimpleSimulationTtl}" 
+                                      -->
+                            <ObjectStatus class="sapUiSmallMarginBottom" 
+                                  text="{i18n>contractPanelCycleSimple}" icon="sap-icon://date-time" 
+                                  state="{= ${/selectedHourlyCycle} === '1' ? 'Success' : 'Information' }" />
+                            <Title text="{path: '/offerSimpleSimulationTtl', formatter: '.formatter.formatCurrency'}"
+                                  level="H2" 
+                                  visible="{= ${/offerlowestHourlyCycleValue} !== '1' ? true : false }" />
+                            <ObjectNumber class="sapMObjectNumberLarge" 
+                                  number="{path: '/offerSimpleSimulationTtl', formatter: '.formatter.formatCurrency'}"
+                                  unit="" emphasized="true" state="Success" 
+                                  visible="{= ${/offerlowestHourlyCycleValue} === '1' ? true : false }" />
+                            <ObjectStatus class="sapUiSmallMarginBottom" title="" 
+                                  text="{path: '/offerSimpleSavings', formatter: '.formatter.formatCurrency'}" active="true" 
+                                  state="{/offerSimpleState}" press=".onOpenSavingsDialog" 
+                                  icon="{= ${/offerSimpleState} === 'Success' ? 'sap-icon://down'
+                                    : ${/offerSimpleState} === 'Warning' ? 'sap-icon://up'
+                                    : 'sap-icon://border' }" 
+                                  visible="{= ${/selectedHourlyCycle} !== '1' ? true : false }" />
+                          </VBox>
+                        </l:content>
+
+                        <!-- Bi-Hourly cycle -->
+                        <l:content>
+                          <VBox alignItems="Center" class="sapUiSmallMarginTop">
+                            <!--
+                        <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleBiH}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '2' ? 'Success' : 'Information' }" inverted="{= ${/selectedHourlyCycle} === '2' ? true : false }"/>
+                                      -->
+                            <ObjectStatus class="sapUiSmallMarginBottom" 
+                                  text="{i18n>contractPanelCycleBiH}" icon="sap-icon://date-time" 
+                                  state="{= ${/selectedHourlyCycle} === '2' ? 'Success' : 'Information' }" />
+                            <Title text="{path: '/offerBiHSimulationTtl', formatter: '.formatter.formatCurrency'}" 
+                                  level="H1" 
+                                  visible="{= ${/offerlowestHourlyCycleValue} !== '2' ? true : false }" />
+                            <ObjectNumber class="sapMObjectNumberLarge" 
+                                  number="{path: '/offerBiHSimulationTtl', formatter: '.formatter.formatCurrency'}" 
+                                  unit="" emphasized="true" state="Success" 
+                                  visible="{= ${/offerlowestHourlyCycleValue} === '2' ? true : false }" />
+                            <ObjectStatus class="sapUiSmallMarginBottom" title="" 
+                                  text="{path: '/offerBiHSavings', formatter: '.formatter.formatCurrency'}" active="true" 
+                                  state="{/offerBiHState}" press=".onOpenSavingsDialog" 
+                                  icon="{= ${/offerBiHState} === 'Success' ? 'sap-icon://down'
+                                    : ${/offerBiHState} === 'Warning' ? 'sap-icon://up'
+                                    : 'sap-icon://border' }" 
+                                  visible="{= ${/selectedHourlyCycle} !== '2' ? true : false }" />
+
+                          </VBox>
+                        </l:content>
+
+                        <!-- Tri-Hourly cycle -->
+                        <l:content>
+                          <VBox alignItems="Center" class="sapUiSmallMarginTop">
+                            <!--
+                        <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleTriH}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '3' ? 'Success' : 'Information' }" inverted="{= ${/selectedHourlyCycle} === '3' ? true : false }"/>
+                                      -->
+                            <ObjectStatus class="sapUiSmallMarginBottom" 
+                                  text="{i18n>contractPanelCycleTriH}" icon="sap-icon://date-time" 
+                                  state="{= ${/selectedHourlyCycle} === '3' ? 'Success' : 'Information' }" />
+                            <Title text="{path: '/offerTriHSimulationTtl', formatter: '.formatter.formatCurrency'}" 
+                                  level="H3" 
+                                  visible="{= ${/offerlowestHourlyCycleValue} !== '3' ? true : false }" />
+                            <ObjectNumber class="sapMObjectNumberLarge" 
+                                  number="{path: '/offerTriHSimulationTtl', formatter: '.formatter.formatCurrency'}"
+                                  unit="" emphasized="true" state="Success" 
+                                  visible="{= ${/offerlowestHourlyCycleValue} === '3' ? true : false }" />
+                            <ObjectStatus class="sapUiSmallMarginBottom" title="" 
+                                  text="{path: '/offerTriHSavings', formatter: '.formatter.formatCurrency'}" active="true" 
+                                  state="{/offerTriHState}" press=".onOpenSavingsDialog" 
+                                  icon="{= ${/offerTriHState} === 'Success' ? 'sap-icon://down'
+                                    : ${/offerTriHState} === 'Warning' ? 'sap-icon://up'
+                                    : 'sap-icon://border' }" 
+                                  visible="{= ${/selectedHourlyCycle} !== '3' ? true : false }" />
+                          </VBox>
+                        </l:content>
+
+                      </l:Grid>
                     </l:content>
 
                   </l:Grid>
-
                 </l:content>
 
               </l:Grid>
 
-              <Table inset="false" showSeparators="Inner">
-                <columns>
-                  <Column>
-                    <Text text="Termo fixo"/>
-                  </Column>
-                  <Column>
-                    <Text text="Termo variável"/>
-                  </Column>
-                </columns>
-                <items>
-                  <ColumnListItem>
-                    <cells>
-                      <VBox>
-                        <Text text="Potência contratada: {/current.power}"/>
-                        <Text text="Preço por dia: {/current/fixedPrice}"/>
-                      </VBox>
-                      <VBox>
-                        <Text text="Consumo total: {/current/totalConsumption}"/>
-                        <Text text="Preço por kWh: {/current/variablePrice}"/>
-                      </VBox>
-                    </cells>
-                  </ColumnListItem>
-                </items>
-              </Table>
+              <Panel expandable="true" visible="true" width="auto" class="sapUiSmallMarginTop" backgroundDesign="Translucent" stickyHeader="false">
+                <headerToolbar>
+                  <OverflowToolbar>
+                    <Title text="Detalhes"/>
+                    <ToolbarSpacer />
+                    <Link text=" " endIcon="sap-icon://inspect" press=".onShowCurrentDetails" />
+                  </OverflowToolbar>
+                </headerToolbar>
+                <!-- Insert offer details view -->
+                <mvc:XMLView viewName="simulador.view.OfferDetails"/>
 
+              </Panel>
 
 
             </VBox>
@@ -150,7 +278,7 @@
                   xmlns:l="sap.ui.layout">
 
                   <l:content>
-                    <VBox alignItems="End" >
+                    <VBox alignItems="End">
                       <HBox class="sapUiTinyMarginTop">
                         <Link text="Trocar" endIcon="sap-icon://journey-change" press=".onSwitch" />
                       </HBox>
@@ -158,31 +286,6 @@
                   </l:content>
 
                 </l:Grid>
-<!--
-                <l:Grid defaultSpan="L12 M12 S12" hSpacing="0" vSpacing="1"
-                  xmlns:l="sap.ui.layout">
-
-                  <l:content class="sapUiSmallMarginEnd">
-                    <VBox alignItems="Start">
-                      <HBox class="sapUiTinyMarginTop sapUiTinyMarginEnd">
-                        <ObjectStatus text="Débito direto obrigatório" state="Warning" visible="{= ${ddMandatory} }" icon="sap-icon://alert" class="sapUiSmallMarginEnd"/>
-                        <MessageStrip class="sapUiSmallMarginEnd" text="Débito direto obrigatório" type="Warning" showIcon="true" visible="{= !${ddMandatory} }">
-                        </MessageStrip>
-                        <ObjectStatus text="Fatura eletrónica obrigatória" state="Warning" visible="{= ${eInvoiceMandatory} }" icon="sap-icon://alert" class="sapUiSmallMarginEnd"/>
-                        <MessageStrip class="sapUiSmallMarginEnd" text="Fatura eletrónica obrigatória" type="Warning" showIcon="true" visible="{= !${ddMandatory} }">
-                        </MessageStrip>
-                        <ObjectStatus text="Sem fidelização" state="Success" visible="{= ${noLoyalty} }" icon="sap-icon://sys-enter-2" class="sapUiSmallMarginEnd"/>
-                        <MessageStrip class="sapUiSmallMarginEnd" text="Sem fidelização" type="Success" showIcon="true" visible="{= !${ddMandatory} }" icon="sap-icon://sys-enter-2">
-                        </MessageStrip>
-                        <ObjectStatus text="Sem condições especiais" state="Success" visible="{= ${noSpecialConditions} }" icon="sap-icon://sys-enter-2" class="sapUiSmallMarginEnd"/>
-                        <MessageStrip class="sapUiSmallMarginEnd" text="Sem condições especiais" type="Success" showIcon="true" visible="{= !${ddMandatory} }">
-                        </MessageStrip>
-                      </HBox>
-                    </VBox>
-                  </l:content>
-
-                </l:Grid>
--->
 
                 <l:Grid defaultSpan="L3 M12 S12" hSpacing="0" vSpacing="1"
                   xmlns:l="sap.ui.layout">
@@ -191,9 +294,10 @@
                     <VBox alignItems="Start">
                       <HBox class="sapUiTinyMarginTop sapUiTinyMarginEnd">
                         <ObjectStatus text="Débito direto obrigatório" state="Warning" visible="{= ${ddMandatory} }" icon="sap-icon://alert" class="sapUiSmallMarginEnd"/>
-                        <MessageStrip class="sapUiSmallMarginEnd" text="Débito direto obrigatório" 
-                        type="Warning" showIcon="true" visible="{= !${ddMandatory} }">
+                        <!--
+                        <MessageStrip class="sapUiSmallMarginEnd" text="Débito direto obrigatório" type="Warning" showIcon="true" visible="{= !${ddMandatory} }">
                         </MessageStrip>
+-->
                       </HBox>
                     </VBox>
                   </l:content>
@@ -202,8 +306,10 @@
                     <VBox alignItems="Start">
                       <HBox class="sapUiTinyMarginTop sapUiTinyMarginEnd">
                         <ObjectStatus text="Fatura eletrónica obrigatória" state="Warning" visible="{= ${eInvoiceMandatory} }" icon="sap-icon://alert" class="sapUiSmallMarginEnd"/>
+                        <!--
                         <MessageStrip class="sapUiSmallMarginEnd" text="Fatura eletrónica obrigatória" type="Warning" showIcon="true" visible="{= !${ddMandatory} }">
                         </MessageStrip>
+-->
                       </HBox>
                     </VBox>
                   </l:content>
@@ -212,8 +318,10 @@
                     <VBox alignItems="Start">
                       <HBox class="sapUiTinyMarginTop sapUiTinyMarginEnd">
                         <ObjectStatus text="Sem fidelização" state="Success" visible="{= ${noLoyalty} }" icon="sap-icon://sys-enter-2" class="sapUiSmallMarginEnd"/>
-                        <MessageStrip class="sapUiSmallMarginEnd" text="Sem fidelização" type="Success" showIcon="true" visible="{= !${ddMandatory} }" icon="sap-icon://sys-enter-2">
+                        <!--
+                        <MessageStrip class="sapUiSmallMarginEnd" text="Sem fidelização" type="Success" showIcon="true" visible="{= !${ddMandatory} }">
                         </MessageStrip>
+-->
                       </HBox>
                     </VBox>
                   </l:content>
@@ -222,18 +330,20 @@
                     <VBox alignItems="Start">
                       <HBox class="sapUiTinyMarginTop sapUiTinyMarginEnd">
                         <ObjectStatus text="Sem condições especiais" state="Success" visible="{= ${noSpecialConditions} }" icon="sap-icon://sys-enter-2" class="sapUiSmallMarginEnd"/>
+                        <!--
                         <MessageStrip class="sapUiSmallMarginEnd" text="Sem condições especiais" type="Success" showIcon="true" visible="{= !${ddMandatory} }">
                         </MessageStrip>
+-->
                       </HBox>
                     </VBox>
                   </l:content>
 
                 </l:Grid>
 
-
               </CustomListItem>
             </List>
           </Panel>
+
 
         </l:content>
 
@@ -244,7 +354,7 @@
     <!-- Footer buttons -->
     <footer>
       <OverflowToolbar>
-        <Button text="{i18n>toSupplier}" icon="sap-icon://navigation-left-arrow" press=".onBack" />
+        <Button text="{i18n>toMain}" icon="sap-icon://navigation-left-arrow" press=".onBack" />
         <ToolbarSpacer/>
         <Button text="{i18n>toNewSimulation}" icon="sap-icon://navigation-right-arrow" press=".onNewSimulation"></Button>
       </OverflowToolbar>

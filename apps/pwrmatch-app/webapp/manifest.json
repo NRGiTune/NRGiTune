@@ -55,13 +55,18 @@
         { "pattern": "", "name": "main", "target": "main" },
         { "pattern": "home", "name": "home", "target": "home" },
         { "pattern": "supplier", "name": "supplier", "target": "supplier" },
-        { "pattern": "simulate", "name": "simulate", "target": "simulate" }
+        { "pattern": "simulate", "name": "simulate", "target": "simulate" },
+        { "pattern": "offerDetails", "name": "offerDetails", "target": "offerDetails" },
+        { "pattern": "savingsDialog", "name": "savingsDialog", "target": "savingsDialog" }
       ],
       "targets": {
         "home": { "viewName": "Home" },
         "main": { "viewName": "Main" },
         "supplier": { "viewName": "Supplier" },
-        "simulate": { "viewName": "Simulate" }
+        "simulate": { "viewName": "Simulate" },
+        "offerDetails": { "viewName": "OfferDetails" },
+        "savingsDialog": { "viewName": "SavingsDialog" }
+        
       }
     }
   }

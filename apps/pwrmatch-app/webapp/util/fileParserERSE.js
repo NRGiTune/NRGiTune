@@ -1,8 +1,136 @@
 sap.ui.define([
 	"sap/base/Log",
-	"sap/ui/model/json/JSONModel"
-], function (Log, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"simulador/util/formatter"
+], function (Log, JSONModel, formatter) {
 	"use strict";
+
+
+	return {
+		parseERSEFiles: function (that) {
+			//var that = this;
+			try {
+				// Add ERSE as supplier
+				//_addESupplierERSE(that);
+				// Add ERSE regulated market offer
+				_addRegMrktOffers(that);
+
+			} catch (err) {
+				Log.error("Error (parseEredesFiles): " + err.message);
+				return new JSONModel([]);
+			}
+		}
+	};
+
+
+	// Add ERSE as supplier
+	function _addESupplierERSE(that) {
+		var oAppDataModel = that.getOwnModels().appDataModel;
+		var oSuppliers = oAppDataModel.oData.suppliers;
+		oSuppliers.push({
+			supplierId: "ERSE",
+			supplierName: "ERSE - Entidade Reguladora dos Serviços Energéticos",
+			supplierLogo: "erseLogo.png"
+		});
+
+	}
+
+
+	// Add ERSE regulated market offer
+	function _addRegMrktOffers(that) {
+		var oAppDataModel = that.getOwnModels().appDataModel;
+		var oSuppliersOffers = oAppDataModel.oData.suppliersOffers;
+		var supplierOffers = {
+			supplierId: "ERSE",
+			offerId: "MR",
+			offerName: "TARIFA TRANSITÓRIA DE VENDA A CLIENTES FINAIS EM BTN (≤20,7 kVA e >1,15 kVA)",
+			offerNameId: "TARIFA TRANSITÓRIA DE VENDA A CLIENTES FINAIS EM BTN (≤20,7 kVA e >1,15 kVA) [MR]",
+			offerFromDate: formatter.parseXlsxFilesDate("01/01/2025"),
+			offerToDate: formatter.parseXlsxFilesDate("31/12/2025"),
+			segment: null,
+			supplyType: "ELE",
+			countType: "123",
+			modality: null,
+			contractDuration: "12",
+			details: []
+		};
+		oSuppliersOffers.push(supplierOffers);
+		// regulated market offers
+		_loadRegMrktOffersPricesFileERSE("data/erse/lstTarifas_RegM.xlsx", that);
+
+	}
+
+
+	// Load regulated market Offers and create related model
+	function _loadRegMrktOffersPricesFileERSE(sPath, that) {
+		fetch(sPath) // adapta "meuapp" ao namespace do projeto
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Erro ao carregar ficheiro: " + sPath);
+				}
+				return response.arrayBuffer();
+			})
+			.then(arrayBuffer => {
+				var oAppDataModel = that.getOwnModels().appDataModel;
+				var oSuppliersOffers = oAppDataModel.oData.suppliersOffers;
+				var oOffersPrices = oAppDataModel.oData.offersPrices;
+				var oRegMarketPrices = oAppDataModel.oData.regMarketPrices;
+				var oModel = that.getOwnModels().appFlowModel;
+				var regMrktOffers = oModel.oData.regMrktOffersERSE;
+				const e = { target: { result: arrayBuffer } };
+				var data = new Uint8Array(e.target.result);
+				var workbook = XLSX.read(data, { type: "array" });
+				// Reads first sheet to model
+				var firstSheetName = workbook.SheetNames[0];
+				var firstSheet = workbook.Sheets[firstSheetName];
+				var jsonData = XLSX.utils.sheet_to_json(firstSheet);
+				jsonData.forEach(function (item) {
+					if (item.COM && item.COD_Proposta) {
+						regMrktOffers.push(item);
+						//var exists = regMrktOffers.some(function (s) {
+						//	return s.COM === item.COM && s.COD_Proposta === item.COD_Proposta;
+						//});
+						//if (!exists) {
+						//	regMrktOffers.push(item);
+						//}
+
+						var suppliersOffers = oSuppliersOffers.filter(
+							supplierOffer => supplierOffer.supplierId === item.COM
+								&& supplierOffer.offerId === item.COD_Proposta
+						);
+						var offersPrices = {
+							supplierId: item.COM,
+							offerId: item.COD_Proposta,
+							offerFromDate: suppliersOffers[0].offerFromDate,
+							offerToDate: suppliersOffers[0].offerToDate,
+							power: item.Pot_Cont,
+							countingCycle: item.Contagem,
+							consumptionLevel: item.Escalao,
+							networkOperator: item.ORD,
+							termFixed: item.TF,
+							termEnergySOR: item["TV|TVFV|TVP"],
+							termEnergyEF: item["TVV|TVC"],
+							termEnergyE: item.TVVz,
+							termFixedNG: item.TFGN,
+							termEnergyNG: item.TVGN
+						};
+						oRegMarketPrices.push(offersPrices);
+						oOffersPrices.push(offersPrices);
+					}
+				});
+
+				// Suppliers list
+				_loadSupplierFile("data/erse/lstComercializadores.xlsx", that);
+
+			})
+			.catch(err => {
+				console.error(err);
+				sap.m.MessageToast.show("Erro ao ler ficheiro local");
+				//return [];
+			});
+
+	}
+
 
 	// Load supplier list and create relate model
 	function _loadSupplierFile(sPath, that) {
@@ -16,8 +144,10 @@ sap.ui.define([
 			})
 			.then(arrayBuffer => {
 				// Agora é equivalente ao reader.onload → tens o conteúdo em binário
-				var oModel = that.getOwnModels().appFlowModel;
-				var suppliers = oModel.oData.suppliersERSE;
+				var oAppDataModel = that.getOwnModels().appDataModel;
+				var oSuppliers = oAppDataModel.oData.suppliers;
+				//var oModel = that.getOwnModels().appFlowModel;
+				//var suppliers = oModel.oData.suppliersERSE;
 				const e = { target: { result: arrayBuffer } };
 				var data = new Uint8Array(e.target.result);
 				var workbook = XLSX.read(data, { type: "array" });
@@ -29,23 +159,29 @@ sap.ui.define([
 				jsonData.forEach(function (item) {
 					//if (item[0] && item[1]) {
 					if (item.COM && item.Comercializador) {
-						var exists = suppliers.some(function (s) {
-							return s.id === item.id;
+						var exists = oSuppliers.some(function (s) {
+							return s.supplierId === item.id;
 						});
 						if (!exists) {
-							//suppliers.push({ id: item[0], name: item[1] });
-							suppliers.push({ id: item.COM, name: item.Comercializador });
+							oSuppliers.push({ supplierId: item.COM, supplierName: item.Comercializador, supplierLogo: item.Logo });
+							//suppliers.push({ id: item.COM, name: item.Comercializador, logo: item.Logo });
 						}
 					}
+
 				});
-				//return oModel;
+
+					// Commercial conditions list
+					_loadComConditionsFile("data/erse/lstCondComerciais.xlsx", that);
+
 			})
 			.catch(err => {
 				console.error(err);
-				sap.m.MessageToast.show("Erro ao ler ficheiro local");
+				sap.m.MessageToast.show("Erro ao ler ficheiro: " + sPath);
 				//return [];
 			});
+
 	}
+
 
 	// Load commercial conditions list and create related model
 	function _loadComConditionsFile(sPath, that) {
@@ -58,6 +194,8 @@ sap.ui.define([
 				return response.arrayBuffer();
 			})
 			.then(arrayBuffer => {
+				var oAppDataModel = that.getOwnModels().appDataModel;
+				var oSuppliersOffers = oAppDataModel.oData.suppliersOffers;
 				var oModel = that.getOwnModels().appFlowModel;
 				var comConditions = oModel.oData.comOffersConditionsERSE;
 				const e = { target: { result: arrayBuffer } };
@@ -73,16 +211,39 @@ sap.ui.define([
 							return s.COM === item.COM && s.COD_Proposta === item.COD_Proposta;
 						});
 						if (!exists) {
+							item["Data ini"] = formatter.parseXlsxFilesDate(item["Data ini"]);
+							item["Data fim"] = formatter.parseXlsxFilesDate(item["Data fim"]);
 							comConditions.push(item);
+
+							var supplierOffers = {
+								supplierId: item.COM,
+								offerId: item.COD_Proposta,
+								offerName: item.NomeProposta,
+								offerNameId: item.NomeProposta + " [" + item.COD_Proposta + "]",
+								offerFromDate: item["Data ini"],
+								offerToDate: item["Data fim"],
+								segment: item.Segmento,
+								supplyType: item.Fornecimento,
+								countType: item.TipoContagem,
+								modality: item.TxTModalidade,
+								contractDuration: item.DuracaoContrato,
+								details: item
+							};
+							oSuppliersOffers.push(supplierOffers);
 						}
 					}
 				});
+
+				// Commercial conditions prices list
+				_loadComConditionsPricesFile("data/erse/lstPrecos_ELEGN.xlsx", that);
+
 			})
 			.catch(err => {
 				console.error(err);
 				sap.m.MessageToast.show("Erro ao ler ficheiro local");
 				//return [];
 			});
+
 	}
 
 
@@ -97,6 +258,9 @@ sap.ui.define([
 				return response.arrayBuffer();
 			})
 			.then(arrayBuffer => {
+				var oAppDataModel = that.getOwnModels().appDataModel;
+				var oSuppliersOffers = oAppDataModel.oData.suppliersOffers;
+				var oOffersPrices = oAppDataModel.oData.offersPrices;
 				var oModel = that.getOwnModels().appFlowModel;
 				var comConditionsPrices = oModel.oData.comOffersPricesERSE;
 				const e = { target: { result: arrayBuffer } };
@@ -108,7 +272,36 @@ sap.ui.define([
 				var jsonData = XLSX.utils.sheet_to_json(firstSheet);
 				jsonData.forEach(function (item) {
 					if (item.COM && item.COD_Proposta) {
+						//date: new Date(row[0]),
 						comConditionsPrices.push(item);
+
+						var suppliersOffers = oSuppliersOffers.filter(
+							supplierOffer => supplierOffer.supplierId === item.COM
+								&& supplierOffer.offerId === item.COD_Proposta
+						);
+						var offerFromDate = null;
+						var offerToDate = null;
+						if (suppliersOffers[0]) {
+							offerFromDate = suppliersOffers[0].offerFromDate;
+							offerToDate = suppliersOffers[0].offerToDate;
+						}
+						var offersPrices = {
+							supplierId: item.COM,
+							offerId: item.COD_Proposta,
+							offerFromDate: offerFromDate,
+							offerToDate: offerToDate,
+							power: item.Pot_Cont,
+							countingCycle: item.Contagem,
+							consumptionLevel: item.Escalao,
+							networkOperator: item.ORD,
+							termFixed: item.TF,
+							termEnergySOR: item["TV|TVFV|TVP"],
+							termEnergyEF: item["TVV|TVC"],
+							termEnergyE: item.TVVz,
+							termFixedNG: item.TFGN,
+							termEnergyNG: item.TVGN
+						};
+						oOffersPrices.push(offersPrices);
 						//var exists = comConditionsPrices.some(function (s) {
 						//	return s.COM === item.COM && s.COD_Proposta === item.COD_Proposta;
 						//});
@@ -117,6 +310,10 @@ sap.ui.define([
 						//}
 					}
 				});
+
+				// Commercial conditions & prices metadata
+				_loadComOffersMetadataFile("data/erse/metadata.xlsx", that);
+
 			})
 			.catch(err => {
 				console.error(err);
@@ -137,6 +334,8 @@ sap.ui.define([
 				return response.arrayBuffer();
 			})
 			.then(arrayBuffer => {
+				var oAppDataModel = that.getOwnModels().appDataModel;
+				var oMetadata = oAppDataModel.oData.metadata;
 				var oModel = that.getOwnModels().appFlowModel;
 				var comOffersMetadata = oModel.oData.comOffersMetadataERSE;
 				const e = { target: { result: arrayBuffer } };
@@ -153,7 +352,8 @@ sap.ui.define([
 					//.filter(row => row[0] && row[5] && row[6] && row[7]) // só mantém linhas válidas
 					.map(item => ({
 						id: item[1],
-						descr: item[2]
+						descr: item[2],
+						description: item[2]
 					}));
 
 				// Get commercial conditions list metadata
@@ -161,54 +361,19 @@ sap.ui.define([
 					.slice(18, 84) // ignora cabeçalho
 					.map(item => ({
 						id: item[1],
-						descr: item[2]
+						descr: item[2],
+						description: item[2]
 					}));
 
 				comOffersMetadata.push({
 					precosELEGN: precosELEGN,
 					condComerciais: condComerciais
 				});
-
-			})
-			.catch(err => {
-				console.error(err);
-				sap.m.MessageToast.show("Erro ao ler ficheiro local");
-				//return [];
-			});
-	}
-
-
-
-	// Load regulated market Offers and create related model
-	function _loadRegMrktOffersFile(sPath, that) {
-		fetch(sPath) // adapta "meuapp" ao namespace do projeto
-			.then(response => {
-				if (!response.ok) {
-					throw new Error("Erro ao carregar ficheiro: " + sPath);
-				}
-				return response.arrayBuffer();
-			})
-			.then(arrayBuffer => {
-				var oModel = that.getOwnModels().appFlowModel;
-				var regMrktOffers = oModel.oData.regMrktOffersERSE;
-				const e = { target: { result: arrayBuffer } };
-				var data = new Uint8Array(e.target.result);
-				var workbook = XLSX.read(data, { type: "array" });
-				// Reads first sheet to model
-				var firstSheetName = workbook.SheetNames[0];
-				var firstSheet = workbook.Sheets[firstSheetName];
-				var jsonData = XLSX.utils.sheet_to_json(firstSheet);
-				jsonData.forEach(function (item) {
-					if (item.COM && item.COD_Proposta) {
-						regMrktOffers.push(item);
-						//var exists = regMrktOffers.some(function (s) {
-						//	return s.COM === item.COM && s.COD_Proposta === item.COD_Proposta;
-						//});
-						//if (!exists) {
-						//	regMrktOffers.push(item);
-						//}
-					}
+				oMetadata.push({
+					prices: precosELEGN,
+					offers: condComerciais
 				});
+
 			})
 			.catch(err => {
 				console.error(err);
@@ -219,7 +384,7 @@ sap.ui.define([
 
 
 	// Create readings from eRedes file model
-	function _createReadingsFromEredesFileModel(that, jsonData) {
+	function DELETE_createReadingsFromEredesFileModel(that, jsonData) {
 
 		// Get readings address, CPE and counter nr
 		var header = jsonData.slice(0, 3).map((row, index) => ({
@@ -282,27 +447,4 @@ sap.ui.define([
 		return oData;
 	}
 
-
-	return {
-		parseERSEFiles: function (that) {
-			//var that = this;
-			try {
-				// Suppliers list
-				_loadSupplierFile("data/erse/lstComercializadores.xlsx", that);
-				// Commercial conditions list
-				_loadComConditionsFile("data/erse/lstCondComerciais.xlsx", that);
-				// Commercial conditions prices list
-				_loadComConditionsPricesFile("data/erse/lstPrecos_ELEGN.xlsx", that);
-				// Commercial conditions & prices metadata
-				_loadComOffersMetadataFile("data/erse/metadata.xlsx", that);
-				// regulated market offers
-				_loadRegMrktOffersFile("data/erse/lstTarifas_RegM.xlsx", that);
-
-				Log.info("ERSE files loaded");
-			} catch (err) {
-				Log.error("Error (parseEredesFiles): " + err.message);
-				return new JSONModel([]);
-			}
-		}
-	};
 });

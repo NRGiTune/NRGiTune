@@ -1,6 +1,7 @@
 sap.ui.define([
-  "sap/ui/model/json/JSONModel"
-], function (JSONModel) {
+  "sap/ui/model/json/JSONModel",
+	"simulador/util/formatter"
+], function (JSONModel, formatter) {
   "use strict";
 
   return {
@@ -129,12 +130,12 @@ sap.ui.define([
 
     getSuppliers: function (that) {
       // Get ERSE data models
-      var oAppFlowModel = that.getOwnerComponent().getModel("appFlowModel");
-      var suppliersERSE = oAppFlowModel.oData.suppliersERSE;
-      var comOffersConditionsERSE = oAppFlowModel.oData.comOffersConditionsERSE;
-      var comOffersPricesERSE = oAppFlowModel.oData.comOffersPricesERSE;
-      var comOffersMetadataERSE = oAppFlowModel.oData.comOffersMetadataERSE;
-      var regMrktOffersERSE = oAppFlowModel.oData.regMrktOffersERSE;
+      var oAppDataModel = that.getOwnerComponent().getModel("appDataModel");
+      var suppliers = oAppDataModel.oData.suppliers;
+      var suppliersOffers = oAppDataModel.oData.suppliersOffers;
+      var offersPrices = oAppDataModel.oData.offersPrices;
+      var regMarketPrices = oAppDataModel.oData.regMarketPrices;
+      var metadata = oAppDataModel.oData.metadata;
       // Supplier model elements
       var suppliers = [];
       var offersPrices = [];
@@ -162,12 +163,12 @@ sap.ui.define([
                 {
                 id: "MR",
                 name: "TARIFA TRANSITÓRIA DE VENDA A CLIENTES FINAIS EM BTN (≤20,7 kVA e >1,15 kVA)",
-                startDate: "01/01/2025",
-                endDate: "31/12/2025",
+                startDate: formatter.parseXlsxFilesDate("01/01/2025"),
+                endDate: formatter.parseXlsxFilesDate("31/12/2025"),
                 supplyType: "ELE",
-                countType: null,
+                countType: "1",
                 segment: null,
-                contractDuration: null,
+                contractDuration: "12",
                 prices: offersPrices,
                 conditions: conditionMR
               }
@@ -177,6 +178,7 @@ sap.ui.define([
 
         id: "ERSE",
         name: "ERSE - Entidade Reguladora dos Serviços Energéticos",
+        logo: "erseLogo.png",
         offers: offersMR
         //offers: [
         //  {
@@ -262,13 +264,14 @@ sap.ui.define([
 
             })
 
-            var supplier = {
+            var oSupplier = {
               id: supplier.id,
               name: supplier.name,
+              logo: supplier.logo,
               offers: offers
             };
 
-            suppliers.push(supplier);
+            suppliers.push(oSupplier);
 
           }
         }

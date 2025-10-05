@@ -4,16 +4,34 @@ sap.ui.define([
   "simulador/util/fileParserEredes",
   "sap/m/Dialog",
   "sap/m/Button",
-  "sap/m/Title"
-], function (Controller, JSONModel, eRedesFileParser, Dialog, Button, Title) {
+  "sap/m/Title",
+  "simulador/model/checkConsReadModel"
+], function (Controller, JSONModel, eRedesFileParser, Dialog, Button, Title, checkConsReadModel) {
   "use strict";
   return Controller.extend("simulador.controller.Main", {
     onInit: function () {
       // wire drop zone after rendering
       this.getView().addEventDelegate({
         //onAfterShow: this._attachDrop.bind(this)
-        onAfterRendering: this._attachDrop.bind(this)
+        onAfterRendering: this._attachDrop.bind(this)        
       });
+
+      var oModel = new JSONModel({
+        // eRedes Readings select options
+        optionValEFRVisible: true,
+        optionValEFRTypeVisible: true,
+        // Message visibility
+        optionValEFRMsgVisible: false,
+        optionValEFRMsgType: "Ok",
+        optionValEFRMsgIcon: "",
+        optionValEFRMsg: "",
+        // Table columns visibility
+        consColsVisible: true,
+        readColsVisible: false,
+        toDateColVisible: true,
+      });
+      this.getView().setModel(oModel);
+
     },
 
     _attachDrop: function () {
@@ -76,10 +94,16 @@ sap.ui.define([
       reader.onload = (e) => {
         var that = this;
         var oData = eRedesFileParser.parseEredesFile(that, e);
+        // To DELETE
         var oAppFlowModel = that.getOwnerComponent().getModel("appFlowModel");
-        oAppFlowModel.setProperty("/consReadRows", oData.consReadRows);
+        oAppFlowModel.setProperty("/consReadRows", oData.oData.consReadRows);
+        // To DELETE
+        var oAppDataModel = that.getOwnerComponent().getModel("appDataModel");
+        oAppDataModel.setProperty("/consumptions", oData.consumptions.consumptions);
+
+        const status = checkConsReadModel.checkConsumptions(oAppDataModel);
         sap.m.MessageToast.show("Ficheiro carregado: " + file.name);
-        this.getOwnerComponent().getRouter().navTo("supplier");
+        this.getOwnerComponent().getRouter().navTo("simulate");
       };
 
       reader.readAsArrayBuffer(file);
@@ -88,7 +112,7 @@ sap.ui.define([
     onOptionReadings: function (oEvt) {
       var idx = oEvt.getParameter("selectedIndex");
       var has = idx === 0;
-      this.getOwnerComponent().getModel("appFlowModel").setProperty("/optionValEFRVisible", has);
+      this.getView().getModel().setProperty("/optionValEFRVisible", has);
     },
 
     onOptionValEFRSelect: function (oEvt) {
@@ -137,31 +161,39 @@ sap.ui.define([
           readColsVisible = false;
           break;
       }
-      this.getOwnerComponent().getModel("appFlowModel").setProperty("/optionValEFRMsgVisible", msgVisible);
-      this.getOwnerComponent().getModel("appFlowModel").setProperty("/optionValEFRMsgIcon", msgIcon);
-      this.getOwnerComponent().getModel("appFlowModel").setProperty("/optionValEFRMsgType", msgType);
-      this.getOwnerComponent().getModel("appFlowModel").setProperty("/optionValEFRMsg", msgText);
-      this.getOwnerComponent().getModel("appFlowModel").setProperty("/consColsVisible", consColsVisible);
-      this.getOwnerComponent().getModel("appFlowModel").setProperty("/readColsVisible", readColsVisible);
+      this.getView().getModel().setProperty("/optionValEFRMsgVisible", msgVisible);
+      this.getView().getModel().setProperty("/optionValEFRMsgIcon", msgIcon);
+      this.getView().getModel().setProperty("/optionValEFRMsgType", msgType);
+      this.getView().getModel().setProperty("/optionValEFRMsg", msgText);
+      this.getView().getModel().setProperty("/consColsVisible", consColsVisible);
+      this.getView().getModel().setProperty("/readColsVisible", readColsVisible);
     },
 
     onNextFromMain: function () {
-      this.getOwnerComponent().getRouter().navTo("supplier");
+      this.getOwnerComponent().getRouter().navTo("simulate");
     },
 
     onAddRow: function () {
-      var o = this.getView().getModel("appFlowModel");
-      var a = o.getProperty("/consReadRows");
-      a.push({ fromDate: "", toDate: "", simple: "", consEmpty: "", consFull: "", consRush: "", readEmpty: "", readFull: "", readRush: "" });
-      o.setProperty("/consReadRows", a);
+      var o = this.getView().getModel("appDataModel");
+      var a = o.getProperty("/consumptions");
+      a.push({ fromDate: null, toDate: null, consumptionSimple: null, 
+                consumptionEmpty: null, consumptionFull: null, consumptionRush: null, 
+                readingsEmpty: null, readingsFull: null, readingsRush: null, checkState: "None", checkMsg: "" });
+      o.setProperty("/consumptions", a);
+    },
+
+    onCheckConsumptions: function () {
+      var oAppDataModel = this.getView().getModel("appDataModel");
+      //var oModel = this.getView().getModel("appFlowModel");
+      const status = checkConsReadModel.checkConsumptions(oAppDataModel);
     },
 
     onDeleteRow: function (oEvent) {
       const oItem = oEvent.getSource().getParent(); // a linha (ColumnListItem)
       const sPath = oItem.getBindingContextPath();   // contexto path
       if (sPath) {
-        const oModel = this.getView().getModel("appFlowModel");
-        const aData = oModel.getProperty("/consReadRows");
+        const oModel = this.getView().getModel("appDataModel");
+        const aData = oModel.getProperty("/consumptions");
         const iIndex = parseInt(sPath.split("/")[2], 10);
         aData.splice(iIndex, 1);
         oModel.setProperty("/consReadRows", aData);
@@ -185,7 +217,7 @@ sap.ui.define([
       var ttl = "Invoice Consuption/Readings Values Help"
       this._openEredesReadingsDialog(sup, t, ttl);
     },
-    
+
     _openEredesReadingsDialog: function (supplier, offer, ttl) {
       var that = this;
       if (this._oDlg) {
@@ -239,7 +271,54 @@ sap.ui.define([
       }
 
       this._oImageStepsDialog.open();
+    },
+
+    onShowCheckedMsgs: function () {
+      var oView = this.getView();
+
+      // reutiliza o diálogo se já existir
+      if (!this._oCheckedMsgsDialog) {
+        this._oCheckedMsgsDialog = new sap.m.Dialog({
+          title: "Mensagens de Validação",
+          contentWidth: "500px",
+          contentHeight: "400px",
+          resizable: true,
+          draggable: true,
+          content: [
+            new sap.m.List({
+              items: {
+                path: "appDataModel>/consumptions",
+                template: new sap.m.CustomListItem({
+                  content: [
+                    new sap.m.ObjectStatus({
+                      class: "sapUiSmallMarginBottom sapUiSmallMarginStart",
+                      active: true,
+                      inverted: false,
+                      state: "{appDataModel>checked}",   // Error, Warning, Success, Information
+                      text: "{appDataModel>checkMsg}"    // mensagem
+                    })
+                  ]
+                })
+              }
+            })
+          ],
+          buttons: [
+            new sap.m.Button({
+              text: "Fechar",
+              press: function () {
+                this._oCheckedMsgsDialog.close();
+              }.bind(this)
+            })
+          ]
+        });
+
+        // adiciona o diálogo como dependente da view
+        oView.addDependent(this._oCheckedMsgsDialog);
+      }
+
+      this._oCheckedMsgsDialog.open();
     }
+
 
 
   });

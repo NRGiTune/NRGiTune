@@ -1,84 +1,391 @@
-<mvc:View
-  controllerName="simulador.controller.OfferDetails"
+<mvc:View controllerName="simulador.controller.OfferDetails"
   xmlns:mvc="sap.ui.core.mvc"
   xmlns="sap.m"
   xmlns:l="sap.ui.layout">
 
   <ScrollContainer vertical="true" height="100%" width="100%">
 
-    <VBox class="sapUiMediumMargin">
+    <VBox class="sapUiSmallMargin">
 
-      <!-- Header contrato -->
-      <HBox justifyContent="SpaceBetween" alignItems="Center">
-        <HBox alignItems="Center">
-          <Image src="{/current/logo}" height="3rem"/>
-          <VBox class="sapUiSmallMarginBegin">
-            <Title text="{/current/name}" level="H3"/>
-            <Text text="{/current/type}"/>
-            <Text text="{/current/period}"/>
-          </VBox>
-        </HBox>
-        <VBox alignItems="End">
-          <Title text="{/current/amount}" level="H2"/>
-        </VBox>
-      </HBox>
+      <!-- Totals -->
+      <Panel headerText="Totais / Ciclo Horário " expandable="false" class="sapUiSmallMarginTop">
+        <l:Grid defaultSpan="L4 M12 S12" hSpacing="1" vSpacing="0"
+          xmlns:l="sap.ui.layout">
+          <l:content>
+            <Panel headerText="Simples" expandable="false">
+              <VBox>
+                <HBox justifyContent="SpaceBetween">
+                  <Text text="Potência {appDataModel>/offerSimulation/powerkWh} kVA | 
+                  { path: 'appDataModel>/offerSimulation/totalsSimple/powerDays', formatter: '.formatter.formatInteger'} 
+                  Dias"/>
+                  <Text text="{path: 'appDataModel>/offerSimulation/totalsSimple/powerValue', formatter: '.formatter.formatCurrency'}"/>
+                </HBox>
+                <HBox justifyContent="SpaceBetween">
+                  <Text text="Consumo | {appDataModel>/offerSimulation/totalsSimple/consumptionKwh} kVA"/>
+                  <Text text="{path: 'appDataModel>/offerSimulation/totalsSimple/consumptionValueTotal', formatter: '.formatter.formatCurrency'}"/>
+                </HBox>
+                <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginTop">
+                  <Title text="Total" level="H4"/>
+                  <Title text="{path: 'appDataModel>/offerSimulation/offerSimpleSimulationTtl', formatter: '.formatter.formatCurrency'}" 
+                  level="H4"/>
+                </HBox>
+              </VBox>
+            </Panel>
+          </l:content>
 
-      <!-- Secção eletricidade -->
-      <Panel headerText="Eletricidade" expandable="false" class="sapUiMediumMarginTop">
-        <HBox justifyContent="SpaceAround">
-          <VBox alignItems="Center">
-            <ObjectStatus text="Consumo" state="Success"/>
-            <Title text="{/current/totalConsumption}" level="H4"/>
-            <Text text="{/current/variablePrice}"/>
-          </VBox>
-          <VBox alignItems="Center">
-            <ObjectStatus text="Termo fixo" state="Information"/>
-            <Title text="31 dias" level="H4"/>
-            <Text text="{/current/fixedPrice}"/>
-          </VBox>
-        </HBox>
+          <l:content>
+            <Panel headerText="Bi-Horário" expandable="false">
+              <VBox>
+                <HBox justifyContent="SpaceBetween">
+                  <Text text="Potência {appDataModel>/offerSimulation/powerkWh} kVA | 
+                  { path: 'appDataModel>/offerSimulation/totalsBiH/powerDays', formatter: '.formatter.formatInteger'} 
+                  Dias"/>
+                  <Text text="{path: 'appDataModel>/offerSimulation/totalsBiH/powerValue', formatter: '.formatter.formatCurrency'}"/>
+                </HBox>
+                <HBox justifyContent="SpaceBetween">
+                  <Text text="Consumo | {appDataModel>/offerSimulation/totalsBiH/consumptionKwh} kVA"/>
+                  <Text text="{path: 'appDataModel>/offerSimulation/totalsBiH/consumptionValueTotal', formatter: '.formatter.formatCurrency'}"/>
+                </HBox>
+                <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginTop">
+                  <Title text="Total" level="H4"/>
+                  <Title text="{path: 'appDataModel>/offerSimulation/offerBiHSimulationTtl', formatter: '.formatter.formatCurrency'}" 
+                  level="H4"/>
+                </HBox>
+              </VBox>
+            </Panel>
+          </l:content>
+
+          <l:content>
+            <Panel headerText="Tri-Horário" expandable="false">
+              <VBox>
+                <HBox justifyContent="SpaceBetween">
+                  <Text text="Potência {appDataModel>/offerSimulation/powerkWh} kVA | 
+                  { path: 'appDataModel>/offerSimulation/totalsTriH/powerDays', formatter: '.formatter.formatInteger'} 
+                  Dias"/>
+                  <Text text="{path: 'appDataModel>/offerSimulation/totalsTriH/powerValue', formatter: '.formatter.formatCurrency'}"/>
+                </HBox>
+                <HBox justifyContent="SpaceBetween">
+                  <Text text="Consumo | {appDataModel>/offerSimulation/totalsTriH/consumptionKwh} kVA"/>
+                  <Text text="{path: 'appDataModel>/offerSimulation/totalsTriH/consumptionValueTotal', formatter: '.formatter.formatCurrency'}"/>
+                </HBox>
+                <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginTop">
+                  <Title text="Total" level="H4"/>
+                  <Title text="{path: 'appDataModel>/offerSimulation/offerTriHSimulationTtl', formatter: '.formatter.formatCurrency'}" 
+                  level="H4"/>
+                </HBox>
+              </VBox>
+            </Panel>
+          </l:content>
+
+        </l:Grid>
+
       </Panel>
 
-      <!-- Detalhes do consumo -->
-      <Title text="Detalhes do consumo" level="H5" class="sapUiSmallMarginTop"/>
-      <Table items="{/current/details}">
-        <columns>
-          <Column><Text text="Período"/></Column>
-          <Column><Text text="Consumo"/></Column>
-          <Column><Text text="Preço por kWh"/></Column>
-        </columns>
-        <items>
-          <ColumnListItem>
-            <cells>
-              <Text text="{period}"/>
-              <Text text="{consumption}"/>
-              <Text text="{price}"/>
-            </cells>
-          </ColumnListItem>
-        </items>
-      </Table>
 
-      <!-- Totais -->
-      <Panel headerText="Totais" expandable="false" class="sapUiMediumMarginTop">
-        <VBox>
-          <HBox justifyContent="SpaceBetween">
-            <Text text="Termo variável"/>
-            <Text text="{/current/totalVariable}"/>
-          </HBox>
-          <HBox justifyContent="SpaceBetween">
-            <Text text="Termo fixo"/>
-            <Text text="{/current/totalFixed}"/>
-          </HBox>
-          <HBox justifyContent="SpaceBetween">
-            <Text text="Taxas"/>
-            <Text text="{/current/taxes}"/>
-          </HBox>
-          <HBox justifyContent="SpaceBetween">
-            <Text text="Eletricidade" design="Bold"/>
-            <Text text="{/current/amount}" design="Bold"/>
-          </HBox>
-        </VBox>
+      <!-- Simple Panel -->
+      <Panel headerText="Simples" expandable="false" class="sapUiMediumMarginTop">
+        <!-- Power Table -->
+        <Table id="tblPower" items="{appDataModel>/offerSimulation/simple}">
+          <headerToolbar>
+            <OverflowToolbar>
+              <content>
+                <Title text="Potência contratada {appDataModel>/offerSimulation/powerkWh} kVA" level="H2"/>
+              </content>
+            </OverflowToolbar>
+          </headerToolbar>
+          <columns>
+            <Column></Column>
+            <Column></Column>
+            <Column hAlign="Center">
+              <footer>
+                <Title text="{ path: 'appDataModel>/offerSimulation/totalsSimple/powerDays', formatter: '.formatter.formatInteger'}" level="H4"/>
+              </footer>
+            </Column>
+            <Column hAlign="End"></Column>
+            <Column hAlign="End"></Column>
+            <Column hAlign="End">
+              <footer>
+                  <Title text="{path: 'appDataModel>/offerSimulation/totalsSimple/powerValue', formatter: '.formatter.formatCurrency'}" level="H4"/>
+              </footer>
+            </Column>
+          </columns>
+          <items>
+            <ColumnListItem>
+              <cells>
+                <ObjectStatus 
+                text="{path: 'appDataModel>fromDate', formatter: '.formatter.formatDate'}"
+                icon="sap-icon://workflow-tasks" state="None" />
+                <ObjectStatus 
+                text="{path: 'appDataModel>toDate', formatter: '.formatter.formatDate'}"
+                icon="sap-icon://select-appointments" state="None" />
+                <Text text="{ path: 'appDataModel>powerDays', formatter: '.formatter.formatInteger'}"/>
+                <Text text="{appDataModel>powerkWh}"/>
+                <Text text="{path: 'appDataModel>powerDayValue', formatter: '.formatter.formatCurrency'}" />
+                <Text text="{path: 'appDataModel>powerValue', formatter: '.formatter.formatCurrency'}" />
+              </cells>
+            </ColumnListItem>
+          </items>
+        </Table>
+        <!-- Consumption Table -->
+        <Table id="tblConsumption" items="{appDataModel>/offerSimulation/simple}">
+          <headerToolbar>
+            <OverflowToolbar>
+              <content>
+                <Title text="Consumo" level="H2"/>
+              </content>
+            </OverflowToolbar>
+          </headerToolbar>
+          <columns>
+            <Column></Column>
+            <Column></Column>
+            <Column hAlign="Center"></Column>
+            <Column hAlign="End">
+              <footer>
+                <Title text="{appDataModel>/offerSimulation/totalsSimple/consumptionKwh}" level="H4"/>
+              </footer>
+            </Column>
+            <Column hAlign="End"></Column>
+            <Column hAlign="End">
+              <footer>
+                <Title text="{path: 'appDataModel>/offerSimulation/totalsSimple/consumptionValueTotal', formatter: '.formatter.formatCurrency'}" level="H4"/>
+              </footer>
+            </Column>
+          </columns>
+          <items>
+            <ColumnListItem>
+              <cells>
+                <ObjectStatus 
+                text="{path: 'appDataModel>fromDate', formatter: '.formatter.formatDate'}"
+                icon="sap-icon://workflow-tasks" state="None" />
+                <ObjectStatus 
+                text="{path: 'appDataModel>toDate', formatter: '.formatter.formatDate'}"
+                icon="sap-icon://select-appointments" state="None" />
+                <VBox>
+                  <Text text="{appDataModel>consumption/0/consumptionTermEnergy}"/>
+                </VBox>
+                <VBox>
+                  <Text text="{appDataModel>consumption/0/consumptionKWh}"/>
+                </VBox>
+                <VBox>
+                  <Text text="{path: 'appDataModel>consumption/0/consumptionKWhValue', formatter: '.formatter.formatCurrency'}" />
+                </VBox>
+                <VBox>
+                  <Text text="{path: 'appDataModel>consumption/0/consumptionValue', formatter: '.formatter.formatCurrency'}" />
+                </VBox>
+              </cells>
+            </ColumnListItem>
+          </items>
+        </Table>
+
       </Panel>
+
+
+      <!-- Bi-Hourly Panel -->
+      <Panel headerText="Bi-Horária" expandable="false" class="sapUiMediumMarginTop">
+        <!-- Power Table -->
+        <Table id="tblBiHPower" items="{appDataModel>/offerSimulation/biH}">
+          <headerToolbar>
+            <OverflowToolbar>
+              <content>
+                <Title text="Potência contratada {appDataModel>/offerSimulation/powerkWh} kVA" level="H2"/>
+              </content>
+            </OverflowToolbar>
+          </headerToolbar>
+          <columns>
+            <Column></Column>
+            <Column></Column>
+            <Column hAlign="Center">
+              <footer>
+                <Title text="{ path: 'appDataModel>/offerSimulation/totalsBiH/powerDays', formatter: '.formatter.formatInteger'}" level="H4"/>
+              </footer>
+            </Column>
+            <Column hAlign="End"></Column>
+            <Column hAlign="End"></Column>
+            <Column hAlign="End">
+              <footer>
+                  <Title text="{path: 'appDataModel>/offerSimulation/totalsBiH/powerValue', formatter: '.formatter.formatCurrency'}" level="H4"/>
+              </footer>
+            </Column>
+          </columns>
+          <items>
+            <ColumnListItem>
+              <cells>
+                <ObjectStatus 
+                text="{path: 'appDataModel>fromDate', formatter: '.formatter.formatDate'}"
+                icon="sap-icon://workflow-tasks" state="None" />
+                <ObjectStatus 
+                text="{path: 'appDataModel>toDate', formatter: '.formatter.formatDate'}"
+                icon="sap-icon://select-appointments" state="None" />
+                <Text text="{ path: 'appDataModel>powerDays', formatter: '.formatter.formatInteger'}"/>
+                <Text text="{appDataModel>powerkWh}"/>
+                <Text text="{path: 'appDataModel>powerDayValue', formatter: '.formatter.formatCurrency'}" />
+                <Text text="{path: 'appDataModel>powerValue', formatter: '.formatter.formatCurrency'}" />
+              </cells>
+            </ColumnListItem>
+          </items>
+        </Table>
+        <!-- Consumption Table -->
+        <Table id="tblBiHConsumption" items="{appDataModel>/offerSimulation/biH}">
+          <headerToolbar>
+            <OverflowToolbar>
+              <content>
+                <Title text="Consumo" level="H2"/>
+              </content>
+            </OverflowToolbar>
+          </headerToolbar>
+          <columns>
+            <Column></Column>
+            <Column></Column>
+            <Column hAlign="Center"></Column>
+            <Column hAlign="End">
+              <footer>
+                <Title text="{appDataModel>/offerSimulation/totalsBiH/consumptionKwh}" level="H4"/>
+              </footer>
+            </Column>
+            <Column hAlign="End"></Column>
+            <Column hAlign="End">
+              <footer>
+                <Title text="{path: 'appDataModel>/offerSimulation/totalsBiH/consumptionValueTotal', formatter: '.formatter.formatCurrency'}" level="H4"/>
+              </footer>
+            </Column>
+          </columns>
+          <items>
+            <ColumnListItem>
+              <cells>
+                <ObjectStatus 
+                text="{path: 'appDataModel>fromDate', formatter: '.formatter.formatDate'}"
+                icon="sap-icon://workflow-tasks" state="None" />
+                <ObjectStatus 
+                text="{path: 'appDataModel>toDate', formatter: '.formatter.formatDate'}"
+                icon="sap-icon://select-appointments" state="None" />
+                <VBox>
+                  <Text text="{appDataModel>consumption/0/consumptionTermEnergy}"/>
+                  <Text text="{appDataModel>consumption/1/consumptionTermEnergy}"/>
+                </VBox>
+                <VBox>
+                  <Text text="{appDataModel>consumption/0/consumptionKWh}"/>
+                  <Text text="{appDataModel>consumption/1/consumptionKWh}"/>
+                </VBox>
+                <VBox>
+                  <Text text="{path: 'appDataModel>consumption/0/consumptionKWhValue', formatter: '.formatter.formatCurrency'}" />
+                  <Text text="{path: 'appDataModel>consumption/1/consumptionKWhValue', formatter: '.formatter.formatCurrency'}" />
+                </VBox>
+                <VBox>
+                  <Text text="{path: 'appDataModel>consumption/0/consumptionValue', formatter: '.formatter.formatCurrency'}" />
+                  <Text text="{path: 'appDataModel>consumption/1/consumptionValue', formatter: '.formatter.formatCurrency'}" />
+                </VBox>
+              </cells>
+            </ColumnListItem>
+          </items>
+        </Table>
+
+      </Panel>
+
+      <!-- Tri-Hourly Panel -->
+      <Panel headerText="Tri-Horária" expandable="false" class="sapUiMediumMarginTop">
+        <!-- Power Table -->
+        <Table id="tblTriHPower" items="{appDataModel>/offerSimulation/triH}">
+          <headerToolbar>
+            <OverflowToolbar>
+              <content>
+                <Title text="Potência contratada {appDataModel>/offerSimulation/powerkWh} kVA" level="H2"/>
+              </content>
+            </OverflowToolbar>
+          </headerToolbar>
+          <columns>
+            <Column></Column>
+            <Column></Column>
+            <Column hAlign="Center">
+              <footer>
+                <Title text="{ path: 'appDataModel>/offerSimulation/totalsTriH/powerDays', formatter: '.formatter.formatInteger'}" level="H4"/>
+            </footer>
+            </Column>
+            <Column hAlign="End"></Column>
+            <Column hAlign="End"></Column>
+            <Column hAlign="End">
+              <footer>
+                  <Title text="{path: 'appDataModel>/offerSimulation/totalsTriH/powerValue', formatter: '.formatter.formatCurrency'}" level="H4"/>
+              </footer>
+            </Column>
+          </columns>
+          <items>
+            <ColumnListItem>
+              <cells>
+                <ObjectStatus 
+                text="{path: 'appDataModel>fromDate', formatter: '.formatter.formatDate'}"
+                icon="sap-icon://workflow-tasks" state="None" />
+                <ObjectStatus 
+                text="{path: 'appDataModel>toDate', formatter: '.formatter.formatDate'}"
+                icon="sap-icon://select-appointments" state="None" />
+                <Text text="{ path: 'appDataModel>powerDays', formatter: '.formatter.formatInteger'}"/>
+                <Text text="{appDataModel>powerkWh}"/>
+                <Text text="{path: 'appDataModel>powerDayValue', formatter: '.formatter.formatCurrency'}" />
+                <Text text="{path: 'appDataModel>powerValue', formatter: '.formatter.formatCurrency'}" />
+              </cells>
+            </ColumnListItem>
+          </items>
+        </Table>
+        <!-- Consumption Table -->
+        <Table id="tblTriHConsumption" items="{appDataModel>/offerSimulation/triH}">
+          <headerToolbar>
+            <OverflowToolbar>
+              <content>
+                <Title text="Consumo" level="H2"/>
+              </content>
+            </OverflowToolbar>
+          </headerToolbar>
+          <columns>
+            <Column></Column>
+            <Column></Column>
+            <Column hAlign="Center"></Column>
+            <Column hAlign="End">
+              <footer>
+                <Title text="{appDataModel>/offerSimulation/totalsTriH/consumptionKwh}" level="H4"/>
+              </footer>
+            </Column>
+            <Column hAlign="End"></Column>
+            <Column hAlign="End">
+              <footer>
+                <Title text="{path: 'appDataModel>/offerSimulation/totalsTriH/consumptionValueTotal', formatter: '.formatter.formatCurrency'}" level="H4"/>
+              </footer>
+            </Column>
+          </columns>
+          <items>
+            <ColumnListItem>
+              <cells>
+                <ObjectStatus 
+                text="{path: 'appDataModel>fromDate', formatter: '.formatter.formatDate'}"
+                icon="sap-icon://workflow-tasks" state="None" />
+                <ObjectStatus 
+                text="{path: 'appDataModel>toDate', formatter: '.formatter.formatDate'}"
+                icon="sap-icon://select-appointments" state="None" />
+                <VBox>
+                  <Text text="{appDataModel>consumption/0/consumptionTermEnergy}"/>
+                  <Text text="{appDataModel>consumption/1/consumptionTermEnergy}"/>
+                  <Text text="{appDataModel>consumption/2/consumptionTermEnergy}"/>
+                </VBox>
+                <VBox>
+                  <Text text="{appDataModel>consumption/0/consumptionKWh}"/>
+                  <Text text="{appDataModel>consumption/1/consumptionKWh}"/>
+                  <Text text="{appDataModel>consumption/2/consumptionKWh}"/>
+                </VBox>
+                <VBox>
+                  <Text text="{path: 'appDataModel>consumption/0/consumptionKWhValue', formatter: '.formatter.formatCurrency'}" />
+                  <Text text="{path: 'appDataModel>consumption/1/consumptionKWhValue', formatter: '.formatter.formatCurrency'}" />
+                  <Text text="{path: 'appDataModel>consumption/2/consumptionKWhValue', formatter: '.formatter.formatCurrency'}" />
+                </VBox>
+                <VBox>
+                  <Text text="{path: 'appDataModel>consumption/0/consumptionValue', formatter: '.formatter.formatCurrency'}" />
+                  <Text text="{path: 'appDataModel>consumption/1/consumptionValue', formatter: '.formatter.formatCurrency'}" />
+                  <Text text="{path: 'appDataModel>consumption/2/consumptionValue', formatter: '.formatter.formatCurrency'}" />
+                </VBox>
+              </cells>
+            </ColumnListItem>
+          </items>
+        </Table>
+
+      </Panel>
+
 
     </VBox>
   </ScrollContainer>

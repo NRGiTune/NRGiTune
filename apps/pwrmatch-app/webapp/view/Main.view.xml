@@ -22,7 +22,7 @@
 
               <l:content>
 
-                <RadioButtonGroup selectedIndex="{= ${appFlowModel>/optionValEFRVisible} ? 0 : 1 }" select=".onOptionReadings">
+                <RadioButtonGroup selectedIndex="{= ${/optionValEFRVisible} ? 0 : 1 }" select=".onOptionReadings">
                   <buttons>
                     <RadioButton text="{i18n>optionReadingsEredes}" />
                     <RadioButton text="{i18n>optionReadingsNoEredes}" />
@@ -45,7 +45,7 @@
 
         <l:content>
           <!-- Manual consuption/readungs input option panel -->
-          <Panel headerText="{i18n>optionValTtl}" class="sapUiSmallMarginTop" visible="{= !${appFlowModel>/optionValEFRVisible} }">
+          <Panel headerText="{i18n>optionValTtl}" class="sapUiSmallMarginTop" visible="{= !${/optionValEFRVisible} }">
 
             <l:Grid defaultSpan="L6 M6 S12" hSpacing="0" vSpacing="0"
               xmlns:l="sap.ui.layout">
@@ -79,12 +79,12 @@
               </l:content>
 
               <l:content>
-                <VBox justifyContent="Center" alignItems="Start" visible="{= ${appFlowModel>/optionValEFRMsgVisible} }" class="sapUiSmallMarginTop">
+                <VBox justifyContent="Center" alignItems="Start" visible="{= ${/optionValEFRMsgVisible} }" class="sapUiSmallMarginTop">
                   <HBox backgroundDesign="Solid">
-                    <MessageStrip class="sapUiTinyMarginBottom sapUiSmallMarginBegin" text="{= ${appFlowModel>/optionValEFRMsg} }" type="{=
-                      ${appFlowModel>/optionValEFRMsgType} === 3 ? 'Error'
-                      : ${appFlowModel>/optionValEFRMsgType} === 2 ? 'Warning'
-                      : ${appFlowModel>/optionValEFRMsgType} === 1 ? 'Information'
+                    <MessageStrip class="sapUiTinyMarginBottom sapUiSmallMarginBegin" text="{= ${/optionValEFRMsg} }" type="{=
+                      ${/optionValEFRMsgType} === 3 ? 'Error'
+                      : ${/optionValEFRMsgType} === 2 ? 'Warning'
+                      : ${/optionValEFRMsgType} === 1 ? 'Information'
                       : 'Success'
                     }" showIcon="true">
                     </MessageStrip>
@@ -105,7 +105,7 @@
         xmlns:l="sap.ui.layout">
 
         <l:content>
-          <Panel headerText="{i18n>uploadPanel}" class="sapUiSmallMarginTop" visible="{= ${appFlowModel>/optionValEFRVisible} }">
+          <Panel headerText="{i18n>uploadPanel}" class="sapUiSmallMarginTop" visible="{= ${/optionValEFRVisible} }">
             <VBox id="uploadContainer" renderType="Bare" class="uploadArea">
               <core:HTML content='
             &lt;div id="dropzone" style="border:2px dashed #ccc; padding:20px; text-align:center;"&gt;{i18n>dropZoneText} {i18n>orDropHere}&lt;/div&gt;
@@ -122,15 +122,17 @@
         xmlns:l="sap.ui.layout">
 
         <l:content>
-          <Panel headerText="{i18n>tableTtl}" visible="{= !${appFlowModel>/optionValEFRVisible} }">
+          <Panel headerText="{i18n>tableTtl}" visible="{= !${/optionValEFRVisible} }">
             <headerToolbar>
               <OverflowToolbar>
                 <Title text="{i18n>tableTtl}"/>
                 <ToolbarSpacer />
+                <m:Button text="{i18n>checkMsg}" icon="sap-icon://message-popup" tooltip="{i18n>addRow}" press=".onShowCheckedMsgs" class="sapUiSmallMarginEnd"/>
+                <m:Button text="{i18n>checkRows}" icon="sap-icon://survey" tooltip="{i18n>addRow}" press=".onCheckConsumptions" class="sapUiSmallMarginEnd"/>
                 <m:Button text="{i18n>addRow}" icon="sap-icon://sys-add" tooltip="{i18n>addRow}" press=".onAddRow"/>
               </OverflowToolbar>
             </headerToolbar>
-            <Table id="tblManual" items="{appFlowModel>/consReadRows}">
+            <Table id="tblManual" items="{appDataModel>/consumptions}">
               <!--
               <headerToolbar>
                 <m:OverflowToolbar style="Clear">
@@ -141,6 +143,7 @@
               </headerToolbar>
               -->
               <columns>
+                <Column width="30px"></Column>
                 <Column>
                   <Text text="{i18n>colFromDate}" />
                 </Column>
@@ -150,22 +153,22 @@
                 <Column>
                   <Text text="{i18n>colSimple}" />
                 </Column>
-                <Column visible="{= ${appFlowModel>/consColsVisible} }">
+                <Column visible="{= ${/consColsVisible} }">
                   <Text text="{i18n>colConsVazio}" />
                 </Column>
-                <Column visible="{= ${appFlowModel>/consColsVisible} }">
+                <Column visible="{= ${/consColsVisible} }">
                   <Text text="{i18n>colConsCheio}" />
                 </Column>
-                <Column visible="{= ${appFlowModel>/consColsVisible} }">
+                <Column visible="{= ${/consColsVisible} }">
                   <Text text="{i18n>colConsPonta}" />
                 </Column>
-                <Column visible="{= ${appFlowModel>/readColsVisible} }">
+                <Column visible="{= ${/readColsVisible} }">
                   <Text text="{i18n>colReadVazio}" />
                 </Column>
-                <Column visible="{= ${appFlowModel>/readColsVisible} }">
+                <Column visible="{= ${/readColsVisible} }">
                   <Text text="{i18n>colReadCheio}" />
                 </Column>
-                <Column visible="{= ${appFlowModel>/readColsVisible} }">
+                <Column visible="{= ${/readColsVisible} }">
                   <Text text="{i18n>colReadPonta}" />
                 </Column>
                 <Column hAlign="Center" width="4rem"></Column>
@@ -173,15 +176,42 @@
               <items>
                 <ColumnListItem>
                   <cells>
-                    <DatePicker value="{appFlowModel>fromDate}" />
-                    <DatePicker value="{appFlowModel>toDate}" />
-                    <Input value="{appFlowModel>simple}" />
-                    <Input value="{appFlowModel>consEmpty}" />
-                    <Input value="{appFlowModel>consFull}" />
-                    <Input value="{appFlowModel>consRush}" />
-                    <Input value="{appFlowModel>readEmpty}" />
-                    <Input value="{appFlowModel>readFull}" />
-                    <Input value="{appFlowModel>readRush}" />
+                    <HBox alignItems="Center">
+                      <ObjectStatus press=".onShowCheckedMsgs"
+                      class="sapUiSmallMarginBottom" active="true" inverted="false" state="{appDataModel>checkState}" icon="sap-icon://message-success" visible="{= ${appDataModel>checkState} === 'Success' }" />
+                      <ObjectStatus press=".onShowCheckedMsgs"
+                      class="sapUiSmallMarginBottom" active="true" inverted="false" state="{appDataModel>checkState}" icon="sap-icon://message-error" visible="{= ${appDataModel>checkState} === 'Error' }" />
+                      <ObjectStatus press=".onShowCheckedMsgs"
+                      class="sapUiSmallMarginBottom" active="true" inverted="false" state="{appDataModel>checkState}" icon="sap-icon://message-warning" visible="{= ${appDataModel>checkState} === 'Warning' }" />
+                      <ObjectStatus press=".onShowCheckedMsgs"
+                      class="sapUiSmallMarginBottom" active="true" inverted="false" state="{appDataModel>checkState}" icon="sap-icon://message-information" visible="{= ${appDataModel>checkState} === 'Information' }" />
+                    </HBox>
+                    <DatePicker value="{
+						                    'path':'appDataModel>fromDate',
+						                    'type':'sap.ui.model.type.Date',
+						                    'formatOptions': {
+							                    'pattern': 'dd/MM/yyyy'
+						                    }
+					                    }" required="false" />
+                    <DatePicker value="{
+						                    'path':'appDataModel>toDate',
+						                    'type':'sap.ui.model.type.Date',
+						                    'formatOptions': {
+							                    'pattern': 'dd/MM/yyyy'
+						                    }
+					                    }" required="false" />
+                    <Input value="{
+                            path: 'appDataModel>consumptionSimple',
+                            type: 'sap.ui.model.type.Float',
+                            constraints: {minimum: 0},
+                            formatOptions: {maxFractionDigits: 2}
+                            }" required="false" />
+                    <Input value="{appDataModel>consumptionEmpty}" type="Number"/>
+                    <Input value="{appDataModel>consumptionFull}" type="Number"/>
+                    <Input value="{appDataModel>consumptionRush}" type="Number"/>
+                    <Input value="{appDataModel>readingsEmpty}" type="Number"/>
+                    <Input value="{appDataModel>readingsFull}" type="Number"/>
+                    <Input value="{appDataModel>readingsRush}" type="Number"/>
                     <Button icon="sap-icon://delete" type="Transparent" press=".onDeleteRow" />
                   </cells>
                 </ColumnListItem>
@@ -197,7 +227,7 @@
     <footer>
       <OverflowToolbar>
         <ToolbarSpacer/>
-        <Button text="{i18n>toSupplier}" icon="sap-icon://navigation-right-arrow" press=".onNextFromMain"></Button>
+        <Button text="{i18n>toSimulation}" icon="sap-icon://navigation-right-arrow" press=".onNextFromMain"></Button>
       </OverflowToolbar>
     </footer>
   </Page>

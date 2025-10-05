@@ -1,7 +1,8 @@
 sap.ui.define([
 	"sap/base/Log",
-	"sap/ui/model/json/JSONModel"
-], function (Log, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"simulador/util/formatter"
+], function (Log, JSONModel, formatter) {
 	"use strict";
 
 
@@ -14,15 +15,88 @@ sap.ui.define([
 		}));
 
 		// Get energy consumption readings
+		var readings = jsonData
+			.slice(8) // ignora cabeçalho
+			.filter(row => row[0] && row[5] && row[6] && row[7]) // só mantém linhas válidas
+			.map(row => ({
+				readingDate: formatter.parseXlsxFilesDate(row[0]),
+				readingType: row[1],
+				origin: row[2],
+				state: row[3],
+				type: row[4],
+				empty: row[5],
+				full: row[7],
+				rush: row[6]
+			}));
+
+		// Sort readings by date descending
+		var readingsSorded = readings.sort((a, b) => new Date(b.readingDate) - new Date(a.readingDate));
+		// Get end date row
+		var oEndDate = readingsSorded[0];
+		// Add header date to
+		header.push({ ["hdrDateTo"]: oEndDate.readingDate });
+		// Sort readings by date ascending
+		readingsSorded = readings.sort((a, b) => new Date(a.readingDate) - new Date(b.readingDate));
+		// Get start date row
+		var oStartDate = readingsSorded[0];
+		// Add header date from
+		header.push({ ["hdrDateFrom"]: oStartDate.readingDate });
+
+
+		// Consumption calculation
+		readings.forEach(function (item, index, arr) {
+			if (index === 0) {
+				item.fromDate = arr[index].readingDate;
+				item.toDate = arr[index].readingDate;
+				item.readingsEmpty = arr[index].empty;
+				item.readingsFull = arr[index].full;
+				item.readingsRush = arr[index].rush;
+				item.consumptionEmpty = item.readingsEmpty - oStartDate.empty;
+				item.consumptionFull = item.readingsFull - oStartDate.full;
+				item.consumptionRush = item.readingsRush - oStartDate.rush;
+				item.consumptionSimple = item.consumptionEmpty + item.consumptionFull + item.consumptionRush;
+			} else {
+				item.fromDate = arr[index - 1].readingDate;
+				item.toDate = arr[index].readingDate;
+				item.readingsEmpty = arr[index].empty;
+				item.readingsFull = arr[index].full;
+				item.readingsRush = arr[index].rush;
+				item.consumptionEmpty = item.readingsEmpty - arr[index - 1].empty;
+				item.consumptionFull = item.readingsFull - arr[index - 1].full;
+				item.consumptionRush = item.readingsRush - arr[index - 1].rush;
+				item.consumptionSimple = item.consumptionEmpty + item.consumptionFull + item.consumptionRush;
+			}
+		});
+
+
+		// Creats App Consuption/Readings model with eRedes data
+		var oData = {
+			header,
+			consumptions: readings,
+		};
+		return oData;
+	}
+
+	// Create readings from eRedes file model
+	function _createReadingsFromEredesFileModel_old(that, jsonData) {
+
+		// Get readings address, CPE and counter nr
+		var header = jsonData.slice(0, 3).map((row, index) => ({
+			[`hdr${index + 1}`]: row[1]
+		}));
+
+		// Get energy consumption readings
 		var readingsData = jsonData
 			.slice(8) // ignora cabeçalho
 			.filter(row => row[0] && row[5] && row[6] && row[7]) // só mantém linhas válidas
 			.map(row => ({
-				date: row[0].split("/")[2] + "-" + row[0].split("/")[1] + "-" + row[0].split("/")[0],
-				day: row[0].split("/")[0],
-				readingEmpty: row[5],
-				readingFull: row[7],
-				readingRush: row[6]
+				//date: row[0].split("/")[2] + "-" + row[0].split("/")[1] + "-" + row[0].split("/")[0],
+				//date: new Date(row[0]),
+				date: formatter.parseXlsxFilesDate(row[0]),
+				//day: row[0].split("/")[0],
+				readEmpty: row[5],
+				readFull: row[7],
+				readRush: row[6]
 			}));
 
 		// Sort readings by date descending
@@ -41,23 +115,25 @@ sap.ui.define([
 		// Consumption calculation
 		readingsData.forEach(function (item, index, arr) {
 			if (index === 0) {
+				item.fromDate = arr[index].date;
 				item.toDate = arr[index].date;
-				item.readEmpty = arr[index].readingEmpty;
-				item.readFull = arr[index].readingFull;
-				item.readRush = arr[index].readingRush;
-				item.consEmpty = item.readingEmpty - oStartDateRow.readingEmpty;
-				item.consFull = item.readingFull - oStartDateRow.readingFull;
-				item.consRush = item.readingRush - oStartDateRow.readingRush;
+				item.readEmpty = arr[index].readEmpty;
+				item.readFull = arr[index].readFull;
+				item.readRush = arr[index].readRush;
+				item.consEmpty = item.readEmpty - oStartDateRow.readEmpty;
+				item.consFull = item.readFull - oStartDateRow.readFull;
+				item.consRush = item.readRush - oStartDateRow.readRush;
+				item.consSimple = item.consEmpty + item.consFull + item.consRush;
 			} else {
 				item.fromDate = arr[index - 1].date;
 				item.toDate = arr[index].date;
-				item.readEmpty = arr[index].readingEmpty;
-				item.readFull = arr[index].readingFull;
-				item.readRush = arr[index].readingRush;
-				item.consEmpty = item.readingEmpty - arr[index - 1].readingEmpty;
-				item.consFull = item.readingFull - arr[index - 1].readingFull;
-				item.consRush = item.readingRush - arr[index - 1].readingRush;
-				item.simple = item.consEmpty + item.consFull + item.consRush;
+				item.readEmpty = arr[index].readEmpty;
+				item.readFull = arr[index].readFull;
+				item.readRush = arr[index].readRush;
+				item.consEmpty = item.readEmpty - arr[index - 1].readEmpty;
+				item.consFull = item.readFull - arr[index - 1].readFull;
+				item.consRush = item.readRush - arr[index - 1].readRush;
+				item.consSimple = item.consEmpty + item.consFull + item.consRush;
 			}
 		});
 
@@ -82,16 +158,22 @@ sap.ui.define([
 				var firstSheet = workbook.Sheets[firstSheetName];
 				var jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
 
-				var oData = [];
+				var consReadRows = [];
+				var consumptions = [];
 				switch (firstSheetName) {
 					case "Leituras":
-						// Trasnforms eRedes readings data to App consuption/readings model 
-						oData = _createReadingsFromEredesFileModel(that, jsonData);
+						// Transforms eRedes readings data to App consuption/readings model 
+						consumptions = _createReadingsFromEredesFileModel(that, jsonData);
+						consReadRows = _createReadingsFromEredesFileModel_old(that, jsonData);
 						break;
 					default:
-						// For future use...
+					// For future use...
 				};
 
+				var oData = {
+					consumptions: consumptions,
+					oData: consReadRows,
+				};
 				// 
 				Log.info("Excel carregado com sucesso");
 				return oData;

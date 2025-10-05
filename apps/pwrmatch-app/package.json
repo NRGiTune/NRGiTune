@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "ui5 serve --open index.html",
-    "simulate": "ui5 serve --open index.html#/simulate"
+    "simulate": "ui5 serve --open index.html#/simulate",
+    "offerDetails": "ui5 serve --open index.html#/OfferDetails",
+    "savingsDialog": "ui5 serve --open index.html#/savingsDialog"
   },
   "keywords": [],
   "author": "",
