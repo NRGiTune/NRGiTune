@@ -18,7 +18,7 @@ sap.ui.define([], function () {
                 currency: currency
             }).format(value);
         },
-        
+
         formatInteger: function (value) {
             if (value == null || value === "") return "";
             return Math.round(value); // arredonda para inteiro
@@ -42,6 +42,19 @@ sap.ui.define([], function () {
                 month: "2-digit",
                 year: "numeric"
             });
+        },
+
+        formatCycleText: function (sCycle) {
+            var oBundle = this.getView().getModel("i18n").getResourceBundle();
+
+            switch (sCycle) {
+                case "1":
+                    return oBundle.getText("contractPanelCycleSimple"); // Simples
+                case "2":
+                    return oBundle.getText("contractPanelCycleBiH"); // Bi-Horário
+                default:
+                    return oBundle.getText("contractPanelCycleTriH"); // Tri-Horário
+            }
         },
 
         parseXlsxFilesDate: function (str) {

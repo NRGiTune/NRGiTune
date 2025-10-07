@@ -15,7 +15,8 @@ sap.ui.define([
         metadata: [],         // {	prices {id, description}, offers {id, description} }
         readings: [],         // {readingDate, readingType, origin, status, empty, rush, full}
         consumptions: [],     // {fromDate, toDate, consumptionSimple, consumptionEmpty, consumptionFull, consumptionRush, readingsEmpty, readingsFull, readingsRush, checkState, checkMsg}
-        offerSimulation: []   
+        offerSimulation: [],
+        topOffersSimulation: []   
       };
       return new JSONModel(data);
     },

@@ -38,6 +38,7 @@ sap.ui.define([
         // Offer
         offerFromDate: null,
         offerToDate: null,
+        offerSupplyType: null,
         offerSupplyTypeEleVisibility: null,
         offerSupplyTypeGasVisibility: null,
         offerCountType: null,
@@ -204,6 +205,7 @@ sap.ui.define([
         oModel.setProperty("/selectedOfferName", offer[0].offerName);
         oModel.setProperty("/offerFromDate", offer[0].offerFromDate);
         oModel.setProperty("/offerToDate", offer[0].offerToDate);
+        oModel.setProperty("/offerSupplyType", offer[0].supplyType);
         if (offer[0].supplyType === "ELE") {
           oModel.setProperty("/offerSupplyTypeEleVisibility", true);
           oModel.setProperty("/offerSupplyTypeGasVisibility", false);
@@ -281,9 +283,9 @@ sap.ui.define([
       var offerPowers = oModel.oData.offerPowers.filter(item =>
         normalizeNum(item.power) === normalizeNum(selectedPower)
       );
-      var offersPrices = oModel.oData.powers.filter(item =>
-        normalizeNum(item.power) === normalizeNum(selectedPower)
-      );
+      //var offersPrices = oModel.oData.powers.filter(item =>
+      //  normalizeNum(item.power) === normalizeNum(selectedPower)
+      //);
       var consumptions = oAppDataModel.oData.consumptions;
 
       var offerSimulation = simulate.simulateOfferConsumptionByCycle(offerPowers, consumptions);
@@ -293,6 +295,53 @@ sap.ui.define([
       oAppDataModel.setProperty("/offerSimulation", offerSimulation);
 
       this._getHourlyCiclesSavings(oModel);
+      this._simulateTopOffers();
+
+    },
+
+    _simulateTopOffers: function () {
+      const normalizeNum = val => Number(String(val ?? "").trim());
+      // get app data model
+      var oAppDataModel = this.getOwnerComponent().getModel("appDataModel");
+      // gets view model
+      var oModel = this.getView().getModel();
+      //var selectedSupplier = oModel.oData.selectedSupplier;
+      //var selectedOffer = oModel.oData.selectedOffer;
+      var offerSupplyType = oModel.oData.offerSupplyType;
+      var selectedPower = oModel.oData.selectedPower;
+      var selectedHourlyCycle = oModel.oData.selectedHourlyCycle;
+      var offerlowestHourlyCycleValue = oModel.oData.offerlowestHourlyCycleValue;
+      //offerSimpleSimulationTtl
+      //offerBiHSimulationTtl
+      //offerTriHSimulationTtl
+
+      // Get offers by supply type: ELE; DUAL; GN
+      var suppliersOffers = oAppDataModel.oData.suppliersOffers.filter(item =>
+        item.supplyType === oModel.oData.offerSupplyType
+      );
+      // Get offers prices by selected power
+      var offersPrices = oAppDataModel.oData.offersPrices.filter(item =>
+        normalizeNum(item.power) === normalizeNum(selectedPower)
+      );
+
+
+      //var consumptions = oAppDataModel.oData.consumptions;
+
+      var simulateTopOffersModel = {
+        suppliers: oAppDataModel.oData.suppliers,
+        suppliersOffers: suppliersOffers,
+        offersPrices: offersPrices,
+        consumptions: oAppDataModel.oData.consumptions,
+        offerlowestHourlyCycleValue: oModel.oData.offerlowestHourlyCycleValue
+      };
+
+      var topOffersSimulation = simulate.simulateTopOffers(simulateTopOffersModel);
+      //oModel.setProperty("/offerSimpleSimulationTtl", offerSimulation.offerSimpleSimulationTtl);
+      //oModel.setProperty("/offerBiHSimulationTtl", offerSimulation.offerBiHSimulationTtl);
+      //oModel.setProperty("/offerTriHSimulationTtl", offerSimulation.offerTriHSimulationTtl);
+      oAppDataModel.setProperty("/topOffersSimulation", topOffersSimulation);
+
+      //this._getHourlyCiclesSavings(oModel);
 
     },
 

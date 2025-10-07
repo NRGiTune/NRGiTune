@@ -183,6 +183,85 @@ sap.ui.define([
 
     },
 
+    simulateTopOffers: function (simulateTopOffersModel, topOffers = 2) {
+
+      // obter offersPrices para a lista de suppliers
+      // oAppDataModel.oData.offersPrices
+      //     supplierId
+      //     offerId
+      //
+      // Lopp offersPrices 
+      //    offerSimulation para obter totais por ciclo 
+      //    comparar com offer totais e determiar poupança
+
+      var data = {
+        topOfferNr: topOffers,
+        topOffers: [
+          {
+            topOfferSupplier: "COOP",
+            topOfferSupplierName: "Coopérnico",
+            topOfferSupplierLogo: "imgs/suppliersLogos/" + "coopernicoLogo.png",
+            topOfferSupplyTypeEleVisibility: true,
+            topOfferSupplyTypeGasVisibility: true,
+            topOfferId: "COOP_04",
+            topOfferName: "Coopérnico BASE 2.0",
+            topOfferPower: 6.9,
+            topOfferFromDate: new Date(),
+            topOfferToDate: new Date(),
+            topOfferHourlyCycle: "1",
+            topOfferValue: 13.50,
+            topOfferSavings: -1.2,
+            offerRelevantConditions: [
+              {
+                condition: "Fatura eletrónica obrigatória",
+                state: "Warning",
+                icon: "sap-icon://alert",
+                visible: true
+              },
+              {
+                condition: "Sem fidelização",
+                state: "Success",
+                icon: "sap-icon://sys-enter-2",
+                visible: true
+              }
+            ]
+          },
+          {
+            topOfferSupplier: "EDPSU",
+            topOfferSupplierName: "SU ELETRICIDADE",
+            topOfferSupplierLogo: "imgs/suppliersLogos/" + "edpSuLogo.png",
+            topOfferSupplyTypeEleVisibility: true,
+            topOfferSupplyTypeGasVisibility: true,
+            topOfferId: "TUR",
+            topOfferName: "Coopérnico Condições de preço regulado",
+            topOfferPower: 6.9,
+            topOfferFromDate: new Date(),
+            topOfferToDate: new Date(),
+            topOfferHourlyCycle: "2",
+            topOfferValue: 13.55,
+            topOfferSavings: -0.7,
+            offerRelevantConditions: [
+              {
+                condition: "Fatura eletrónica obrigatória",
+                state: "Warning",
+                icon: "sap-icon://alert",
+                visible: true
+              },
+              {
+                condition: "Sem fidelização",
+                state: "Success",
+                icon: "sap-icon://sys-enter-2",
+                visible: true
+              }
+            ]
+          }
+        ]
+      };
+
+      return data;
+
+    },
+
     simulateOfferConsumptionByCycle: function (offerPowers, consumptions) {
 
       const normalizeNum = val => Number(String(val ?? "").trim());
