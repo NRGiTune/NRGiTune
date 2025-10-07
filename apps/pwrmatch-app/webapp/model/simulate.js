@@ -183,82 +183,86 @@ sap.ui.define([
 
     },
 
-    simulateTopOffers: function (simulateTopOffersModel, topOffers = 2) {
+    simulateTopOffers: function (simulateTopOffersModel, topOffersNr = 5) {
 
-      // obter offersPrices para a lista de suppliers
-      // oAppDataModel.oData.offersPrices
-      //     supplierId
-      //     offerId
-      //
-      // Lopp offersPrices 
-      //    offerSimulation para obter totais por ciclo 
-      //    comparar com offer totais e determiar poupança
+      var suppliers = simulateTopOffersModel.suppliers;
+      var suppliersOffers = simulateTopOffersModel.suppliersOffers;
+      var consumptions = simulateTopOffersModel.consumptions;
+      var topOffers = [];
 
-      var data = {
-        topOfferNr: topOffers,
-        topOffers: [
-          {
-            topOfferSupplier: "COOP",
-            topOfferSupplierName: "Coopérnico",
-            topOfferSupplierLogo: "imgs/suppliersLogos/" + "coopernicoLogo.png",
-            topOfferSupplyTypeEleVisibility: true,
-            topOfferSupplyTypeGasVisibility: true,
-            topOfferId: "COOP_04",
-            topOfferName: "Coopérnico BASE 2.0",
-            topOfferPower: 6.9,
-            topOfferFromDate: new Date(),
-            topOfferToDate: new Date(),
-            topOfferHourlyCycle: "1",
-            topOfferValue: 13.50,
-            topOfferSavings: -1.2,
-            offerRelevantConditions: [
-              {
-                condition: "Fatura eletrónica obrigatória",
-                state: "Warning",
-                icon: "sap-icon://alert",
-                visible: true
-              },
-              {
-                condition: "Sem fidelização",
-                state: "Success",
-                icon: "sap-icon://sys-enter-2",
-                visible: true
-              }
-            ]
-          },
-          {
-            topOfferSupplier: "EDPSU",
-            topOfferSupplierName: "SU ELETRICIDADE",
-            topOfferSupplierLogo: "imgs/suppliersLogos/" + "edpSuLogo.png",
-            topOfferSupplyTypeEleVisibility: true,
-            topOfferSupplyTypeGasVisibility: true,
-            topOfferId: "TUR",
-            topOfferName: "Coopérnico Condições de preço regulado",
-            topOfferPower: 6.9,
-            topOfferFromDate: new Date(),
-            topOfferToDate: new Date(),
-            topOfferHourlyCycle: "2",
-            topOfferValue: 13.55,
-            topOfferSavings: -0.7,
-            offerRelevantConditions: [
-              {
-                condition: "Fatura eletrónica obrigatória",
-                state: "Warning",
-                icon: "sap-icon://alert",
-                visible: true
-              },
-              {
-                condition: "Sem fidelização",
-                state: "Success",
-                icon: "sap-icon://sys-enter-2",
-                visible: true
-              }
-            ]
-          }
-        ]
+
+      suppliersOffers.forEach(element => {
+
+        var supplier = suppliers.filter(supplier =>
+          supplier.supplierId === element.supplierId
+        );
+
+        if (!supplier[0]) {
+          console.log("Supplier:", element.supplierId);
+          return;
+        };
+
+        var offerPowers = simulateTopOffersModel.offersPrices.filter(item =>
+          item.supplierId === element.supplierId
+          && item.offerId === element.offerId
+        );
+
+        var offerSimulation = this.simulateOfferConsumptionByCycle(offerPowers, consumptions);
+
+        var supplyType = element.supplyType;
+        var topOfferSupplyTypeEleVisibility = true;
+        var topOfferSupplyTypeGasVisibility = true;
+        if (supplyType === "ELE") {
+          topOfferSupplyTypeGasVisibility = false;
+        } else if (supplyType === "GAS") {
+          topOfferSupplyTypeEleVisibility = false;
+        };
+
+        const options = [
+          { type: "1", value: offerSimulation.offerSimpleSimulationTtl },
+          { type: "2", value: offerSimulation.offerBiHSimulationTtl },
+          { type: "3", value: offerSimulation.offerTriHSimulationTtl }
+        ];
+
+        const lowest = options.reduce((min, curr) =>
+          curr.value < min.value ? curr : min
+        );
+
+        var topOfferSavings = lowest.value - simulateTopOffersModel.offerlowestValue;
+
+        var topOffer = {
+          topOfferSupplier: supplier[0].supplierId,
+          topOfferSupplierName: supplier[0].supplierName,
+          topOfferSupplierLogo: "imgs/suppliersLogos/" + supplier[0].supplierLogo,
+          topOfferSupplyTypeEleVisibility: topOfferSupplyTypeEleVisibility,
+          topOfferSupplyTypeGasVisibility: topOfferSupplyTypeGasVisibility,
+          topOfferId: element.offerId,
+          topOfferNameId: element.offerNameId,
+          topOfferPower: offerSimulation.powerkWh,
+          topOfferFromDate: element.offerFromDate,
+          topOfferToDate: element.offerToDate,
+          topOfferHourlyCycle: lowest.type,
+          topOfferValue: lowest.value,
+          topOfferSavings: topOfferSavings,
+        };
+
+        if (topOfferSavings < 0) {
+          topOffers.push(topOffer);
+        }
+
+
+      });
+
+      const lowestTopOffers = [...topOffers] // cria cópia para não alterar o original
+        .sort((a, b) => a.topOfferSavings - b.topOfferSavings) // ordena ascendente
+        .slice(0, topOffersNr); // pega os X primeiros (menores)
+
+      var oData = {
+        topOfferNr: lowestTopOffers.length,
+        topOffers: lowestTopOffers
       };
 
-      return data;
+      return oData;
 
     },
 

@@ -18,6 +18,7 @@ sap.ui.define([
 
       var oModel = new JSONModel({
         // Select supplier
+        offer: [{}],
         suppliers: [],
         offers: [],
         offerPowers: [],
@@ -32,6 +33,7 @@ sap.ui.define([
         selectedSupplierLogo: null,
         selectedOffer: null,
         selectedOfferName: null,
+        selectedOfferNameId: null,
         selectedPower: "6.9",
         selectedHourlyCycle: "1",
 
@@ -56,7 +58,8 @@ sap.ui.define([
         offerSimpleState: null,
         offerBiHState: null,
         offerTriHState: null,
-        offerlowestHourlyCycleValue: null,
+        offerlowestHourlyCycle: null,
+        offerlowestValue: null,
 
         // Selected offer hourly cycle simulation
         // # Simple cycle
@@ -203,6 +206,7 @@ sap.ui.define([
       var offer = offers.filter(item => item.offerId === selectedOffer);
       if (offer[0]) {
         oModel.setProperty("/selectedOfferName", offer[0].offerName);
+        oModel.setProperty("/selectedOfferNameId", offer[0].offerName + "[" + offers[0].offerId + "]");
         oModel.setProperty("/offerFromDate", offer[0].offerFromDate);
         oModel.setProperty("/offerToDate", offer[0].offerToDate);
         oModel.setProperty("/offerSupplyType", offer[0].supplyType);
@@ -310,7 +314,8 @@ sap.ui.define([
       var offerSupplyType = oModel.oData.offerSupplyType;
       var selectedPower = oModel.oData.selectedPower;
       var selectedHourlyCycle = oModel.oData.selectedHourlyCycle;
-      var offerlowestHourlyCycleValue = oModel.oData.offerlowestHourlyCycleValue;
+      //var offerlowestHourlyCycle = oModel.oData.offerlowestHourlyCycle;
+      //var offerlowestValue = oModel.oData.offerlowestValue;
       //offerSimpleSimulationTtl
       //offerBiHSimulationTtl
       //offerTriHSimulationTtl
@@ -332,7 +337,8 @@ sap.ui.define([
         suppliersOffers: suppliersOffers,
         offersPrices: offersPrices,
         consumptions: oAppDataModel.oData.consumptions,
-        offerlowestHourlyCycleValue: oModel.oData.offerlowestHourlyCycleValue
+        offerlowestHourlyCycle: oModel.oData.offerlowestHourlyCycle,
+        offerlowestValue: oModel.oData.offerlowestValue
       };
 
       var topOffersSimulation = simulate.simulateTopOffers(simulateTopOffersModel);
@@ -409,14 +415,24 @@ sap.ui.define([
         triHState = "Information";
       }
 
-      const values = {
-        "1": simpleSavings,
-        "2": biHSavings,
-        "3": triHSavings
-      };
+      //const values = {
+      //  "1": simpleSavings,
+      //  "2": biHSavings,
+      //  "3": triHSavings
+      //};
 
-      lowestHourlyCycle = Object.keys(values).reduce((a, b) =>
-        values[a] < values[b] ? a : b
+      //lowestHourlyCycle = Object.keys(values).reduce((a, b) =>
+      //  values[a] < values[b] ? a : b
+      //);
+
+      const options = [
+        { type: "1", value: simpleAmountVal },
+        { type: "2", value: biHAmountVal },
+        { type: "3", value: triHAmountVal }
+      ];
+
+      const lowest = options.reduce((min, curr) =>
+        curr.value < min.value ? curr : min
       );
 
       oModel.setProperty("/offerSimpleSavings", simpleSavings);
@@ -425,7 +441,8 @@ sap.ui.define([
       oModel.setProperty("/offerBiHState", biHState);
       oModel.setProperty("/offerTriHSavings", triHSavings);
       oModel.setProperty("/offerTriHState", triHState);
-      oModel.setProperty("/offerlowestHourlyCycleValue", lowestHourlyCycle);
+      oModel.setProperty("/offerlowestHourlyCycle", lowest.type);
+      oModel.setProperty("/offerlowestValue", lowest.value);
 
     },
 

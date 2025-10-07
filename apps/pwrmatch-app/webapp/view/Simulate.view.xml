@@ -4,7 +4,9 @@
   xmlns="sap.m"
   xmlns:core="sap.ui.core"
   xmlns:layout="sap.ui.layout"
-  xmlns:tnt="sap.tnt">
+  xmlns:tnt="sap.tnt"
+  xmlns:f="sap.f"
+  xmlns:grid="sap.ui.layout.cssgrid">
   <Page title="{i18n>simulateTitle}" class="sapUiResponsivePadding--header sapUiResponsivePadding--footer" showNavButton="false" floatingFooter="true">
     <content>
 
@@ -71,10 +73,10 @@
 
         <l:content>
 
-          <!-- Selected offer -->
-          <Panel headerText="{= ${/selectedSupplier} === 'ERSE'
+          <!-- Selected offer 001 Inicio -->
+          <Panel visible="{= ${/selectedHourlyCycle} === '3' ? true : false }" headerText="{= ${/selectedSupplier} === 'ERSE'
                             ? ${i18n>contractPanelTtlERSE}
-                            : ${i18n>contractPanelTtl} }" visible="true">
+                            : ${i18n>contractPanelTtl} }" >
             <VBox>
               <l:Grid defaultSpan="L6 M12 S12" hSpacing="0" vSpacing="0"
                 xmlns:l="sap.ui.layout">
@@ -83,6 +85,7 @@
                     <Image src="{/selectedSupplierLogo}" height="3rem" class="sapUiSmallMarginEnd"/>
                     <VBox class="sapUiSmallMarginEnd">
                       <Title text="{/selectedSupplierName}" level="H3" />
+                      <Text text="{/selectedOfferNameId}" class="sapUiSmallMarginEnd"/>
                       <HBox>
                         <tnt:InfoLabel text="{i18n>offerSupplyTypeEle}" colorScheme="8" icon="sap-icon://lightbulb" class="sapUiSmallMarginTop sapUiSmallMarginEnd" visible="{/offerSupplyTypeEleVisibility}"/>
                         <tnt:InfoLabel text="{i18n>offerSupplyTypeGas}" colorScheme="6" icon="sap-icon://e-care" class="sapUiSmallMarginTop" visible="{/offerSupplyTypeGasVisibility}" />
@@ -116,8 +119,8 @@
                         <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleSimple}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '1' ? 'Success' : 'Information' }" inverted="{= ${/selectedHourlyCycle} === '1' ? true : false }" /> number="{/offerSimpleSimulationTtl}" 
                                       -->
                             <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleSimple}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '1' ? 'Success' : 'Information' }" />
-                            <Title text="{path: '/offerSimpleSimulationTtl', formatter: '.formatter.formatCurrency'}" level="H2" visible="{= ${/offerlowestHourlyCycleValue} !== '1' ? true : false }" />
-                            <ObjectNumber class="sapMObjectNumberLarge" number="{path: '/offerSimpleSimulationTtl', formatter: '.formatter.formatCurrency'}" unit="" emphasized="true" state="Success" visible="{= ${/offerlowestHourlyCycleValue} === '1' ? true : false }" />
+                            <Title text="{path: '/offerSimpleSimulationTtl', formatter: '.formatter.formatCurrency'}" level="H2" visible="{= ${/offerlowestHourlyCycle} !== '1' ? true : false }" />
+                            <ObjectNumber class="sapMObjectNumberLarge" number="{path: '/offerSimpleSimulationTtl', formatter: '.formatter.formatCurrency'}" unit="" emphasized="true" state="Success" visible="{= ${/offerlowestHourlyCycle} === '1' ? true : false }" />
                             <ObjectStatus class="sapUiSmallMarginBottom" title="" text="{path: '/offerSimpleSavings', formatter: '.formatter.formatCurrency'}" active="true" state="{/offerSimpleState}" press=".onOpenSavingsDialog" icon="{= ${/offerSimpleState} === 'Success' ? 'sap-icon://down'
                                     : ${/offerSimpleState} === 'Warning' ? 'sap-icon://up'
                                     : 'sap-icon://border' }" visible="{= ${/selectedHourlyCycle} !== '1' ? true : false }" />
@@ -131,8 +134,8 @@
                         <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleBiH}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '2' ? 'Success' : 'Information' }" inverted="{= ${/selectedHourlyCycle} === '2' ? true : false }"/>
                                       -->
                             <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleBiH}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '2' ? 'Success' : 'Information' }" />
-                            <Title text="{path: '/offerBiHSimulationTtl', formatter: '.formatter.formatCurrency'}" level="H1" visible="{= ${/offerlowestHourlyCycleValue} !== '2' ? true : false }" />
-                            <ObjectNumber class="sapMObjectNumberLarge" number="{path: '/offerBiHSimulationTtl', formatter: '.formatter.formatCurrency'}" unit="" emphasized="true" state="Success" visible="{= ${/offerlowestHourlyCycleValue} === '2' ? true : false }" />
+                            <Title text="{path: '/offerBiHSimulationTtl', formatter: '.formatter.formatCurrency'}" level="H1" visible="{= ${/offerlowestHourlyCycle} !== '2' ? true : false }" />
+                            <ObjectNumber class="sapMObjectNumberLarge" number="{path: '/offerBiHSimulationTtl', formatter: '.formatter.formatCurrency'}" unit="" emphasized="true" state="Success" visible="{= ${/offerlowestHourlyCycle} === '2' ? true : false }" />
                             <ObjectStatus class="sapUiSmallMarginBottom" title="" text="{path: '/offerBiHSavings', formatter: '.formatter.formatCurrency'}" active="true" state="{/offerBiHState}" press=".onOpenSavingsDialog" icon="{= ${/offerBiHState} === 'Success' ? 'sap-icon://down'
                                     : ${/offerBiHState} === 'Warning' ? 'sap-icon://up'
                                     : 'sap-icon://border' }" visible="{= ${/selectedHourlyCycle} !== '2' ? true : false }" />
@@ -147,8 +150,8 @@
                         <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleTriH}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '3' ? 'Success' : 'Information' }" inverted="{= ${/selectedHourlyCycle} === '3' ? true : false }"/>
                                       -->
                             <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleTriH}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '3' ? 'Success' : 'Information' }" />
-                            <Title text="{path: '/offerTriHSimulationTtl', formatter: '.formatter.formatCurrency'}" level="H3" visible="{= ${/offerlowestHourlyCycleValue} !== '3' ? true : false }" />
-                            <ObjectNumber class="sapMObjectNumberLarge" number="{path: '/offerTriHSimulationTtl', formatter: '.formatter.formatCurrency'}" unit="" emphasized="true" state="Success" visible="{= ${/offerlowestHourlyCycleValue} === '3' ? true : false }" />
+                            <Title text="{path: '/offerTriHSimulationTtl', formatter: '.formatter.formatCurrency'}" level="H3" visible="{= ${/offerlowestHourlyCycle} !== '3' ? true : false }" />
+                            <ObjectNumber class="sapMObjectNumberLarge" number="{path: '/offerTriHSimulationTtl', formatter: '.formatter.formatCurrency'}" unit="" emphasized="true" state="Success" visible="{= ${/offerlowestHourlyCycle} === '3' ? true : false }" />
                             <ObjectStatus class="sapUiSmallMarginBottom" title="" text="{path: '/offerTriHSavings', formatter: '.formatter.formatCurrency'}" active="true" state="{/offerTriHState}" press=".onOpenSavingsDialog" icon="{= ${/offerTriHState} === 'Success' ? 'sap-icon://down'
                                     : ${/offerTriHState} === 'Warning' ? 'sap-icon://up'
                                     : 'sap-icon://border' }" visible="{= ${/selectedHourlyCycle} !== '3' ? true : false }" />
@@ -182,6 +185,133 @@
 
             </VBox>
           </Panel>
+          <!-- Selected offer 001 Fim -->
+
+          <!-- Selected offer 002 Inicio -->
+          <f:GridList visible="{= ${/selectedHourlyCycle} !== '3' ? true : false }" id="gridList1" headerText="" items="{ path: '/offer' }" class="sapUiSmallMarginStart sapUiSmallMarginEnd" >
+            <f:GridListItem highlight="Success" type="Inactive">
+
+
+              <!-- Selected offer -->
+              <Panel headerText="{= ${/selectedSupplier} === 'ERSE'
+                            ? ${i18n>contractPanelTtlERSE}
+                            : ${i18n>contractPanelTtl} }" visible="true">
+                <VBox>
+                  <l:Grid defaultSpan="L6 M12 S12" hSpacing="0" vSpacing="0"
+                    xmlns:l="sap.ui.layout">
+                    <l:content>
+                      <HBox class="sapUiSmallMarginStart sapUiSmallMarginTop">
+                        <Image src="{/selectedSupplierLogo}" height="3rem" class="sapUiSmallMarginEnd"/>
+                        <VBox class="sapUiSmallMarginEnd">
+                          <Title text="{/selectedSupplierName}" level="H3" />
+                          <Text text="{/selectedOfferNameId}" class="sapUiSmallMarginEnd"/>
+                          <HBox>
+                            <tnt:InfoLabel text="{i18n>offerSupplyTypeEle}" colorScheme="8" icon="sap-icon://lightbulb" class="sapUiSmallMarginTop sapUiSmallMarginEnd" visible="{/offerSupplyTypeEleVisibility}"/>
+                            <tnt:InfoLabel text="{i18n>offerSupplyTypeGas}" colorScheme="6" icon="sap-icon://e-care" class="sapUiSmallMarginTop" visible="{/offerSupplyTypeGasVisibility}" />
+                          </HBox>
+                          <!--
+                      -->
+                          <ObjectStatus text="{i18n>offerPricePwrLbl} {/selectedPower} {i18n>offerPricePwrUnitLbl}" icon="sap-icon://disconnected" state="Information" class="sapUiTinyMarginTop"/>
+                          <HBox>
+                            <ObjectStatus text="{path: '/offerFromDate', formatter: '.formatter.formatDate'}" icon="sap-icon://workflow-tasks" state="Information" class="sapUiTinyMarginTop sapUiMediumMarginEnd"/>
+                            <ObjectStatus text="{path: '/offerToDate', formatter: '.formatter.formatDate'}" icon="sap-icon://select-appointments" state="Information" class="sapUiTinyMarginTop"/>
+                          </HBox>
+                          <!--<Text text="{/current/period}" class="sapUiTinyMarginTop"/>-->
+                        </VBox>
+                      </HBox>
+                    </l:content>
+
+                    <!-- Selected offer hourly cycle simulation -->
+                    <l:content>
+
+                      <l:Grid defaultSpan="L12 M12 S12" hSpacing="0" vSpacing="0"
+                        xmlns:l="sap.ui.layout">
+                        <l:content>
+
+                          <l:Grid defaultSpan="L4 M4 S4" hSpacing="0" vSpacing="0"
+                            xmlns:l="sap.ui.layout">
+
+                            <!-- Simple cycle -->
+                            <l:content>
+                              <VBox alignItems="Center" class="sapUiSmallMarginTop">
+                                <!--
+                        <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleSimple}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '1' ? 'Success' : 'Information' }" inverted="{= ${/selectedHourlyCycle} === '1' ? true : false }" /> number="{/offerSimpleSimulationTtl}" 
+                                      -->
+                                <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleSimple}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '1' ? 'Success' : 'Information' }" />
+                                <Title text="{path: '/offerSimpleSimulationTtl', formatter: '.formatter.formatCurrency'}" level="H2" visible="{= ${/offerlowestHourlyCycle} !== '1' ? true : false }" />
+                                <ObjectNumber class="sapMObjectNumberLarge" number="{path: '/offerSimpleSimulationTtl', formatter: '.formatter.formatCurrency'}" unit="" emphasized="true" state="Success" visible="{= ${/offerlowestHourlyCycle} === '1' ? true : false }" />
+                                <ObjectStatus class="sapUiSmallMarginBottom" title="" text="{path: '/offerSimpleSavings', formatter: '.formatter.formatCurrency'}" active="true" state="{/offerSimpleState}" press=".onOpenSavingsDialog" icon="{= ${/offerSimpleState} === 'Success' ? 'sap-icon://down'
+                                    : ${/offerSimpleState} === 'Warning' ? 'sap-icon://up'
+                                    : 'sap-icon://border' }" visible="{= ${/selectedHourlyCycle} !== '1' ? true : false }" />
+                              </VBox>
+                            </l:content>
+
+                            <!-- Bi-Hourly cycle -->
+                            <l:content>
+                              <VBox alignItems="Center" class="sapUiSmallMarginTop">
+                                <!--
+                        <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleBiH}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '2' ? 'Success' : 'Information' }" inverted="{= ${/selectedHourlyCycle} === '2' ? true : false }"/>
+                                      -->
+                                <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleBiH}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '2' ? 'Success' : 'Information' }" />
+                                <Title text="{path: '/offerBiHSimulationTtl', formatter: '.formatter.formatCurrency'}" level="H1" visible="{= ${/offerlowestHourlyCycle} !== '2' ? true : false }" />
+                                <ObjectNumber class="sapMObjectNumberLarge" number="{path: '/offerBiHSimulationTtl', formatter: '.formatter.formatCurrency'}" unit="" emphasized="true" state="Success" visible="{= ${/offerlowestHourlyCycle} === '2' ? true : false }" />
+                                <ObjectStatus class="sapUiSmallMarginBottom" title="" text="{path: '/offerBiHSavings', formatter: '.formatter.formatCurrency'}" active="true" state="{/offerBiHState}" press=".onOpenSavingsDialog" icon="{= ${/offerBiHState} === 'Success' ? 'sap-icon://down'
+                                    : ${/offerBiHState} === 'Warning' ? 'sap-icon://up'
+                                    : 'sap-icon://border' }" visible="{= ${/selectedHourlyCycle} !== '2' ? true : false }" />
+
+                              </VBox>
+                            </l:content>
+
+                            <!-- Tri-Hourly cycle -->
+                            <l:content>
+                              <VBox alignItems="Center" class="sapUiSmallMarginTop">
+                                <!--
+                        <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleTriH}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '3' ? 'Success' : 'Information' }" inverted="{= ${/selectedHourlyCycle} === '3' ? true : false }"/>
+                                      -->
+                                <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleTriH}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '3' ? 'Success' : 'Information' }" />
+                                <Title text="{path: '/offerTriHSimulationTtl', formatter: '.formatter.formatCurrency'}" level="H3" visible="{= ${/offerlowestHourlyCycle} !== '3' ? true : false }" />
+                                <ObjectNumber class="sapMObjectNumberLarge" number="{path: '/offerTriHSimulationTtl', formatter: '.formatter.formatCurrency'}" unit="" emphasized="true" state="Success" visible="{= ${/offerlowestHourlyCycle} === '3' ? true : false }" />
+                                <ObjectStatus class="sapUiSmallMarginBottom" title="" text="{path: '/offerTriHSavings', formatter: '.formatter.formatCurrency'}" active="true" state="{/offerTriHState}" press=".onOpenSavingsDialog" icon="{= ${/offerTriHState} === 'Success' ? 'sap-icon://down'
+                                    : ${/offerTriHState} === 'Warning' ? 'sap-icon://up'
+                                    : 'sap-icon://border' }" visible="{= ${/selectedHourlyCycle} !== '3' ? true : false }" />
+                              </VBox>
+                            </l:content>
+
+                          </l:Grid>
+                        </l:content>
+
+                      </l:Grid>
+                    </l:content>
+
+                  </l:Grid>
+
+                  <Panel expandable="true" visible="true" width="auto" class="sapUiSmallMarginTop" backgroundDesign="Translucent" stickyHeader="false">
+                    <headerToolbar>
+                      <OverflowToolbar>
+                        <Title text="Detalhes"/>
+                        <ToolbarSpacer />
+                        <!--
+                    <Link text="Simular Melhores Ofertas" endIcon="sap-icon://simulate" press="._simulateTopOffers" />
+                    -->
+                        <Link text=" " endIcon="sap-icon://inspect" press=".onShowCurrentDetails" />
+                      </OverflowToolbar>
+                    </headerToolbar>
+                    <!-- Insert offer details view -->
+                    <mvc:XMLView viewName="simulador.view.OfferDetails"/>
+
+                  </Panel>
+
+
+                </VBox>
+              </Panel>
+
+
+
+
+
+            </f:GridListItem>
+          </f:GridList>
+          <!-- Selected offer 002 Fim -->
 
           <!-- Top Offers -->
           <Panel headerText="Encontrámos {appDataModel>/topOffersSimulation/topOfferNr} ofertas para ti" expandable="false">
@@ -195,6 +325,7 @@
                       <Image src="{appDataModel>topOfferSupplierLogo}" height="3rem" class="sapUiSmallMarginEnd"/>
                       <VBox>
                         <Title text="{appDataModel>topOfferSupplierName}" level="H3" class="sapUiSmallMarginEnd"/>
+                        <Text text="{appDataModel>topOfferNameId}" class="sapUiSmallMarginEnd"/>
                         <HBox >
                           <tnt:InfoLabel text="{i18n>offerSupplyTypeEle}" colorScheme="8" icon="sap-icon://lightbulb" class="sapUiSmallMarginTop sapUiSmallMarginEnd" visible="{appDataModel>topOfferSupplyTypeEleVisibility}"/>
                           <tnt:InfoLabel text="{i18n>offerSupplyTypeGas}" colorScheme="6" icon="sap-icon://e-care" class="sapUiSmallMarginTop" visible="{appDataModel>topOfferSupplyTypeGasVisibility}" />
@@ -232,13 +363,8 @@
 
                           <l:content>
                             <VBox alignItems="Center" class="sapUiSmallMarginTop">
-                            <!--
-                              <ObjectStatus class="sapUiSmallMarginBottom" text="{i18n>contractPanelCycleTriH}" icon="sap-icon://date-time" state="{= ${/selectedHourlyCycle} === '3' ? 'Success' : 'Information' }" />
-                            -->
-                              <ObjectStatus class="sapUiSmallMarginBottom" 
-                                            text="{ path: 'appDataModel>topOfferHourlyCycle', formatter: '.formatter.formatCycleText' }"
-                                            icon="sap-icon://date-time" state="Information" />
-                              <ObjectNumber class="sapMObjectNumberLarge" number="{path: 'appDataModel>topOfferValue', formatter: '.formatter.formatCurrency'}" unit="" emphasized="true" state="Success" visible="{= ${/offerlowestHourlyCycleValue} === '3' ? true : false }" />
+                              <ObjectStatus class="sapUiSmallMarginBottom" text="{ path: 'appDataModel>topOfferHourlyCycle', formatter: '.formatter.formatCycleText' }" icon="sap-icon://date-time" state="Information" />
+                              <ObjectNumber class="sapMObjectNumberLarge" number="{path: 'appDataModel>topOfferValue', formatter: '.formatter.formatCurrency'}" unit="" emphasized="true" state="Success" />
                               <ObjectStatus class="sapUiSmallMarginBottom" title="" text="{path: 'appDataModel>topOfferSavings', formatter: '.formatter.formatCurrency'}" active="true" state="{/offerTriHState}" press=".onOpenSavingsDialog" icon="{= ${/offerTriHState} === 'Success' ? 'sap-icon://down'
                                     : ${/offerTriHState} === 'Warning' ? 'sap-icon://up'
                                     : 'sap-icon://border' }" />
@@ -296,7 +422,6 @@
               </CustomListItem>
             </List>
           </Panel>
-
 
         </l:content>
 
