@@ -61,71 +61,32 @@ sap.ui.define([
         offerlowestHourlyCycle: null,
         offerlowestValue: null,
 
-        // Selected offer hourly cycle simulation
-        // # Simple cycle
-
-        //pricePwrSimple: null,
-        //priceSimple: null,
-        //pricePwrBi: null,
-        //priceBiEmpty: null,
-        //priceBiOutEmpty: null,
-        //pricePwrTri: null,
-        //priceTriEmpty: null,
-        //priceTriFull: null,
-        //priceTriRush: null,
-        //
-        //current: {
-        //  logo: null,
-        //  name: null,
-        //  type: "Eletricidade",
-        //  type2: "Gas",
-        //  period: "22 Jul - 21 Aug",
-        //  power: "6.9 kVA",
-        //  powerLbl: "Potência",
-        //  cycleType: "Simples",
-        //  fixedPrice: "0.568 €/dia",
-        //  totalConsumption: "411 kWh",
-        //  variablePrice: "0.164 €/kWh",
-        //  simpleAmount: "102,49€",
-        //  simpleAmountVal: 102.49,
-        //  simpleSavings: "",
-        //  simpleState: "Information",
-        //  biHAmount: "101,49€",
-        //  biHAmountVal: 101.49,
-        //  biHSavings: "1,00€",
-        //  biHState: "Warning",
-        //  triHAmount: "100,49€",
-        //  triHAmountVal: 100.49,
-        //  triHSavings: "2,00€",
-        //  triHState: "Success",
-        //  lowestHourlyCyclePrice: "3" // 1 - Simple; 2 - Bi-hourly; 3 - Tri-hourly 
-        //},
         offersCount: 2,
-        offers: [
-          {
-            logo: "imgs/suppliersLogos/ibelectraLogo.png",
-            name: "Ibelectra",
-            contractType: "Solução Segura (DD + FE)",
-            price: "91,86€",
-            savings: "10,63€ poupança",
-            ddMandatory: true,
-            eInvoiceMandatory: true,
-            noLoyalty: true,
-            noSpecialConditions: true
-          },
-          {
-            logo: "imgs/suppliersLogos/G9-Logo.svg",
-            name: "IG9",
-            contractType: "Net Promo Verão",
-            price: "93,55€",
-            savings: "8.94€ poupança",
-            ddMandatory: false,
-            eInvoiceMandatory: false,
-            noLoyalty: false,
-            noSpecialConditions: false
-          }
-
-        ]
+        //offers: [
+        // {
+        //    logo: "imgs/suppliersLogos/ibelectraLogo.png",
+        //    name: "Ibelectra",
+        //    contractType: "Solução Segura (DD + FE)",
+        //    price: "91,86€",
+        //    savings: "10,63€ poupança",
+        //    ddMandatory: true,
+        //    eInvoiceMandatory: true,
+        //    noLoyalty: true,
+        //    noSpecialConditions: true
+        //  },
+        //  {
+        //    logo: "imgs/suppliersLogos/G9-Logo.svg",
+        //    name: "IG9",
+        //    contractType: "Net Promo Verão",
+        //    price: "93,55€",
+        //    savings: "8.94€ poupança",
+        //    ddMandatory: false,
+        //    eInvoiceMandatory: false,
+        //    noLoyalty: false,
+        //    noSpecialConditions: false
+        //  }
+        //]
+        
       });
       this.getView().setModel(oModel);
       this._getSuppliers(this);

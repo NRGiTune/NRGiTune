@@ -15,6 +15,7 @@ sap.ui.define([
         metadata: [],         // {	prices {id, description}, offers {id, description} }
         readings: [],         // {readingDate, readingType, origin, status, empty, rush, full}
         consumptions: [],     // {fromDate, toDate, consumptionSimple, consumptionEmpty, consumptionFull, consumptionRush, readingsEmpty, readingsFull, readingsRush, checkState, checkMsg}
+        consumptionsHeader: null, // {hdr1, hdr2, hdr3, hdrDateFrom, hdrDateTo}  (hdr1 - Address, hdr2 - CPE, hdr3- Counter NR)
         offerSimulation: [],
         topOffersSimulation: []   
       };

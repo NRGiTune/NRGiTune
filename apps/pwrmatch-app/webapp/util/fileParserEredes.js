@@ -10,7 +10,7 @@ sap.ui.define([
 	function _createReadingsFromEredesFileModel(that, jsonData) {
 
 		// Get readings address, CPE and counter nr
-		var header = jsonData.slice(0, 3).map((row, index) => ({
+		var fileHeader = jsonData.slice(0, 3).map((row, index) => ({
 			[`hdr${index + 1}`]: row[1]
 		}));
 
@@ -33,14 +33,22 @@ sap.ui.define([
 		var readingsSorded = readings.sort((a, b) => new Date(b.readingDate) - new Date(a.readingDate));
 		// Get end date row
 		var oEndDate = readingsSorded[0];
-		// Add header date to
-		header.push({ ["hdrDateTo"]: oEndDate.readingDate });
+		// Add fileHeader date to
+		//fileHeader.push({ ["hdrDateTo"]: oEndDate.readingDate });
 		// Sort readings by date ascending
 		readingsSorded = readings.sort((a, b) => new Date(a.readingDate) - new Date(b.readingDate));
 		// Get start date row
 		var oStartDate = readingsSorded[0];
-		// Add header date from
-		header.push({ ["hdrDateFrom"]: oStartDate.readingDate });
+		// Add fileHeader date from
+		//fileHeader.push({ ["hdrDateFrom"]: oStartDate.readingDate });
+		var header = {
+			address: fileHeader[0].hdr1,
+			cpe: fileHeader[1].hdr2,
+			counterNr: fileHeader[2].hdr3,
+			dateFrom: oStartDate.readingDate,
+			dateTo: oEndDate.readingDate,
+
+		};
 
 
 		// Consumption calculation

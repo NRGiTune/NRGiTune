@@ -100,6 +100,8 @@ sap.ui.define([
         // To DELETE
         var oAppDataModel = that.getOwnerComponent().getModel("appDataModel");
         oAppDataModel.setProperty("/consumptions", oData.consumptions.consumptions);
+        oAppDataModel.setProperty("/consumptionsHeader", oData.consumptions.header);
+        
 
         const status = checkConsReadModel.checkConsumptions(oAppDataModel);
         sap.m.MessageToast.show("Ficheiro carregado: " + file.name);
