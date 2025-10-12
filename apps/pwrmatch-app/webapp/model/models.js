@@ -8,13 +8,14 @@ sap.ui.define([
 
     createDataModel: function () {
       var data = {
-        suppliers: [],        // suppliers { supplierId, supplierName, supplierLogo 
-        suppliersOffers: [],  // {supplierId, offerID, offerName, offerFromDate, offerToDate, ... }
-        offersPrices: [],     // {supplierId, offerID, offerFromDate, offerToDate, power, ... }
-        regMarketPrices: [],  // {supplierId, offerID, offerFromDate, offerToDate, power, ... }
-        metadata: [],         // {	prices {id, description}, offers {id, description} }
-        readings: [],         // {readingDate, readingType, origin, status, empty, rush, full}
-        consumptions: [],     // {fromDate, toDate, consumptionSimple, consumptionEmpty, consumptionFull, consumptionRush, readingsEmpty, readingsFull, readingsRush, checkState, checkMsg}
+        suppliers: [],            // suppliers { supplierId, supplierName, supplierLogo 
+        suppliersOffers: [],      // {supplierId, offerID, offerName, offerFromDate, offerToDate, ... }
+        offersPrices: [],         // {supplierId, offerID, offerFromDate, offerToDate, power, ... }
+        regMarketPrices: [],      // {supplierId, offerID, offerFromDate, offerToDate, power, ... }
+        metadata: [],             // {	prices {id, description}, offers {id, description} }
+        metadataBySegment: [],    // 
+        readings: [],             // {readingDate, readingType, origin, status, empty, rush, full}
+        consumptions: [],         // {fromDate, toDate, consumptionSimple, consumptionEmpty, consumptionFull, consumptionRush, readingsEmpty, readingsFull, readingsRush, checkState, checkMsg}
         consumptionsHeader: null, // {hdr1, hdr2, hdr3, hdrDateFrom, hdrDateTo}  (hdr1 - Address, hdr2 - CPE, hdr3- Counter NR)
         offerSimulation: [],
         topOffersSimulation: []   

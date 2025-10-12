@@ -67,6 +67,137 @@ sap.ui.define([], function () {
             if (!(start instanceof Date) || !(end instanceof Date)) return 0;
             const diff = (end - start) / (1000 * 60 * 60 * 24);
             return inclusive ? diff + 1 : diff;
+        },
+
+        getOfferCommConditionsFilter: function (oBundle, offerCommConditions) {
+
+            var offerCommConditionsFilter = [];
+            var offerCommConditionFilter = null;
+
+            const commConditionsFilter = Object.entries(offerCommConditions)
+                .filter(([key]) => key.startsWith("Filtro"))          // only keys starting with "Filtro"
+                .map(([key, value]) => ({
+                    filterType: key,
+                    filterValue: String(value)                          // optional: convert to string
+                }));
+
+            commConditionsFilter.forEach(commCond => {
+                let commConditionsText = null;
+                let commConditionsIcon = null;
+                let commConditionsState = null;
+                let commConditionsVisible = null;
+
+                switch (commCond.filterType) {
+
+                    case "Filtrofaturacao":
+                        switch (commCond.filterValue) {
+                            case "01":
+                                commConditionsText = oBundle.getText("billingFilter01");
+                                commConditionsIcon = "sap-icon://alert";
+                                commConditionsState = "Information";
+                                break;
+                            case "10":
+                                commConditionsText = oBundle.getText("billingFilter10");
+                                commConditionsIcon = "sap-icon://alert";
+                                commConditionsState = "Warning";
+                                break;
+                            default:
+                                commConditionsText = oBundle.getText("billingFilter11");
+                                commConditionsIcon = "sap-icon://sys-enter-2";
+                                commConditionsState = "Success";
+                                break;
+                        }
+                        commConditionsVisible = true;
+                        break;
+
+                    case "FiltroContratacao":
+                        switch (commCond.filterValue) {
+                            case "100":
+                                commConditionsText = oBundle.getText("hiringFilter100");
+                                commConditionsIcon = "sap-icon://alert";
+                                commConditionsState = "Warning";
+                                break;
+                            case "110":
+                                commConditionsText = oBundle.getText("hiringFilter110");
+                                commConditionsIcon = "sap-icon://alert";
+                                commConditionsState = "Warning";
+                                break;
+                            default:
+                                commConditionsText = oBundle.getText("hiringFilter111");
+                                commConditionsIcon = "sap-icon://sys-enter-2";
+                                commConditionsState = "Success";
+                                break;
+                        }
+                        commConditionsVisible = false;
+                        break;
+
+                    case "FiltroPagamento":
+                        switch (commCond.filterValue) {
+                            case "100":
+                                commConditionsText = oBundle.getText("paymentFilter100");
+                                commConditionsIcon = "sap-icon://alert";
+                                commConditionsState = "Warning";
+                                break;
+                            default:
+                                commConditionsText = oBundle.getText("paymentFilter101");
+                                commConditionsIcon = "sap-icon://sys-enter-2";
+                                commConditionsState = "Success";
+                                break;
+                        }
+                        commConditionsVisible = true;
+                        break;
+
+                    case "FiltroFidelização":
+                        switch (commCond.filterValue) {
+                            case "Sim":
+                                commConditionsText = oBundle.getText("loyaltyFilterYes");
+                                commConditionsIcon = "sap-icon://alert";
+                                commConditionsState = "Warning";
+                                break;
+                            default:
+                                commConditionsText = oBundle.getText("loyaltyFilterNo");
+                                commConditionsIcon = "sap-icon://sys-enter-2";
+                                commConditionsState = "Success";
+                                break;
+                        }
+                        commConditionsVisible = true;
+                        break;
+
+                    case "FiltroRestrições":
+                        switch (commCond.filterValue) {
+                            case "Sim":
+                                commConditionsText = oBundle.getText("restrictionsFilterYes");
+                                commConditionsIcon = "sap-icon://alert";
+                                commConditionsState = "Warning";
+                                break;
+                            default:
+                                commConditionsText = oBundle.getText("restrictionsFilterNo");
+                                commConditionsIcon = "sap-icon://sys-enter-2";
+                                commConditionsState = "Success";
+                                break;
+                        }
+                        commConditionsVisible = true;
+                        break;
+
+                    default:
+                        // case unrecognized filter
+                        break;
+                }
+
+                // Se todos os valores foram definidos, adiciona ao array
+                if (commConditionsText && commConditionsIcon && commConditionsState) {
+                    offerCommConditionsFilter.push({
+                        text: commConditionsText,
+                        icon: commConditionsIcon,
+                        state: commConditionsState,
+                        visible: commConditionsVisible
+                    });
+                }
+            });
+
+
+            return offerCommConditionsFilter;
+
         }
 
 

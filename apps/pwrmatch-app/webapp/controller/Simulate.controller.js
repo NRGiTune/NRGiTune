@@ -86,7 +86,7 @@ sap.ui.define([
         //    noSpecialConditions: false
         //  }
         //]
-        
+
       });
       this.getView().setModel(oModel);
       this._getSuppliers(this);
@@ -267,6 +267,7 @@ sap.ui.define([
     _simulateTopOffers: function () {
       const normalizeNum = val => Number(String(val ?? "").trim());
       // get app data model
+      var oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle()
       var oAppDataModel = this.getOwnerComponent().getModel("appDataModel");
       // gets view model
       var oModel = this.getView().getModel();
@@ -280,6 +281,17 @@ sap.ui.define([
       //offerSimpleSimulationTtl
       //offerBiHSimulationTtl
       //offerTriHSimulationTtl
+
+      var offerTtl = null;
+      if (oModel.oData.selectedHourlyCycle === "2") {
+        offerTtl = oModel.oData.offerBiHSimulationTtl;
+      } else if (oModel.oData.selectedHourlyCycle === "3") {
+        {
+          offerTtl = oModel.oData.offerTriHSimulationTtl;
+        }
+      } else {
+        offerTtl = oModel.oData.offerSimpleSimulationTtl;
+      }
 
       // Get offers by supply type: ELE; DUAL; GN
       var suppliersOffers = oAppDataModel.oData.suppliersOffers.filter(item =>
@@ -302,7 +314,7 @@ sap.ui.define([
         offerlowestValue: oModel.oData.offerlowestValue
       };
 
-      var topOffersSimulation = simulate.simulateTopOffers(simulateTopOffersModel);
+      var topOffersSimulation = simulate.simulateTopOffers(oBundle, simulateTopOffersModel, offerTtl);
       //oModel.setProperty("/offerSimpleSimulationTtl", offerSimulation.offerSimpleSimulationTtl);
       //oModel.setProperty("/offerBiHSimulationTtl", offerSimulation.offerBiHSimulationTtl);
       //oModel.setProperty("/offerTriHSimulationTtl", offerSimulation.offerTriHSimulationTtl);
@@ -563,33 +575,50 @@ sap.ui.define([
 
     },
 
-    onOpenSavingsDialog: function () {
+    onOpenSavingsDialog: function (oEvt) {
       var oView = this.getView();
+      var offerSimulation = this.getOwnerComponent().oModels.appDataModel.oData.offerSimulation;
+      var selectedHourlyCycle = oView.getModel().oData.selectedHourlyCycle;
+
+      var oSavingsDialogModel = new sap.ui.model.json.JSONModel({
+        eventId: oEvt.getParameter("id"),
+        selectedHourlyCycle: selectedHourlyCycle,
+        offerSimulation: offerSimulation
+      });
 
       if (!this._oSavingsDialog) {
-        this._oSavingsDialog = new sap.m.Dialog({
-          title: "Poupança Estimada",
-          contentWidth: "80%",
-          contentHeight: "80%",
-          resizable: true,
-          draggable: true,
-          content: [
-            new sap.ui.core.mvc.XMLView({
-              viewName: "simulador.view.SavingsDialog" // nova view
-            })
-          ],
-          beginButton: new sap.m.Button({
-            text: "Fechar",
-            press: function () {
-              this._oSavingsDialog.close();
-            }.bind(this)
-          })
-        });
+        // cria a subview assincronamente
+        sap.ui.core.mvc.XMLView.create({
+          viewName: "simulador.view.SavingsDialog"
+        }).then(function (oSubView) {
+          // associa o modelo à subview
+          oSubView.setModel(oSavingsDialogModel, "savingsModel");
 
-        oView.addDependent(this._oSavingsDialog);
+          // cria o diálogo e adiciona a subview como conteúdo
+          this._oSavingsDialog = new sap.m.Dialog({
+            title: "Poupança Estimada",
+            contentWidth: "80%",
+            contentHeight: "80%",
+            resizable: true,
+            draggable: true,
+            content: [oSubView],
+            beginButton: new sap.m.Button({
+              text: "Fechar",
+              press: function () {
+                this._oSavingsDialog.close();
+              }.bind(this)
+            })
+          });
+
+          oView.addDependent(this._oSavingsDialog);
+          this._oSavingsDialog.open();
+        }.bind(this));
+      } else {
+        // atualiza o modelo se o diálogo já existe
+        this._oSavingsDialog.getContent()[0].setModel(oSavingsDialogModel, "savingsModel");
+        this._oSavingsDialog.open();
       }
 
-      this._oSavingsDialog.open();
     },
 
     onShowCurrentDetails: function () {
@@ -604,6 +633,195 @@ sap.ui.define([
 
     onSwitch: function (oEvent) {
       MessageToast.show("Mudar para este fornecedor");
+    },
+
+    onShowOfferCommercialConditions: function () {
+      var oAppDataModel = this.getOwnerComponent().getModel("appDataModel");
+      var oModel = this.getView().getModel();
+      var sSupplierKey = oModel.getProperty("/selectedSupplier");
+      var sOfferKey = oModel.getProperty("/selectedOffer");
+      var selectedPower = oModel.getProperty("/selectedPower");
+      if (!sSupplierKey || !sOfferKey) {
+        sap.m.MessageToast.show("Escolha fornecedor e tarifário");
+        return;
+      }
+      // buscar detalhes
+      var sId = sSupplierKey;
+      var suppliers = oModel.oData.suppliers;
+      var sup = suppliers.find(s => s.supplierId === sId);
+      var offer = (oModel.oData.offers || []).find(x => x.offerId === sOfferKey);
+      var metadataBySegment = oAppDataModel.oData.metadataBySegment;
+      var conditions = modelsUtils.mapOfferConditions(metadataBySegment, offer.details);
+      var oDlgModel = {
+        title: sSupplierKey + " / " + sOfferKey + " / " + selectedPower,
+        subtitle: "Detalhes do tarifário",
+        priceRows: [
+          { description: "Potência", value: "offer.prices.power" },
+          { description: "Vazio", value: "offer.prices.vazio" },
+          { description: "Cheio", value: "offer.prices.cheio" },
+          { description: "Ponta", value: "offer.prices.ponta" }
+        ],
+        conditions: conditions || []
+      };
+      this._openDetailsDialog(oDlgModel);
+    },
+
+
+    _openDetailsDialog: function (dlgModel) {
+      var that = this;
+      if (!this._oDlg) {
+        this._oDlg = new sap.m.Dialog({
+          title: "{/title}",
+          content: [
+            new sap.m.Text({ text: "{/subtitle}" }),
+            new sap.m.IconTabBar({
+              items: [
+                new sap.m.IconTabFilter({
+                  icon: "sap-icon://hint",
+                  text: "Descrição",
+                  content: new sap.m.Table({
+                    columns: [
+                      new sap.m.Column({ header: new sap.m.Title({ text: "Descrição" }) }),
+                      new sap.m.Column({ header: new sap.m.Title({ text: "Valor" }) })
+                    ],
+                    items: {
+                      path: "/conditions/conditionsDescr",
+                      template: new sap.m.ColumnListItem({
+                        cells: [new sap.m.Text({ text: "{descr}" }), new sap.m.Text({ text: "{text}" })]
+                      })
+                    }
+                  })
+                }),
+                new sap.m.IconTabFilter({
+                  icon: "sap-icon://chain-link",
+                  text: "Links",
+                  //content: new sap.m.List({
+                  //  items: {
+                  //    path: "/conditions/conditionsLinks",
+                  //    template: new sap.m.StandardListItem({ title: "{descr}", description: "{text}" })
+                  //  }
+                  //})
+                  content: new sap.m.Table({
+                    columns: [
+                      new sap.m.Column({ header: new sap.m.Title({ text: "Descrição" }) }),
+                      new sap.m.Column({ header: new sap.m.Title({ text: "Ligação" }) })
+                    ],
+                    items: {
+                      path: "/conditions/conditionsLinks",
+                      template: new sap.m.ColumnListItem({
+                        cells: [new sap.m.Text({ text: "{descr}" }),
+                        new sap.m.Text({ text: "{text}" })
+                          //  new sap.m.Link({
+                          //  text: "Link",   // texto do link
+                          //  href: "{text}",       // URL para abrir
+                          //  target: "_blank"      // abre em nova aba (opcional)
+                          //})
+                        ]
+                      })
+                    }
+                  })
+
+
+
+                }),
+                new sap.m.IconTabFilter({
+                  icon: "sap-icon://paid-leave",
+                  text: "Reembolsos/Descontos",
+                  content: new sap.m.Table({
+                    columns: [
+                      new sap.m.Column({ header: new sap.m.Title({ text: "Descrição" }) }),
+                      new sap.m.Column({ header: new sap.m.Title({ text: "Valor" }) })
+                    ],
+                    items: {
+                      path: "/conditions/conditionsRefundsDiscounts",
+                      template: new sap.m.ColumnListItem({
+                        cells: [new sap.m.Text({ text: "{descr}" }), new sap.m.Text({ text: "{text}" })]
+                      })
+                    }
+                  })
+                }),
+                new sap.m.IconTabFilter({
+                  icon: "sap-icon://message-warning",
+                  text: "Limitações da oferta",
+                  content: new sap.m.Table({
+                    columns: [
+                      new sap.m.Column({ header: new sap.m.Title({ text: "Descrição" }) }),
+                      new sap.m.Column({ header: new sap.m.Title({ text: "Valor" }) })
+                    ],
+                    items: {
+                      path: "/conditions/conditionsLimit",
+                      template: new sap.m.ColumnListItem({
+                        cells: [new sap.m.Text({ text: "{descr}" }), new sap.m.Text({ text: "{text}" })]
+                      })
+                    }
+                  })
+                }),
+                new sap.m.IconTabFilter({
+                  icon: "sap-icon://lead",
+                  text: "Custo dos serviços adicionais",
+                  content: new sap.m.Table({
+                    columns: [
+                      new sap.m.Column({ header: new sap.m.Title({ text: "Descrição" }) }),
+                      new sap.m.Column({ header: new sap.m.Title({ text: "Valor" }) })
+                    ],
+                    items: {
+                      path: "/conditions/conditionsCost",
+                      template: new sap.m.ColumnListItem({
+                        cells: [new sap.m.Text({ text: "{descr}" }), new sap.m.Text({ text: "{text}" })]
+                      })
+                    }
+                  })
+                }),
+                new sap.m.IconTabFilter({
+                  icon: "sap-icon://filter-facets",
+                  text: "Filtro",
+                  content: new sap.m.Table({
+                    columns: [
+                      new sap.m.Column({ header: new sap.m.Title({ text: "Descrição" }) }),
+                      new sap.m.Column({ header: new sap.m.Title({ text: "Valor" }) })
+                    ],
+                    items: {
+                      path: "/conditions/conditionsFilter",
+                      template: new sap.m.ColumnListItem({
+                        cells: [new sap.m.Text({ text: "{descr}" }), new sap.m.Text({ text: "{text}" })]
+                      })
+                    }
+                  })
+                })
+
+              ]
+            })
+          ],
+          endButton: new sap.m.Button({ text: "Fechar", press: function () { that._oDlg.close(); } })
+        });
+      }
+
+      // popular dados do dialog
+      //var oDlgModel = oDlgModel;
+
+      var oDlgModel = new JSONModel(
+        dlgModel
+      );
+      this._oDlg.setModel(oDlgModel);
+      this._oDlg.open();
+    },
+
+
+
+
+    onTopOfferSelected: function (oEvent) {
+      // item selecionado
+      const oSelectedItem = oEvent.getParameter("listItem");
+
+      // contexto do modelo (dados do item)
+      const oCtx = oSelectedItem.getBindingContext("appDataModel");
+      const oData = oCtx.getObject();
+
+      console.log("Item selecionado:", oData);
+
+      // exemplo: guardar o item selecionado no modelo global
+      //const oModel = this.getOwnerComponent().getModel("appDataModel");
+      //oModel.setProperty("/selectedOffer", oData);
     },
 
     onNewSimulation: function () {

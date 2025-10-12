@@ -30,13 +30,13 @@
           <Column hAlign="End">
             <Text text="Atual"/>
             <footer>
-              <Text text="{/total/current}" design="Bold" />
+              <Text text="{path: '/total/current', formatter: '.formatter.formatCurrency'}" />
             </footer>
           </Column>
           <Column hAlign="End">
             <Text text="Esta oferta"/>
             <footer>
-              <Text text="{/total/offer}" design="Bold" />
+              <Text text="{path: '/total/offer', formatter: '.formatter.formatCurrency'}"/>
             </footer>
           </Column>
           <Column hAlign="End">
@@ -52,8 +52,9 @@
 -->
 
 
-                 <ObjectNumber number="{/total/diff}" unit="" 
-                 emphasized="true" state="{/total/state}" />
+                 <ObjectNumber 
+                 number="{path: '/total/diff', formatter: '.formatter.formatCurrency'}"
+                 unit="" emphasized="true" state="{/total/state}" />
        
 
 
@@ -64,17 +65,24 @@
           <ColumnListItem>
             <cells>
               <Text text="{term}"/>
-              <VBox>
-                <Text text="{current01}"/>
-                <Text text="{current02}" visible="{= ${current02} !== '' ? true : false }"/>
-                <Text text="{current03}" visible="{= ${current03} !== '' ? true : false }"/>
+              <VBox alignItems="End" >
+                <Text text="{path: 'current01', formatter: '.formatter.formatCurrency'}"/>
+                <Text text="{path: 'current02', formatter: '.formatter.formatCurrency'}" 
+                visible="{= ${current02} !== 0 ? true : false }"/>
+                <Text text="{path: 'current03', formatter: '.formatter.formatCurrency'}" 
+                visible="{= ${current03} !== 0 ? true : false }"/>
               </VBox>
-              <VBox>
-                <Text text="{offer01}"/>
-                <Text text="{offer02}" visible="{= ${offer02} !== '' ? true : false }"/>
-                <Text text="{offer03}" visible="{= ${offer03} !== '' ? true : false }"/>
+              <VBox alignItems="End" >
+                <Text text="{path: 'offer01', formatter: '.formatter.formatCurrency'}"/>
+                <Text text="{path: 'offer02', formatter: '.formatter.formatCurrency'}" 
+                visible="{= ${offer02} !== 0 ? true : false }"/>
+                <Text text="{path: 'offer03', formatter: '.formatter.formatCurrency'}" 
+                visible="{= ${offer03} !== 0 ? true : false }"/>
               </VBox>
-              <ObjectStatus text="{diff}" state="{state}"/>
+              <VBox alignItems="End" >
+              <ObjectStatus text="{path: 'diff', formatter: '.formatter.formatCurrency'}"
+              state="{state}"/>
+              </VBox>
             </cells>
           </ColumnListItem>
         </items>

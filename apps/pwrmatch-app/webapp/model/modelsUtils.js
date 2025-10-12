@@ -1,6 +1,6 @@
 sap.ui.define([
   "sap/ui/model/json/JSONModel",
-	"simulador/util/formatter"
+  "simulador/util/formatter"
 ], function (JSONModel, formatter) {
   "use strict";
 
@@ -33,27 +33,32 @@ sap.ui.define([
       return results
     },
 
-    mapOfferConditions: function (segments, condModel) {
+    mapOfferConditions: function (segments, offerCommConditions) {
       // Map offer comercial conditions segment into offer conditions
 
+      var oOfferCommConditions = Object.entries(offerCommConditions).map(([key, value]) => ({
+        id: key,
+        text: value
+      }));
+
       var conditionsLinks = this.mapOffersMetadataSegment(
-                segments.conditionsLinks, condModel
-              );
+        segments.conditionsLinks, oOfferCommConditions
+      );
       var conditionsRefundsDiscounts = this.mapOffersMetadataSegment(
-                segments.conditionsRefundsDiscounts, condModel
-              );
+        segments.conditionsRefundsDiscounts, oOfferCommConditions
+      );
       var conditionsDescr = this.mapOffersMetadataSegment(
-                segments.conditionsDescr, condModel
-              );
+        segments.conditionsDescr, oOfferCommConditions
+      );
       var conditionsLimit = this.mapOffersMetadataSegment(
-                segments.conditionsLimit, condModel
-              );
+        segments.conditionsLimit, oOfferCommConditions
+      );
       var conditionsCost = this.mapOffersMetadataSegment(
-                segments.conditionsCost, condModel
-              );
+        segments.conditionsCost, oOfferCommConditions
+      );
       var conditionsFilter = this.mapOffersMetadataSegment(
-                segments.conditionsFilter, condModel
-              );
+        segments.conditionsFilter, oOfferCommConditions
+      );
 
       return {
         conditionsLinks: conditionsLinks,
@@ -151,29 +156,29 @@ sap.ui.define([
       offersPrices = oThat.getPricesBySupplierOffer(regMrktOffersERSE, "ERSE", "MR");
 
 
-          var conditionMR = {
-              conditionsDescr: [{
-                id: "TarifasPrecosRegulados", 
-                descr: "Tarifas e Preços Regulados", 
-                text: "https://www.erse.pt/atividade/regulacao/tarifas-e-precos-eletricidade/#tarifas-e-precos-regulados"                
-              }]
-          };
+      var conditionMR = {
+        conditionsDescr: [{
+          id: "TarifasPrecosRegulados",
+          descr: "Tarifas e Preços Regulados",
+          text: "https://www.erse.pt/atividade/regulacao/tarifas-e-precos-eletricidade/#tarifas-e-precos-regulados"
+        }]
+      };
 
-              var offersMR = [
-                {
-                id: "MR",
-                name: "TARIFA TRANSITÓRIA DE VENDA A CLIENTES FINAIS EM BTN (≤20,7 kVA e >1,15 kVA)",
-                startDate: formatter.parseXlsxFilesDate("01/01/2025"),
-                endDate: formatter.parseXlsxFilesDate("31/12/2025"),
-                supplyType: "ELE",
-                countType: "1",
-                segment: null,
-                contractDuration: "12",
-                prices: offersPrices,
-                conditions: conditionMR
-              }
-                             ];
-      
+      var offersMR = [
+        {
+          id: "MR",
+          name: "TARIFA TRANSITÓRIA DE VENDA A CLIENTES FINAIS EM BTN (≤20,7 kVA e >1,15 kVA)",
+          startDate: formatter.parseXlsxFilesDate("01/01/2025"),
+          endDate: formatter.parseXlsxFilesDate("31/12/2025"),
+          supplyType: "ELE",
+          countType: "1",
+          segment: null,
+          contractDuration: "12",
+          prices: offersPrices,
+          conditions: conditionMR
+        }
+      ];
+
       var suppliers = [{
 
         id: "ERSE",
@@ -214,7 +219,7 @@ sap.ui.define([
               }));
 
               //var ocomOffersConditionsERSETranfMeta = comOffersMetadataERSE[0].condComerciais.map(meta => ({
-                 
+
               //var ocomOffersConditionsERSETranfMeta = oThat.mapOffersMetadataSegment(
               //  filterOffersMetadataSegments.conditionsLinks, ocomOffersConditionsERSETranf
               //);

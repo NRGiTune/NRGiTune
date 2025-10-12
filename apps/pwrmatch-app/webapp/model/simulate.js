@@ -183,7 +183,7 @@ sap.ui.define([
 
     },
 
-    simulateTopOffers: function (simulateTopOffersModel, topOffersNr = 5) {
+    simulateTopOffers: function (oBundle, simulateTopOffersModel, offerTtl, topOffersNr = 5) {
 
       var suppliers = simulateTopOffersModel.suppliers;
       var suppliersOffers = simulateTopOffersModel.suppliersOffers;
@@ -230,6 +230,34 @@ sap.ui.define([
 
         var topOfferSavings = lowest.value - simulateTopOffersModel.offerlowestValue;
 
+        var offerCommConditionsFilter = null;
+        if (element.details) {
+          var offerCommConditionsFilter = formatter.getOfferCommConditionsFilter(oBundle, element.details);
+          //oModel.setProperty("/offerCommConditionsFilter", offerCommConditionsFilter);
+        }
+
+        var offerSavingsSimple = offerSimulation.offerSimpleSimulationTtl - offerTtl
+        var stateSimple = "None";
+        if (offerSavingsSimple < 0) {
+          stateSimple = "Success";
+        } else if (offerSavingsSimple > 0) {
+          stateSimple = "Warning";
+        }
+        var offerSavingsBiH = offerSimulation.offerBiHSimulationTtl - offerTtl
+        var stateBiH = "None";
+        if (offerSavingsBiH < 0) {
+          stateBiH = "Success";
+        } else if (offerSavingsBiH > 0) {
+          stateBiH = "Warning";
+        }
+        var offerSavingsTriH = offerSimulation.offerTriHSimulationTtl - offerTtl
+        var stateTriH = "None";
+        if (offerSavingsTriH < 0) {
+          stateTriH = "Success";
+        } else if (offerSavingsTriH > 0) {
+          stateTriH = "Warning";
+        }
+
         var topOffer = {
           topOfferSupplier: supplier[0].supplierId,
           topOfferSupplierName: supplier[0].supplierName,
@@ -242,17 +270,27 @@ sap.ui.define([
           topOfferFromDate: element.offerFromDate,
           topOfferToDate: element.offerToDate,
           topOfferHourlyCycle: lowest.type,
-          topOfferValue: lowest.value,
-          topOfferSavings: topOfferSavings,
+          topOfferValueSimple: offerSimulation.offerSimpleSimulationTtl,
+          topOfferValueBiH: offerSimulation.offerBiHSimulationTtl,
+          topOfferValueTriH: offerSimulation.offerTriHSimulationTtl,
+          topOfferSavingsSimple: offerSavingsSimple,
+          topOfferSavingsBiH: offerSavingsBiH,
+          topOfferSavingsTriH: offerSavingsTriH,
+          topOfferSavingsStateSimple: stateSimple,
+          topOfferSavingsStateBiH: stateBiH,
+          topOfferSavingsStateTriH: stateTriH,
+
+          offerCommConditionsFilter: offerCommConditionsFilter,
         };
 
-        if (topOfferSavings < 0) {
+        //if (topOfferSavings < 0) {
           topOffers.push(topOffer);
-        }
+        //}
 
 
       });
 
+      topOffersNr = topOffers.length;
       const lowestTopOffers = [...topOffers] // cria cópia para não alterar o original
         .sort((a, b) => a.topOfferSavings - b.topOfferSavings) // ordena ascendente
         .slice(0, topOffersNr); // pega os X primeiros (menores)

@@ -1,8 +1,9 @@
 sap.ui.define([
 	"sap/base/Log",
 	"sap/ui/model/json/JSONModel",
+	"simulador/model/modelsUtils",
 	"simulador/util/formatter"
-], function (Log, JSONModel, formatter) {
+], function (Log, JSONModel, modelsUtils, formatter) {
 	"use strict";
 
 
@@ -52,7 +53,8 @@ sap.ui.define([
 			countType: "123",
 			modality: null,
 			contractDuration: "12",
-			details: []
+			details: [],
+			filteredConditions: []
 		};
 		oSuppliersOffers.push(supplierOffers);
 		// regulated market offers
@@ -170,8 +172,8 @@ sap.ui.define([
 
 				});
 
-					// Commercial conditions list
-					_loadComConditionsFile("data/erse/lstCondComerciais.xlsx", that);
+				// Commercial conditions list
+				_loadComConditionsFile("data/erse/lstCondComerciais.xlsx", that);
 
 			})
 			.catch(err => {
@@ -374,12 +376,18 @@ sap.ui.define([
 					offers: condComerciais
 				});
 
+				// split metadata by segment
+				var metadataBySegment = modelsUtils.filterOffersMetadataSegments(condComerciais);
+				oAppDataModel.setProperty("/metadataBySegment", metadataBySegment);
+
 			})
 			.catch(err => {
 				console.error(err);
 				sap.m.MessageToast.show("Erro ao ler ficheiro local");
 				//return [];
 			});
+
+
 	}
 
 
