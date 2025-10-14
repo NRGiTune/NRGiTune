@@ -1,0 +1,53 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    xmlns:html="http://www.w3.org/1999/xhtml" controllerName="simulador.controller.VideoDialog">
+
+    <Dialog id="videoDialog" title="Vídeos Tutoriais" contentWidth="80%" contentHeight="80%" resizable="true" draggable="true">
+
+        <l:Grid defaultSpan="L12 M12 S12">
+            <l:content>
+                <!-- Player 
+        <core:HTML content='
+            <video id="videoPlayer" width="100%" height="400" controls>
+              <source src="" type="video/mp4">
+              O seu browser não suporta vídeos.
+            </video>
+          ' />
+          
+                              <html:div class="video-wrapper">
+
+          -->
+                <HBox alignItems="Center"  justifyContent="Center" class="sapUiSmallMarginTop">
+                    <html:div style="max-width: 90%; margin: auto;">
+                        <html:video id="videoPlayer" width="100%" height="auto" controls="true" src="videos/guid002.m4v">
+                                        Seu navegador não suporta a tag de vídeo.
+                        </html:video>
+                    </html:div>
+                </HBox>
+
+            </l:content>
+            <l:content>
+                <!-- Lista de vídeos -->
+                <List id="videoList" mode="SingleSelectMaster" items="{videoModel>/videos}" selectionChange=".onSelectVideo">
+                    <StandardListItem title="{videoModel>title}" />
+                </List>
+            </l:content>
+        </l:Grid>
+
+        <!-- Toolbar -->
+        <Toolbar>
+            <!--
+      <Button icon="sap-icon://media-play" tooltip="Play" press=".onPlay" />
+      <Button icon="sap-icon://media-pause" tooltip="Pause" press=".onPause" />
+      <Button icon="sap-icon://stop" tooltip="Parar" press=".onStop" />
+      <ToolbarSpacer />
+      <Slider width="150px" liveChange=".onVolumeChange" tooltip="Volume" />
+-->
+            <ToolbarSpacer />
+            <Button text="Fechar" type="Emphasized" press=".onCloseDialog" />
+        </Toolbar>
+
+    </Dialog>
+</mvc:View>

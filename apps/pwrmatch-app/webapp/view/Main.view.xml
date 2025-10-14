@@ -32,7 +32,7 @@
 
               <l:content>
                 <VBox justifyContent="Center" alignItems="End">
-                  <Link text="{i18n>optionReadingsHelp}" endIcon="sap-icon://inspect" press=".onOpenImageStepsDialog" />
+                  <m:Button text="{i18n>optionReadingsHelp}" icon="sap-icon://learning-assistant" type="Transparent" tooltip="{i18n>optionReadingsHelp}" press=".onOpenImageStepsDialog" />
                 </VBox>
               </l:content>
 
@@ -51,14 +51,14 @@
               xmlns:l="sap.ui.layout">
 
               <l:content>
-                <VBox justifyContent="End" alignItems="Start">
-                  <Text text="{i18n>optionVal}" />
+                <VBox justifyContent="End" alignItems="Start" class="sapUiSmallMarginTop">
+                  <Text text="{i18n>optionVal}"  />
                 </VBox>
               </l:content>
 
               <l:content>
                 <VBox justifyContent="Center" alignItems="End">
-                  <Link text="{i18n>valEFRHelp}" endIcon="sap-icon://inspect" press=".onOpenImageStepsDialog" />
+                  <m:Button text="{i18n>valEFRHelp}" icon="sap-icon://learning-assistant" type="Transparent" tooltip="{i18n>valEFRHelp}" press=".onOpenVideoDialog" />
                 </VBox>
               </l:content>
 
@@ -177,14 +177,10 @@
                 <ColumnListItem>
                   <cells>
                     <HBox alignItems="Center">
-                      <ObjectStatus press=".onShowCheckedMsgs"
-                      class="sapUiSmallMarginBottom" active="true" inverted="false" state="{appDataModel>checkState}" icon="sap-icon://message-success" visible="{= ${appDataModel>checkState} === 'Success' }" />
-                      <ObjectStatus press=".onShowCheckedMsgs"
-                      class="sapUiSmallMarginBottom" active="true" inverted="false" state="{appDataModel>checkState}" icon="sap-icon://message-error" visible="{= ${appDataModel>checkState} === 'Error' }" />
-                      <ObjectStatus press=".onShowCheckedMsgs"
-                      class="sapUiSmallMarginBottom" active="true" inverted="false" state="{appDataModel>checkState}" icon="sap-icon://message-warning" visible="{= ${appDataModel>checkState} === 'Warning' }" />
-                      <ObjectStatus press=".onShowCheckedMsgs"
-                      class="sapUiSmallMarginBottom" active="true" inverted="false" state="{appDataModel>checkState}" icon="sap-icon://message-information" visible="{= ${appDataModel>checkState} === 'Information' }" />
+                      <ObjectStatus press=".onShowCheckedMsgs" class="sapUiSmallMarginBottom" active="true" inverted="false" state="{appDataModel>checkState}" icon="sap-icon://message-success" visible="{= ${appDataModel>checkState} === 'Success' }" />
+                      <ObjectStatus press=".onShowCheckedMsgs" class="sapUiSmallMarginBottom" active="true" inverted="false" state="{appDataModel>checkState}" icon="sap-icon://message-error" visible="{= ${appDataModel>checkState} === 'Error' }" />
+                      <ObjectStatus press=".onShowCheckedMsgs" class="sapUiSmallMarginBottom" active="true" inverted="false" state="{appDataModel>checkState}" icon="sap-icon://message-warning" visible="{= ${appDataModel>checkState} === 'Warning' }" />
+                      <ObjectStatus press=".onShowCheckedMsgs" class="sapUiSmallMarginBottom" active="true" inverted="false" state="{appDataModel>checkState}" icon="sap-icon://message-information" visible="{= ${appDataModel>checkState} === 'Information' }" />
                     </HBox>
                     <DatePicker value="{
 						                    'path':'appDataModel>fromDate',

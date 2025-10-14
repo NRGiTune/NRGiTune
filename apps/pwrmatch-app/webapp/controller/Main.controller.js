@@ -13,7 +13,7 @@ sap.ui.define([
       // wire drop zone after rendering
       this.getView().addEventDelegate({
         //onAfterShow: this._attachDrop.bind(this)
-        onAfterRendering: this._attachDrop.bind(this)        
+        onAfterRendering: this._attachDrop.bind(this)
       });
 
       var oModel = new JSONModel({
@@ -101,7 +101,7 @@ sap.ui.define([
         var oAppDataModel = that.getOwnerComponent().getModel("appDataModel");
         oAppDataModel.setProperty("/consumptions", oData.consumptions.consumptions);
         oAppDataModel.setProperty("/consumptionsHeader", oData.consumptions.header);
-        
+
 
         const status = checkConsReadModel.checkConsumptions(oAppDataModel);
         sap.m.MessageToast.show("Ficheiro carregado: " + file.name);
@@ -178,9 +178,11 @@ sap.ui.define([
     onAddRow: function () {
       var o = this.getView().getModel("appDataModel");
       var a = o.getProperty("/consumptions");
-      a.push({ fromDate: null, toDate: null, consumptionSimple: null, 
-                consumptionEmpty: null, consumptionFull: null, consumptionRush: null, 
-                readingsEmpty: null, readingsFull: null, readingsRush: null, checkState: "None", checkMsg: "" });
+      a.push({
+        fromDate: null, toDate: null, consumptionSimple: null,
+        consumptionEmpty: null, consumptionFull: null, consumptionRush: null,
+        readingsEmpty: null, readingsFull: null, readingsRush: null, checkState: "None", checkMsg: ""
+      });
       o.setProperty("/consumptions", a);
     },
 
@@ -319,7 +321,77 @@ sap.ui.define([
       }
 
       this._oCheckedMsgsDialog.open();
+    },
+
+    onOpenVideoDialogOld: function () {
+      if (!this._oVideoDialog) {
+        this._oVideoDialog = sap.ui.xmlview("simulador.view.VideoDialog");
+        this.getView().addDependent(this._oVideoDialog);
+      }
+
+      this._oVideoDialog.byId("videoDialog").open();
+    },
+
+    onOpenVideoDialog_old: function () {
+      if (!this._oVideoDialog) {
+        // Criar view do conteúdo do diálogo
+        //const oSubView = sap.ui.xmlview("simulador.view.VideoDialog");
+
+        // Criar o diálogo
+        this._oVideoDialog = new sap.m.Dialog({
+          title: "Vídeos Tutoriais",
+          contentWidth: "80%",
+          contentHeight: "80%",
+          resizable: true,
+          draggable: true,
+          //content: [oSubView],
+          content: [
+            new sap.ui.core.mvc.XMLView({
+              viewName: "simulador.view.VideoDialog"
+            })
+          ],
+          buttons: [
+            new sap.m.Button({
+              text: "Fechar",
+              type: "Emphasized",
+              press: function () {
+                this._oVideoDialog.close();
+              }.bind(this)
+            })
+          ]
+        });
+
+        // Associar a view pai
+        this.getView().addDependent(this._oVideoDialog);
+      }
+
+      // Abrir o diálogo
+      this._oVideoDialog.open();
+
+    },
+
+    onOpenVideoDialog: function () {
+      if (!this._oVideoDialog) {
+        // cria a view XML (retorna a view inteira, que contém o Dialog com id="videoDialog")
+        this._oVideoDialog = sap.ui.xmlview("simulador.view.VideoDialog");
+        this.getView().addDependent(this._oVideoDialog);
+
+        // ligar o botão Fechar (btnClose) para fechar o Dialog
+        var oCloseBtn = this._oVideoDialog.byId("btnClose");
+        if (oCloseBtn) {
+          oCloseBtn.attachPress(function () {
+            // fechar o Dialog que está dentro da subview
+            var oDialog = this._oVideoDialog.byId("videoDialog");
+            if (oDialog) { oDialog.close(); }
+          }.bind(this));
+        }
+      }
+
+      // abrir o Dialog
+      var oDialog = this._oVideoDialog.byId("videoDialog");
+      if (oDialog) { oDialog.open(); }
     }
+
 
 
 

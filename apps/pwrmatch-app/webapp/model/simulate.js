@@ -283,9 +283,9 @@ sap.ui.define([
           offerCommConditionsFilter: offerCommConditionsFilter,
         };
 
-        //if (topOfferSavings < 0) {
+        if (topOfferSavings < 0) {
           topOffers.push(topOffer);
-        //}
+        }
 
 
       });
