@@ -1,0 +1,370 @@
+/* Variáveis para fácil gestão das cores */
+:root {
+    --color-primary: #00bf63; /* Verde principal original */
+    --color-highlight: #00bf63; /* Verde para 'Simulador' selecionado */
+    --color-link-default: #7ed957; /* Verde claro para outros links */
+    --color-secondary: #000; /* Preto para texto */
+    --color-background: #fff;
+    --color-light-gray: #f2f2f2;
+}
+
+body {
+    /* NOVIDADE: Aplicar a fonte Ubuntu */
+    /*font-family: 'Ubuntu', sans-serif; */
+    font-family: system-ui, sans-serif; 
+    margin: 0;
+    padding: 0;
+    color: var(--color-secondary);
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-secondary);
+    transition: font-size 0.3s ease-in-out; 
+}
+
+/* --- NOVO HEADER (DUAS LINHAS) --- */
+.header {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 50px;
+    border-bottom: 1px solid var(--color-light-gray);
+}
+
+/* PRIMEIRA LINHA: Log In e Avatar */
+.header-top {
+    display: flex;
+    justify-content: flex-end; /* Alinha os itens à direita */
+    align-items: center;
+    gap: 15px; /* Espaço entre o botão e o avatar */
+    width: 100%;
+    margin-bottom: 10px; /* Espaço entre as duas linhas do header */
+}
+
+.register-button {
+    /* Fundo verde e texto branco conforme pedido */
+    background-color: var(--color-primary); 
+    color: var(--color-background);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+
+/* NOVO: Efeito Mouse Over no Botão de Registo */
+.register-button:hover {
+    /* font-size: 18px; Aumenta o tamanho da fonte */
+    /* font-weight: bold; Aplica negrito */
+    background-color: var(--color-background); 
+    color: var(--color-primary);
+}
+
+/* NOVO: Estilo do Avatar Circular */
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    position: relative; /* Essencial para o pseudo-elemento */
+    overflow: hidden; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    cursor: pointer;
+    /* Transição para suavizar o aumento de diâmetro */
+    transition: all 0.3s ease-in-out; 
+    z-index: 1; 
+}
+
+/* Pseudo-elemento para o círculo de fundo que recebe a borda e transparência */
+.user-avatar::before {
+    content: '';
+    position: absolute;
+    top: 1;
+    left: 1;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    /* Cor de fundo inicial (verde) */
+    background-color: var(--color-highlight); 
+    /* Borda inicial transparente para evitar que o círculo "salte" */
+    border: 3px solid; 
+    transition: all 0.3s ease-in-out;
+    z-index: -1; 
+}
+
+/* EFEITO NOVO: Fundo transparente e Borda verde no hover */
+.user-avatar:hover::before {
+    background-color: transparent; 
+    border: 2px solid var(--color-primary); 
+    /* Certifica que não há blur ou transformações antigas */
+    filter: none; 
+    transform: none; 
+}
+
+.avatar-initials {
+    color: var(--color-background); /* Cor inicial: Branco */
+    font-size: 18px;
+    font-weight: 700;
+    position: relative; 
+    z-index: 2; 
+    /* Transição para suavizar a mudança de cor e tamanho do texto */
+    transition: all 0.3s ease-in-out; 
+}
+
+/* EFEITO NOVO: Texto Verde e ligeiramente maior no hover */
+.user-avatar:hover .avatar-initials {
+    color: var(--color-primary); 
+    font-size: 20px; 
+}
+
+/* SEGUNDA LINHA: Logo e Menu */
+.header-bottom {
+    display: flex;
+    justify-content: space-between; /* Coloca o Logo à Esquerda e o Menu à Direita */
+    /* CORREÇÃO: Alinha os itens pela linha de base do texto (importante para tamanhos de fonte diferentes) */
+    align-items: baseline; 
+    width: 100%;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-left: 20px; /* Mantém a margem de posição */
+    height: 100px; /* Define uma altura para o container do logo, se necessário */
+}
+
+.logo img {
+    height: 100%; /* Ocupa a altura do container .logo (40px) */
+    width: auto;
+    /* Ajuste o 'height' conforme o tamanho que pretende para o seu logo */
+}
+
+.logo-icon {
+    display: none;
+}
+
+
+/* --- LINKS DE NAVEGAÇÃO (MENU) --- */
+.nav-links {
+    display: flex;
+    /* ALTERADO: Dobro do espaçamento (era 30px, agora 60px) */
+    gap: 60px; 
+}
+
+.nav-links a {
+    /* NOVO: Removemos o sublinhado default aqui para o simularmos com border-bottom */
+    text-decoration: none; 
+    
+    /* NOVO: Simular sublinhado com maior espaçamento */
+    border-bottom: 3px solid ; /* Inicialmente transparente */
+    padding-bottom: 8px; /* Espaço entre o texto e a linha */
+}
+
+/* Estilos Padrão para "Contacto" e "Quem Somos" */
+.nav-links a:not(:first-child) {
+    font-size: 27px;
+    color: var(--color-link-default);
+}
+
+/* Estilo Padrão (Simulado como "Selecionado") para "Simulador" */
+.nav-links a:first-child {
+    font-size: 32px;
+    color: var(--color-highlight);
+    font-weight: bold;
+}
+
+/* EFEITOS MOUSE OVER (HEADER) */
+
+/* Mouse Over para "Contacto" e "Quem Somos" */
+.nav-links a:not(:first-child):hover {
+    font-size: 32px; /* Animação de 27px -> 32px */
+    /* MANTÉM a cor original (var(--color-link-default)) e o sublinhado */
+    color: var(--color-link-default); 
+}
+
+/* Mouse Over para "Simulador" */
+.nav-links a:first-child:hover {
+    font-size: 41px; /* Animação de 32px -> 41px */
+    /* MANTÉM a cor original (var(--color-highlight)) e o sublinhado */
+    color: var(--color-highlight); 
+}
+
+/* --- MAIN CONTENT --- */
+.main-content {
+    flex-grow: 1;
+    text-align: center;
+    padding-top: 50px;
+}
+
+/* NOVIDADE: Estilos de Texto do MAIN */
+.tagline, .steps-title {
+    font-size: 41px; /* Tamanho 41 para texto preto e verde */
+    font-weight: 300;
+    margin-bottom: 5px;
+}
+
+.tagline {
+    color: var(--color-secondary); /* Texto preto */
+}
+
+.highlight-green {
+    color: var(--color-primary);
+    font-weight: bold; /* Texto verde bold */
+}
+
+/* O resto do MAIN (passos e monitor) não necessita de alterações de fonte/tamanho */
+/* --- SECÇÃO DOS PASSOS (FLEXBOX) --- */
+.steps-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 50px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 220px; 
+}
+
+.step-number {
+    font-size: 40px;
+    font-weight: bold;
+    color: #ccc; 
+    margin-bottom: 10px;
+}
+
+.arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 15px solid #ccc; 
+    margin-bottom: 15px;
+}
+
+.step-button {
+    color: var(--color-background);
+    border: none;
+    padding: 15px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    height: 60px;
+}
+
+.green-bg {
+    background-color: var(--color-primary);
+}
+
+.monitor-container {
+    padding-bottom: 20px;
+}
+
+.monitor-image {
+    background-color: #000; 
+    border: 15px solid #333;
+    border-radius: 20px;
+    width: 650px;
+    height: 400px;
+    display: block;
+    margin: 0 auto;
+}
+
+
+/* --- FOOTER --- */
+.footer {
+    padding: 20px 50px;
+    background-color: var(--color-background);
+    border-top: 1px solid var(--color-light-gray);
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.footer a {
+    /* NOVIDADE: Tamanho de texto 21px para o footer */
+    font-size: 21px; 
+    color: var(--color-link-default);
+    font-weight: 500;
+    /* ALTERADO: Remover o sublinhado */
+    text-decoration: none; 
+}
+
+/* NOVIDADE: Efeito Mouse Over no Footer */
+.footer a:hover {
+    font-size: 27px; /* Animação de 21px -> 27px */
+    /* ALTERADO: Retirar o sublinhado no mouseover */
+    text-decoration: none;
+    /* MANTÉM a cor original (var(--color-primary)) */
+    color: var(--color-link-default);
+}
+
+/* Media Queries para Responsividade (melhor visualização em telemóveis) */
+@media (max-width: 768px) {
+    /* Reset dos tamanhos grandes do menu para o telemóvel */
+    .nav-links a, 
+    .nav-links a:hover,
+    .nav-links a:not(:first-child),
+    .nav-links a:not(:first-child):hover,
+    .nav-links a:first-child,
+    .nav-links a:first-child:hover {
+        font-size: 18px !important; 
+        font-weight: normal !important;
+        /* Garante que o sublinhado do header é mantido no mobile */
+        text-decoration: underline !important; 
+        /* Mantém o padding inferior mesmo no mobile */
+        padding-bottom: 5px !important; 
+    }
+    
+    .header {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .nav-links {
+        margin-top: 15px;
+    }
+
+    .nav-links a {
+        margin: 0 5px;
+    }
+    
+    .tagline, .steps-title {
+        font-size: 28px;
+    }
+
+    .steps-container {
+        flex-direction: column; 
+        align-items: center;
+        gap: 20px;
+    }
+
+    .step {
+        width: 80%;
+    }
+
+    .monitor-image {
+        width: 90%;
+        height: 300px;
+    }
+
+    .footer {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    .footer a, .footer a:hover {
+        font-size: 16px;
+        text-decoration: none; /* Garante que o sublinhado do footer é removido no mobile */
+    }
+}
