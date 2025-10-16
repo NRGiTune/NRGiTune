@@ -282,6 +282,15 @@ a {
 }
 
 
+/* --- TITLE  --- */
+/* MAIN: Logo e Menu */
+.main-center {
+    display: flex;
+    justify-content: center;
+    align-items: baseline; 
+    width: 100%;
+}
+
 /* --- FOOTER --- */
 .footer {
     padding: 20px 50px;
