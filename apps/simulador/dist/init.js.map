@@ -1,1 +1,0 @@
-{"version":3,"file":"init.js","names":["sap","ui","define","Component","getCore","attachInit","create","name","async","then","oComponent","placeAt"],"sources":["init-dbg.js"],"mappings":"AAAAA,IAAIC,GAAGC,OAAO,CAAC,yBAA0B,SAAUC,GACjD,aAEAH,IAAIC,GAAGG,UAAUC,WAAW,WAC1BF,EAAUG,OAAO,CACfC,KAAM,YACNC,MAAO,OACNC,KAAK,SAAUC,GAChBA,EAAWC,QAAQ,UACrB,EACF,EACF","ignoreList":[]}

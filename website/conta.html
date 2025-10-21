@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/quem-somos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-top">
+            <a href="login.html">
+                <button class="register-button">Log In / Regista-te</button>
+            </a>
+            <div class="user-avatar">
+                <span class="avatar-initials">NT</span>
+            </div>
+        </div>
+        <div class="header-bottom">
+            <div>
+                <a href="#">
+                    <embed type="image/svg+xml" src="imgs/logo-img.svg" width="100%" height="100%" />
+                </a>
+            </div>
+            <nav class="nav-links">
+                <a href="simulador.html">Simulador</a>
+                <a href="termos-condicoes.html">Termos e Condições</a>
+                <a href="quem-somos.html">Quem Somos</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+
+        <div class="container">
+            <h1>Dados da Conta e Utilizador</h1>
+
+            <form id="form-perfil">
+                <h2>Dados de Acesso</h2>
+                <label for="email-conta">E-mail</label>
+                <input type="email" id="email-conta" disabled> <label for="new-password">Nova Senha (Opcional)</label>
+                <input type="password" id="new-password" placeholder="Mínimo 6 caracteres">
+
+                <h2>Informações Pessoais</h2>
+                <label for="nome-utilizador">Nome</label>
+                <input type="text" id="nome-utilizador" placeholder="O seu nome" required>
+
+                <button type="submit" id="btn-atualizar">Atualizar Dados</button>
+                <button type="button" id="btn-logout">Sair da Conta</button>
+            </form>
+
+            <p id="message"></p>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+        <script>
+            // CONFIGURAÇÃO SUPABASE (Substitua pelos seus dados)
+            const SUPABASE_URL = 'https://citaewfnpsfjtnuolqyo.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpdGFld2ZucHNmanRudW9scXlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc2MDcxMjMsImV4cCI6MjA3MzE4MzEyM30.JJ90UzR3_DLu6-YcWGZq623B-hXcPFBUrwg2gOLFOcI';
+            const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+            const emailInput = document.getElementById('email-conta');
+            const nameInput = document.getElementById('nome-utilizador');
+            const passwordInput = document.getElementById('new-password');
+            const form = document.getElementById('form-perfil');
+            const message = document.getElementById('message');
+
+            // 1. Obter e Preencher Dados
+            async function loadUserData() {
+                const { data: { user } } = await supabaseClient.auth.getUser();
+
+                if (!user) {
+                    // Se não estiver logado, redirecionar para a página de login
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Preenche o e-mail (da tabela auth.users)
+                emailInput.value = user.email;
+
+                // Preenche o nome (dos metadados do usuário)
+                const userName = user.user_metadata?.nome || '';
+                nameInput.value = userName;
+            }
+
+            // 2. Atualizar Dados
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const newName = nameInput.value.trim();
+                const newPassword = passwordInput.value.trim();
+                const updates = {};
+
+                // A. Atualizar Senha (se houver)
+                if (newPassword.length >= 6) {
+                    updates.password = newPassword;
+                }
+
+                // B. Atualizar Metadados (Nome)
+                if (newName) {
+                    updates.data = { nome: newName };
+                }
+
+                if (Object.keys(updates).length === 0) {
+                    message.textContent = 'Nenhuma alteração a ser salva.';
+                    return;
+                }
+
+                const { data, error } = await supabaseClient.auth.updateUser(updates);
+
+                if (error) {
+                    message.textContent = `Erro ao atualizar: ${error.message}`;
+                } else {
+                    message.textContent = 'Dados da conta atualizados com sucesso!';
+                    passwordInput.value = ''; // Limpa o campo de senha
+                    loadUserData(); // Recarrega os dados (opcional)
+                }
+            });
+
+            // 3. Logout
+            document.getElementById('btn-logout').addEventListener('click', async () => {
+                const { error } = await supabaseClient.auth.signOut();
+                if (error) {
+                    alert('Erro ao sair da conta.');
+                } else {
+                    window.location.href = 'login.html'; // Redireciona para o login
+                }
+            });
+
+            loadUserData();
+        </script>
+
+    </main>
+
+</body>
+
+</html>

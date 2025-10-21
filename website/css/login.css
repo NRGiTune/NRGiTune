@@ -1,0 +1,213 @@
+/* Variáveis de cor (Assumidas do código anterior) */
+:root {
+    --color-primary: #52b748; /* Verde principal */
+    --color-highlight: #00bf63; /* Verde de destaque */
+    --color-secondary: #000; /* Preto para texto */
+    --color-background: #fff; /* Branco */
+    --color-light-gray: #f2f2f2;
+}
+
+/* --- ESTILOS DO CONTAINER DE LOGIN/REGISTO --- */
+.auth-container {
+    max-width: 400px; /* Limita a largura do formulário */
+    margin: 80px auto; /* Centraliza vertical e horizontalmente */
+    padding: 20px;
+    /* Apenas se quiser uma borda ou sombra, caso contrário remova */
+    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+    /* border-radius: 8px; */
+}
+
+/* Títulos do Formulário */
+.auth-container h1 {
+    font-size: 38px;
+    font-weight: 400; /* Levemente mais fino, como no mockup */
+    margin-bottom: 5px;
+}
+
+.auth-container p {
+    font-size: 16px;
+    color: var(--color-secondary);
+    margin-bottom: 30px;
+}
+
+/* --- ESTILOS DOS BOTÕES DE LOGIN SOCIAL/SSO --- */
+.social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc; /* Borda cinzenta clara */
+    border-radius: 8px; /* Cantos mais arredondados */
+    background-color: var(--color-background);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.social-button:hover {
+    border-color: var(--color-primary); /* Destaque na borda ao passar o mouse */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.social-button i, .social-button svg {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+/* Separador "ou" */
+.separator {
+    text-align: center;
+    margin: 30px 0;
+    font-size: 14px;
+    color: #999;
+    text-transform: uppercase;
+}
+
+/* --- ESTILOS DO FORMULÁRIO DE E-MAIL/PASSWORD --- */
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--color-secondary);
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box; /* Garante que o padding não aumenta a largura total */
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+/* Link Esqueceu a Senha? */
+.forgot-password {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 14px;
+    color: var(--color-primary); /* Cor primária do projeto */
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Novo estilo para o container da senha (para envolver o input e o ícone) */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center; /* Alinha o input e o ícone verticalmente */
+}
+
+/* Ajuste o input dentro do wrapper */
+.password-wrapper .form-input {
+    width: 100%;
+}
+
+/* Estilo para o ícone de mostrar/ocultar */
+.password-toggle {
+    position: absolute;
+    right: 15px; /* Posição à direita dentro do input */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #999; /* Cor cinzenta discreta */
+    font-size: 16px;
+    padding: 5px; /* Área de clique maior */
+    z-index: 10;
+}
+
+.password-toggle:hover {
+    color: var(--color-secondary);
+}
+
+/* --- BOTÃO PRINCIPAL DE ENTRAR --- */
+.main-auth-button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--color-highlight); /* Um verde ligeiramente mais vivo */
+    color: var(--color-background);
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+}
+
+.main-auth-button:hover {
+    background-color: var(--color-primary);
+}
+
+
+/* --- RODAPÉ DO FORMULÁRIO --- */
+.auth-footer-links {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 16px;
+}
+
+.auth-footer-links a {
+    color: var(--color-primary);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.auth-footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* Links da Política de Privacidade e Termos (Rodapé inferior) */
+.policy-links {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-light-gray);
+    font-size: 12px;
+    color: #999;
+    line-height: 1.5;
+}
+
+.policy-links a {
+    color: #999;
+    text-decoration: underline;
+}
+
+.policy-links a:hover {
+    color: var(--color-primary);
+}
+
+/* Mídias queries para telemóveis */
+@media (max-width: 480px) {
+    .auth-container {
+        margin: 20px auto;
+        padding: 10px;
+    }
+    .auth-container h1 {
+        font-size: 32px;
+    }
+}
+/* Alterar o .form-group para permitir posicionamento absoluto dentro */
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+

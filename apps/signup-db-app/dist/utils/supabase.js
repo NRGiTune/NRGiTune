@@ -1,2 +1,0 @@
-sap.ui.define([],function(){"use strict";const{createClient:c}=window.supabase;const i="https://citaewfnpsfjtnuolqyo.supabase.co";const n="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpdGFld2ZucHNmanRudW9scXlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc2MDcxMjMsImV4cCI6MjA3MzE4MzEyM30.JJ90UzR3_DLu6-YcWGZq623B-hXcPFBUrwg2gOLFOcI";const s=c(i,n);return{getClient:function(){return s}}});
-//# sourceMappingURL=supabase.js.map

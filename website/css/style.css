@@ -66,20 +66,44 @@ a {
     color: var(--color-primary);
 }
 
+.avatar-button {
+    /* Fundo verde e texto branco conforme pedido */
+    background-color: var(--color-primary); 
+    color: var(--color-background);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+
+/* NOVO: Efeito Mouse Over no Botão de Registo */
+.avatar-button:hover {
+    /* font-size: 18px; Aumenta o tamanho da fonte */
+    /* font-weight: bold; Aplica negrito */
+    background-color: var(--color-background); 
+    color: var(--color-primary);
+}
+
 /* NOVO: Estilo do Avatar Circular */
 .user-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    position: relative; /* Essencial para o pseudo-elemento */
-    overflow: hidden; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
+    position: relative;
+    overflow: hidden;
+    /* Remover 'display: none' aqui, pois a span interna já tem display: none,
+       e o JavaScript controlará o display do botão e do span/div de acordo.
+       Vamos garantir que a DIV tem uma classe de ocultação: */
+    /* display: none; /* Esta linha estava a causar conflito */
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-    /* Transição para suavizar o aumento de diâmetro */
-    transition: all 0.3s ease-in-out; 
-    z-index: 1; 
+    transition: all 0.3s ease-in-out;
+    z-index: 1;
 }
 
 /* Pseudo-elemento para o círculo de fundo que recebe a borda e transparência */
@@ -108,14 +132,22 @@ a {
     transform: none; 
 }
 
+/* O estado inicial INVISÍVEL é gerido por esta classe. */
+/* É essencial ter esta classe no CSS para o JS usar. */
+.hidden {
+    display: none !important;
+}
+
 .avatar-initials {
-    color: var(--color-background); /* Cor inicial: Branco */
+    /* CORREÇÃO: Removi o display: none daqui e vamos controlá-lo no JS.
+       Em vez disso, garanto que está centrado. */
+    display: flex; /* Mantenha 'flex' para ser centrado vertical e horizontalmente */
+    color: var(--color-background);
     font-size: 18px;
     font-weight: 700;
-    position: relative; 
-    z-index: 2; 
-    /* Transição para suavizar a mudança de cor e tamanho do texto */
-    transition: all 0.3s ease-in-out; 
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease-in-out;
 }
 
 /* EFEITO NOVO: Texto Verde e ligeiramente maior no hover */
@@ -283,13 +315,14 @@ a {
 
 
 /* --- TITLE  --- */
-/* MAIN: Logo e Menu */
+/* MAIN: Logo e Menu
 .main-center {
     display: flex;
     justify-content: center;
     align-items: baseline; 
     width: 100%;
 }
+ */
 
 /* --- FOOTER --- */
 .footer {
@@ -376,4 +409,94 @@ a {
         font-size: 16px;
         text-decoration: none; /* Garante que o sublinhado do footer é removido no mobile */
     }
+}
+
+/* --- ESTILOS PARA O DIALOG DE PERFIL --- */
+
+/* O container do avatar (user-auth-area) precisa de ser 'relative' para o dialog */
+#user-auth-area {
+    position: relative; /* CRUCIAL: Ponto de referência para o dialog */
+    /* Garante que o avatar original ainda tem o tamanho correto */
+    width: 40px; 
+    height: 40px;
+}
+
+.user-menu-dialog {
+    /* Posição Absoluta em relação ao #user-auth-area */
+    position: absolute;
+    top: 50px; /* Desce 50px do topo do avatar */
+    right: 0; /* Alinha o canto direito do dialog com o canto direito do avatar */
+    
+    width: 280px; /* Largura fixa como no mockup */
+    background: var(--color-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra suave */
+    
+    padding: 10px 0;
+    z-index: 1000; /* Garante que está acima de tudo */
+}
+
+/* Ocultar inicialmente (gerido pelo JS) */
+.user-menu-dialog.hidden {
+    display: none;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--color-light-gray);
+}
+
+.user-info .text-info {
+    margin-left: 10px;
+}
+
+.user-info .name {
+    font-weight: 600;
+    font-size: 16px;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.user-info .niss {
+    color: #888;
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.3;
+}
+
+/* Estilo para o Avatar dentro do Dialog (Maior) */
+.large-avatar-initials {
+    width: 50px; /* Aumenta o tamanho */
+    height: 50px;
+    font-size: 20px;
+    background-color: var(--color-primary);
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+}
+
+/* Itens de Menu (Perfil, Terminar sessão) */
+.menu-item {
+    display: block;
+    padding: 12px 15px;
+    color: var(--color-secondary);
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.1s;
+}
+
+.menu-item:hover {
+    background-color: var(--color-light-gray);
+}
+
+.logout-item {
+    /* Adicionar um pequeno espaço para separar do Perfil */
+    margin-top: 10px; 
+    border-top: 1px solid var(--color-light-gray);
 }

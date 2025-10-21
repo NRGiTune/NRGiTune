@@ -1,9 +1,0 @@
-<mvc:View
-    controllerName="simulador.controller.App"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m"
-    displayBlock="true">
-
-    <!-- Container principal -->
-    <App id="app"/>
-</mvc:View>

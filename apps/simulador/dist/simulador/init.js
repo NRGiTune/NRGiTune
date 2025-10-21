@@ -1,2 +1,0 @@
-sap.ui.define(["sap/ui/core/Component"],function(t){"use strict";sap.ui.getCore().attachInit(function(){t.create({name:"simulador",async:true}).then(function(t){t.placeAt("content")})})});
-//# sourceMappingURL=init.js.map
