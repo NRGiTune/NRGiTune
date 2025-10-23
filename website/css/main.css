@@ -1,0 +1,22 @@
+/* --- MAIN CONTENT --- */
+.main-content {
+    flex-grow: 1;
+    text-align: center;
+    padding-top: 20px;
+}
+/* Estilos de Texto do MAIN */
+.tagline, .steps-title {
+    font-size: 30px; /* Tamanho 41 para texto preto e verde */
+    font-weight: 300;
+    margin-bottom: 5px;
+}
+.tagline {
+    color: var(--color-secondary); /* Texto preto */
+}
+.monitor-container {
+    padding-bottom: 20px;
+}
+.highlight-green {
+    color: var(--color-primary);
+    font-weight: bold; /* Texto verde bold */
+}

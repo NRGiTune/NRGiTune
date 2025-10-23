@@ -1,0 +1,31 @@
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  (function() {
+    emailjs.init("pHl3iqVWtbSFdWoLO"); // substitui pelo teu User ID
+  })();
+
+  function sendMail(event) {
+    event.preventDefault();
+    const datahora = new Date().toLocaleString();
+
+    emailjs.send("service_nprkw9l","template_5dzeywt", {
+      nome: document.getElementById("nome").value,
+      email: document.getElementById("email").value,
+      assunto: document.getElementById("assunto").value,
+      title: document.getElementById("title").value,
+      mensagem: document.getElementById("mensagem").value,
+      datahora: datahora
+    })
+    .then(response => alert("Email enviado com sucesso!"))
+    .catch(error => alert("Erro ao enviar email: " + error));
+  }
+</script>
+
+<form onsubmit="sendMail(event)">
+  <input id="nome" type="text" placeholder="Nome" required>
+  <input id="email" type="email" placeholder="Email" required>
+  <input id="assunto" type="text" placeholder="Assunto" required>
+  <input id="title" type="text" placeholder="Titulo" required>
+  <textarea id="mensagem" placeholder="Mensagem" required></textarea>
+  <button type="submit">Enviar</button>
+</form>

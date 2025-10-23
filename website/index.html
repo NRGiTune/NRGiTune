@@ -5,92 +5,212 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NRGiTune - Simples, Justo e Transparente</title>
-
-    <!--
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
-    -->
-
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/png" href="imgs/favicon.png">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/auth-modals.css">
+    <link rel="stylesheet" href="css/contacto.css">
 </head>
 
 <body>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
     <header class="header">
         <div class="header-top">
-            <a href="login.html">
+            <a href="index.html?content=main.html" aria-label="Início">
+                <svg width="100%" height="100%" viewBox="0 0 430 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Transparent background by default -->
+                    <defs>
+                        <style>
+                            .text-fill {
+                                fill: #050505;
+                                stroke: #050505;
+                                /* Cor do contorno */
+                                stroke-width: 1px;
+                                /* Espessura do contorno */
+                                font-family: system-ui;
+                                font-weight: 500;
+                            }
+                        </style>
+                    </defs>
+                    <!-- Logo Image -->
+                    <image href="logo-img.png" x="10" y="10" height="115" width="115" />
+                    <!-- Logo Text -->
+                    <text id="logo-text" class="text-fill" x="135" y="90" font-size="65" letter-spacing="1">
+                        NRGiTune
+                    </text>
+                </svg>
+            </a>
+            <a id="loginLink">
                 <button id="btnLogIn" class="register-button">Log In / Regista-te</button>
             </a>
-            <div class="user-avatar">
-                <span id="avatar" class="avatar-initials">NT</span>
-            </div>
+            <a id="avatarLink">
+                <button id="btnAvatar" class="avatar-button">NT</button>
+            </a>
         </div>
         <div class="header-bottom">
-            <div >
-                <a href="#">
-                    <embed type="image/svg+xml" src="imgs/logo-img.svg" width="100%" height="100%" />
-                </a>
-            </div>
-            <nav class="nav-links">
-                <a href="conta.html">Conta</a>
-                <a href="termos-condicoes.html">Termos e Condições</a>
-                <a href="quem-somos.html">Quem Somos</a>
+            <nav id="menu" class="nav-links">
+                <a href="#" data-url="main.html" visible="false"></a>
+                <a href="#" data-url="simulador.html">Simulador</a>
+                <a href="#" data-url="quem-somos.html">Quem Somos</a>
+                <a href="#" data-url="contacto.html">Contacto</a>
             </nav>
         </div>
+
     </header>
 
-    <main class="main-content">
-
-        <p class="tagline">
-            Porque escolher energia deve ser
-            <span class="highlight-green">simples</span>,
-            <span class="highlight-green">justo</span> e
-            <span class="highlight-green">transparente</span>
-        </p>
-
-        <br />
-        <h2 class="steps-title">E agora, em apenas 3 passos, já é!</h2>
-        <br /><br />
-
-        <!--
-        <section class="steps-container">
-            <div class="step">
-                <div class="step-number">1</div>
-                <div class="arrow-down"></div>
-                <button class="step-button green-bg">Regista-te</button>
-            </div>
-
-            <div class="step">
-                <div class="step-number">2</div>
-                <div class="arrow-down"></div>
-                <button class="step-button green-bg">Faz o upload dos teus consumos</button>
-            </div>
-
-            <div class="step">
-                <div class="step-number">3</div>
-                <div class="arrow-down"></div>
-                <button class="step-button green-bg">Simula e vê quanto podes poupar</button>
-            </div>
-        </section>
--->
-        <div class="monitor-container">
-            <img src="imgs/passos.png" alt="Monitor de computador a simular os passos da NRGiTune" width="50%">
-        </div>
-
-        <div class="monitor-container">
-            <img src="imgs/monitor.png" alt="Monitor de computador a simular os passos da NRGiTune" width="50%">
-        </div>
-        <br /><br />
+    <main id="dinamic-content">
 
     </main>
 
-    <footer class="footer">
-        <a href="quem-somos.html">Visão</a>
-        <a href="#">Contactos</a>
-        <a href="#">Parcerias</a>
+    <footer id="footer" class="footer">
+        <a href="#" data-url="termos-condicoes.html">Termos e Condições</a>
+        <a href="#" data-url="politica-privacidade.html">Política de Privacidade</a>
+        <a href="#" data-url="politica-cookies.html">Política de Cookies</a>
     </footer>
+
+    <!-- START - Modals -->
+    <!-- START - Login Modal -->
+    <div id="loginModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button" id="closeLoginModal">&times;</span>
+
+            <h1>Bem-vindo de volta</h1>
+            <p class="subtitle">Entre na sua conta NRGiTune.</p>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email-login">E-mail</label>
+                    <input class="form-input" type="email" id="email-login" placeholder="seu@exemplo.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password-login">Senha</label>
+                    <a class="forgot-password" href="#" id="openRecoverFromLogin">Esqueceu sua senha?</a>
+                    <input class="form-input" type="password" id="password-login" placeholder="••••••••" required>
+                    <i class="fas fa-eye-slash password-toggle" id="toggleLoginPassword"></i>
+                </div>
+
+                <button class="main-auth-button" type="submit" id="loginSubmitButton">Entrar</button>
+                <p class="auth-message" id="loginMessage"></p>
+            </form>
+
+            <div class="auth-footer-links">
+                <p>Não tem uma conta? <a href="#" id="openRegisterFromLogin">Cadastre-se agora</a></p>
+            </div>
+
+            <div class="policy-links">
+                Ao continuar, você concorda com os
+                <a href="#">Termos de Serviço</a> e a
+                <a href="#">Política de Privacidade</a> da NRGiTune e em receber e-mails periódicos com atualizações.
+            </div>
+        </div>
+    </div>
+    <!-- END - Login Modal -->
+
+    <!-- START - Registration Modal -->
+    <div id="registrationModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button" id="closeModal">&times;</span>
+
+            <h2>Registe-se na NRGiTune</h2>
+            <p class="subtitle">Criar uma nova conta.</p>
+
+            <form id="registrationForm" class="auth-form">
+                <div class="form-group">
+                    <label for="reg-email">E-mail</label>
+                    <input type="email" id="reg-email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Senha (mínimo 6 caracteres)</label>
+                    <input class="form-input" type="password" id="reg-password" placeholder="••••••••" required
+                        minlength="6">
+                    <i class="fas fa-eye-slash password-toggle" id="toggleRegPassword"></i>
+                </div>
+                <div class="form-group">
+                    <label for="reg-name">Nome Completo</label>
+                    <input type="text" id="reg-name" class="form-input" required>
+                </div>
+
+                <button class="main-auth-button" type="submit" id="regSubmitButton">Registar</button>
+                <p class="auth-message" id="regMessage"></p>
+            </form>
+
+            <div class="auth-footer-links">
+                <p>Já tem uma conta? <a href="#" id="openLoginFromRegister">Faça Login</a></p>
+            </div>
+
+            <div class="policy-links">
+                Ao continuar, você concorda com os
+                <a href="#">Termos de Serviço</a> e a
+                <a href="#">Política de Privacidade</a> da NRGiTune e em receber e-mails periódicos com atualizações.
+            </div>
+        </div>
+    </div>
+    <!-- END - Registration Modal -->
+
+    <!-- START - Recover Password Modal -->
+    <div class="modal hidden" id="recoverModal">
+        <div class="modal-content">
+            <span class="close-button" id="closeRecoverModal">&times;</span>
+
+            <h2>Recuperar Senha</h2>
+            <p class="subtitle">Insira o seu e-mail para receber um link de redefinição.</p>
+
+            <form id="recoverPasswordForm" class="auth-form">
+                <div class="form-group">
+                    <label for="email-recover">E-mail</label>
+                    <input type="email" id="email-recover" class="form-input" placeholder="seu@exemplo.com" required>
+                </div>
+
+                <button type="submit" id="recoverSubmitButton" class="main-auth-button">Enviar Link</button>
+                <p id="recoverMessage" class="auth-message"></p>
+            </form>
+
+            <div class="auth-footer-links">
+                <p>Lembrou-se da sua senha? <a href="#" id="openLoginFromRecover">Faça Login</a></p>
+            </div>
+
+        </div>
+    </div>
+    <!-- END - Recover Password Modal -->
+
+    <!-- START - User Info Modal -->
+    <div class="modal hidden" id="userInfoModal">
+        <div class="modal-content">
+            <span class="close-button" id="closeUserInfoModal">&times;</span>
+            <h2>Utilizador</h2>
+            <form id="userInfoForm" class="auth-form">
+                <div class="form-group">
+                    <label for="userInfoName">Nome</label>
+                    <input class="form-input" type="email" id="userInfoName" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="userInfoEmail">eMail</label>
+                    <input class="form-input" type="email" id="userInfoEmail" readonly>
+                </div>
+
+                <button class="main-auth-button" type="submit" id="btnLogout">Terminar sessão</button>
+                <p id="logoutMessage" class="auth-message"></p>
+                <nav class="auth-footer-links" id="userAccountNav">
+                    <p>Ir para detalhes da sua
+                        <a href="#" id="userAccount" data-url="termos-condicoes.html">conta NRGiTune</a>
+                    </p>
+                </nav>
+            </form>
+        </div>
+    </div>
+    <!-- END - User Info Modal -->
+    <!-- END - Modals -->
+
+
+    <script src="js/index.js" defer></script>
+    <script src="js/auth-modals.js" defer></script>
+    <script src="js/contacto.js"></script>
+    <!--
+    <script src="js/user-area.js" defer></script>
+    -->
 
 </body>
 

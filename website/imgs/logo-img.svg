@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-				<svg width="100%" height="100%" viewBox="0 0 430 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<!-- Transparent background by default -->
-					<defs>
-						<style>
-							.text-fill {
-								fill: #050505;
-								stroke: #050505;	/* Cor do contorno */
-								stroke-width: 1px;	 /* Espessura do contorno */
-								font-family: system-ui;
-								font-weight: 500;
-							}
-						</style>
-					</defs>
-					<!-- Logo Image -->
-					<image href="logo-img.png" x="10" y="10" height="115" width="115" />
-					<!-- Logo Text -->
-					<text id="logo-text" class="text-fill" x="135" y="90" font-size="65" letter-spacing="1">
-						NRGiTune
-					</text>
-				</svg>
+<svg width="100%" height="100%" viewBox="0 0 430 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<!-- Transparent background by default -->
+	<defs>
+		<style>
+			.text-fill {
+				fill: #050505;
+				stroke: #050505;	/* Cor do contorno */
+				stroke-width: 1px;	 /* Espessura do contorno */
+				font-family: system-ui;
+				font-weight: 500;
+				}
+		</style>
+	</defs>
+	<!-- Logo Image -->
+	<image href="logo-img.png" x="10" y="10" height="115" width="115" />
+	<!-- Logo Text -->
+	<text id="logo-text" class="text-fill" x="135" y="90" font-size="65" letter-spacing="1">
+		NRGiTune
+	</text>
+</svg>

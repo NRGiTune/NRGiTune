@@ -26,16 +26,17 @@ function getIniciais(fullName) {
 /**
  * Alterna a visibilidade dos elementos Logado/Deslogado.
  */
-function updateAuthUI(isLoggedIn, userName = null, userLogin = null) {
+function updateAuthUI(isLoggedIn, userName = null, userEmail = null) {
     if (isLoggedIn) {
         // Logado: Esconde Login, Mostra Avatar Link
         loginLink.style.display = 'none';
         avatarLink.style.display = 'inline-block'; // Links geralmente são inline
 
         // Preenche dados do avatar/menu
-        const iniciais = getIniciais(userName || userLogin);
+        const iniciais = getIniciais(userName || userEmail);
         btnAvatar.textContent = iniciais;
-        dialogUserName.textContent = userLogin;
+        userInfoName.value = userName;
+        userInfoEmail.value = userEmail;
 
     } else {
         // Deslogado: Mostra Login Link, Esconde Avatar Link
@@ -49,7 +50,7 @@ async function checkAuthStatus() {
 
     if (session && session.user) {
         const user = session.user;
-        const userName = user.user_metadata?.full_name || user.email;
+        const userName = user.user_metadata?.nome || user.email;
         updateAuthUI(true, userName, user.email);
     } else {
         updateAuthUI(false);
@@ -62,7 +63,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const btnLogout = document.getElementById('btnLogout');
     const btnAvatar = document.getElementById('btnAvatar');
-    const dialogUserName = document.getElementById('dialogUserName');
+    const userInfoName = document.getElementById('userInfoName');
+    const userInfoEmail = document.getElementById('userInfoEmail');
 
     // Botão que abre o modal
     const btnLogIn = document.getElementById('btnLogIn');
@@ -233,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // === 5. LÓGICA ESPECÍFICA DO FORMULÁRIO DE REGISTO ===
 
-    // (Integre aqui a lógica completa do seu script 'registration-modal.js' anterior)
+    // A. (Integre aqui a lógica completa do seu script 'registration-modal.js' anterior)
     if (registrationForm) {
         const regSubmitButton = document.getElementById('regSubmitButton');
         const regMessage = document.getElementById('regMessage');
@@ -274,6 +276,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 regMessage.style.color = 'var(--color-primary)';
                 setTimeout(() => closeModal(registerModal), 3000);
             }
+        });
+    }
+
+    // B. Lógica de Visualização da Senha (Login)
+    const toggleRegPassword = document.getElementById('toggleRegPassword');
+    const passwordRegInput = document.getElementById('reg-password');
+
+    if (toggleRegPassword && passwordRegInput) {
+        toggleRegPassword.addEventListener('click', function () {
+            const type = passwordRegInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordRegInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
         });
     }
 

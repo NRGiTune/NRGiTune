@@ -9,15 +9,18 @@
 
 .about-header h1 {
     font-size: 41px; 
-    font-weight: 300;
-    margin-bottom: 30px;
+    font-weight: bold;
+    margin-bottom: 50px;
+    text-align: center;
     color: var(--color-secondary); /* Preto */
 }
 
+
 .about-text {
-    font-size: 20px; /* Tamanho de texto legível para o corpo */
+    font-size: 25px; /* Tamanho de texto legível para o corpo */
     line-height: 1.6;
     margin-bottom: 25px;
+    text-align: center;
     color: var(--color-secondary);
 }
 
@@ -36,21 +39,24 @@
 .vision-block {
     background-color: var(--color-primary); /* Fundo verde */
     color: var(--color-background); /* Texto branco */
-    padding: 30px 20px;
+    padding: 20px 20px;
     text-align: center;
+    justify-content: center;
     margin-top: 40px;
+    margin-bottom: 40px;
 }
 
 .vision-block h2 {
-    font-size: 41px;
+    font-size: 40px;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
 .vision-block p {
-    font-size: 20px;
+    font-size: 25px;
     font-weight: 300;
     margin: 0;
+    margin-bottom: 20px;
 }
 
 
@@ -61,9 +67,11 @@
     justify-content: center;
     gap: 50px;
     max-width: 1000px;
+    /* margin: 40px auto 80px; */
     margin: 40px auto 80px;
     padding: 0 20px;
     text-align: center;
+    margin-top: 100px;
 }
 
 .value-item {
@@ -107,14 +115,14 @@
 }
 
 .value-item h3 {
-    font-size: 20px;
+    font-size: 30px;
     font-weight: bold;
     color: var(--color-highlight);
     margin-bottom: 5px;
 }
 
 .value-item p {
-    font-size: 16px;
+    font-size: 24px;
     color: var(--color-secondary);
 }
 

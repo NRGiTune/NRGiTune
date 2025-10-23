@@ -1,0 +1,34 @@
+<main id="contactModal" class="contact">
+    <div class="contact-content">
+        <h2>Fale Connosco</h2>
+        <p class="subtitle">Envie a sua mensagem.</p>
+        <form id="contactForm">
+            <div class="form-group">
+                <label for="name">Nome Completo</label>
+                <input class="form-input" type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-input" type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Assunto</label>
+                <input class="form-input" type="text" id="subject" name="subject" required>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Mensagem</label>
+                <textarea class="form-input" id="message" name="message" required></textarea>
+            </div>
+
+            <button class="main-auth-button" type="submit" id="sendBtn">
+                <span id="btnText">Enviar Mensagem</span>
+                <span id="btnLoader" class="btn-loader" style="display:none;"></span>
+            </button>
+
+            <p class="auth-message" id="status-message"></p>
+        </form>
+    </div>
+</main>
