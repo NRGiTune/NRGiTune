@@ -103,36 +103,6 @@ body {
     outline: none;
 }
 
-/* Link Esqueceu a Senha? */
-.forgot-password {
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-size: 14px;
-    color: var(--color-primary); /* Cor primária do projeto */
-    text-decoration: none;
-    font-weight: 500;
-}
-.forgot-password:hover {
-    text-decoration: underline;
-}
-
-/* Estilo para o ícone de mostrar/ocultar */
-.password-toggle {
-    position: absolute;
-    right: 10px; /* Posição à direita dentro do input */
-    top: 65%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #999; /* Cor cinzenta discreta */
-    font-size: 16px;
-    padding: 5px; /* Área de clique maior */
-    z-index: 10;
-}
-.password-toggle:hover {
-    color: var(--color-secondary);
-}
-
 /* --- BOTÃO PRINCIPAL DE ENTRAR --- */
 .main-auth-button {
     width: 100%;
