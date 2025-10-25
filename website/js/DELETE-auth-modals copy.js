@@ -45,107 +45,16 @@ function updateAuthUI(isLoggedIn, userName = null, userEmail = null) {
     }
 }
 
-async function isLogged() {
-    // Nota: É crucial que esta função termine com um 'return'
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    return !!session; // Retorna true se session for um objeto, false caso contrário
-}
-
 async function checkAuthStatus() {
     const { data: { session } } = await supabaseClient.auth.getSession();
 
-    var userName = null;
-    var userEmail = null;
-    var isLoggedIn = false;
-
     if (session && session.user) {
         const user = session.user;
-        userName = user.user_metadata?.nome || user.email;
-        userEmail = session.user.email;
-        isLoggedIn = true;
+        const userName = user.user_metadata?.nome || user.email;
+        updateAuthUI(true, userName, user.email);
+    } else {
+        updateAuthUI(false);
     }
-
-    updateAuthUI(isLoggedIn, userName, userEmail);
-
-}
-
-/**
- * Abre uma página HTML especificada.
- *
- * @param {string} url O nome do ficheiro HTML (ex: "sobre.html" ou "contacto.html").
- * @param {boolean} openInNewTab Se 'true', abre a página num novo separador/janela. Se 'false' ou omitido, abre na janela atual.
- */
-function navigateTo(url, openInNewTab = false) {
-    if (!url || typeof url !== 'string') {
-        console.error("Erro: O nome da página deve ser uma string válida.");
-        return;
-    }
-
-    // O segundo parâmetro do window.open() é o 'target'
-    // '_self' = abre na janela atual
-    // '_blank' = abre numa nova janela/separador
-    const target = openInNewTab ? '_blank' : '_self';
-
-    window.open(url, target);
-
-    // Se estiver a usar o target '_blank', o browser pode bloquear a nova janela 
-    // se esta função não for chamada diretamente por uma ação do utilizador (clique).
-}
-
-// =========================================================
-// FUNÇÕES DE GESTÃO DE MODAL (GLOBAIS)
-// =========================================================
-
-const openModalTarget = { url: "", openInNewTab: false };
-
-/**
- * Abre o modal e fecha os outros modais de autenticação.
- * NOTA: Esta função depende da existência dos IDs dos modais no DOM.
- * @param {HTMLElement} modalElement O elemento modal a ser aberto.
- */
-function openModal(modalElement, url, openInNewTab = false) {
-    // É necessário obter as referências DOM para os outros modais aqui dentro,
-    // pois a declaração das constantes locais está fora deste escopo.
-    const loginModal = document.getElementById('loginModal');
-    const registerModal = document.getElementById('registrationModal');
-    const recoverModal = document.getElementById('recoverModal');
-    const userInfoModal = document.getElementById('userInfoModal');
-
-    openModalTarget.url = url;
-    openModalTarget.openInNewTab = openInNewTab;
-
-    // Fecha todos os modais primeiro (Apenas se existirem)
-    if (loginModal) loginModal.classList.add('hidden');
-    if (registerModal) registerModal.classList.add('hidden');
-    if (recoverModal) recoverModal.classList.add('hidden');
-    if (userInfoModal) userInfoModal.classList.add('hidden');
-
-    // Abre o modal desejado
-    if (modalElement) {
-        modalElement.classList.remove('hidden');
-    }
-}
-
-/**
- * Fecha o modal.
- * @param {HTMLElement} modalElement O elemento modal a ser fechado.
- */
-async function closeModal(modalElement) {
-
-    const url = openModalTarget.url;
-    const openInNewTab = openModalTarget.openInNewTab;
-
-    if (modalElement) {
-        modalElement.classList.add('hidden');
-    }
-    
-    const isLoggedIn = await isLogged();
-    if (url && isLoggedIn) {
-        navigateTo(url, openInNewTab);
-    }
-    openModalTarget.url = "";
-    openModalTarget.openInNewTab = false;
-
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -186,22 +95,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const recoverPasswordForm = document.getElementById('recoverPasswordForm');
 
     // === 2. FUNÇÕES DE GESTÃO DE MODAL ===
-    /*
-        function openModal(modalElement) {
-            // Fecha todos os modais primeiro
-            loginModal.classList.add('hidden');
-            registerModal.classList.add('hidden');
-            recoverModal.classList.add('hidden');
-            userInfoModal.classList.add('hidden');
-    
-            // Abre o modal desejado
-            modalElement.classList.remove('hidden');
-        }
-    
-        function closeModal(modalElement) {
-            modalElement.classList.add('hidden');
-        }
-    */
+
+    function openModal(modalElement) {
+        // Fecha todos os modais primeiro
+        loginModal.classList.add('hidden');
+        registerModal.classList.add('hidden');
+        recoverModal.classList.add('hidden');
+        userInfoModal.classList.add('hidden');
+
+        // Abre o modal desejado
+        modalElement.classList.remove('hidden');
+    }
+
+    function closeModal(modalElement) {
+        modalElement.classList.add('hidden');
+    }
+
     // === 3. EVENTOS DE ABERTURA E FECHO ===
 
     // Abrir Login Modal pelo botão principal
@@ -361,11 +270,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 regMessage.textContent = 'Sucesso! Verifique o seu e-mail para confirmar a sua conta.';
                 regMessage.style.color = 'var(--color-primary)';
                 // Fechar o modal de registo após sucesso
-                setTimeout(() => closeModal(registerModal), 4000);
+                setTimeout(() => closeModal(registerModal), 3000);
             } else {
                 regMessage.textContent = 'O seu registo foi enviado. Por favor, verifique o seu e-mail.';
                 regMessage.style.color = 'var(--color-primary)';
-                setTimeout(() => closeModal(registerModal), 4000);
+                setTimeout(() => closeModal(registerModal), 3000);
             }
         });
     }

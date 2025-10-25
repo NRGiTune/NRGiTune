@@ -75,8 +75,8 @@ body {
     background-color: var(--color-primary);
     color: var(--color-background);
     border: none;
-    /* padding: 10px 20px; */
-    border-radius: 5px;
+    padding: 10px 10px;
+    border-radius: 50%;
     cursor: pointer;
     font-size: 16px;
     font-weight: 500;

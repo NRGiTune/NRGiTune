@@ -6,6 +6,19 @@ async function carregarConteudo(url) {
     container.innerHTML = '<h2>A carregar...</h2>';
 
     try {
+
+        // ✅ Se for a página de simulador, valida se é necessário o login do utilizador
+        if (url.includes('simulador')) {
+            const loginLink = document.getElementById('loginLink');
+            if (loginLink.style.display === "block") {
+                const loginModal = document.getElementById('loginModal');
+                openModal(loginModal, url, true);
+            } else {
+                navigateTo(url, true);
+            }
+            url = "main.html"
+        }
+
         const response = await fetch(url);
 
         if (!response.ok) {
@@ -23,6 +36,15 @@ async function carregarConteudo(url) {
                 initContactForm(); // <-- Muito importante!
             } else {
                 console.warn("⚠️ initContactForm não encontrado. Certifica-te que contacto.js está incluído.");
+            }
+        }
+
+        // ✅ Se for a página de reset password, inicializa o formulário
+        if (url.includes('reset-password')) {
+            if (typeof initResetPasswordForm === "function") {
+                initResetPasswordForm(); // <-- Muito importante!
+            } else {
+                console.warn("⚠️ initResetPasswordForm não encontrado. Certifica-te que reset-password.js está incluído.");
             }
         }
 

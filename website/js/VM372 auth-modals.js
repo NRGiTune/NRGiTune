@@ -45,10 +45,13 @@ function updateAuthUI(isLoggedIn, userName = null, userEmail = null) {
     }
 }
 
-async function isLogged() {
-    // Nota: É crucial que esta função termine com um 'return'
+async function isLoggedIn() {
     const { data: { session } } = await supabaseClient.auth.getSession();
-    return !!session; // Retorna true se session for um objeto, false caso contrário
+    if (session && session.user) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 async function checkAuthStatus() {
@@ -130,7 +133,7 @@ function openModal(modalElement, url, openInNewTab = false) {
  * Fecha o modal.
  * @param {HTMLElement} modalElement O elemento modal a ser fechado.
  */
-async function closeModal(modalElement) {
+function closeModal(modalElement) {
 
     const url = openModalTarget.url;
     const openInNewTab = openModalTarget.openInNewTab;
@@ -138,8 +141,7 @@ async function closeModal(modalElement) {
     if (modalElement) {
         modalElement.classList.add('hidden');
     }
-    
-    const isLoggedIn = await isLogged();
+    const isLoggedIn = isLoggedIn();
     if (url && isLoggedIn) {
         navigateTo(url, openInNewTab);
     }
