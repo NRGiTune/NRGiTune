@@ -407,7 +407,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // IMPORTANTE: URL para onde o utilizador será redirecionado
         // CRIE esta página para concluir o processo de redefinição
-        const REDIRECT_TO_URL = window.location.origin + '/index.html?content=reset-password.html';
+        const REDIRECT_TO_URL = window.location.origin + window.location.pathname + '?content=reset-password.html';
 
         recoverPasswordForm.addEventListener('submit', async (e) => {
             e.preventDefault();

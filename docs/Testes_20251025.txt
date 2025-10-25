@@ -1,11 +1,9 @@
 20251025 - 001 - Teste Processo de registo; autenticação e recuperação de senha
 ...
 1. Registo de novo utilizador com um email já registado
-	ERRO: 	Permitiu registar o user e devolveu mensagem para consultar email para confirmação;
-		Msg: Sucesso! Verifique o seu e-mail para confirmar a sua conta.
-		eMail não enviado
+	OK: 	Msg: Info: email já registado...
 
-2. Login com utilizador não registado
+2. Login com utilizador não registado ou senha errada
 	OK:	Mensagem de erro "Erro: Invalid login credentials"
 	OK:	Esconder/Mostrar senha
 	DEV:	Apresentar mensagem na lingua correta
