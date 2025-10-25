@@ -138,13 +138,29 @@ async function closeModal(modalElement) {
     if (modalElement) {
         modalElement.classList.add('hidden');
     }
-    
+
     const isLoggedIn = await isLogged();
     if (url && isLoggedIn) {
         navigateTo(url, openInNewTab);
     }
     openModalTarget.url = "";
     openModalTarget.openInNewTab = false;
+
+    // === CÓDIGO PARA LIMPAR O FORMULÁRIO ===
+    // 1. Encontra o primeiro formulário dentro do modal
+    const form = modalElement.querySelector('form');
+    if (form) {
+        // 2. Utiliza o método .reset() do elemento form
+        form.reset();
+
+        // Opcional: Limpar mensagens de erro/sucesso que não são resetadas
+        const messageDisplays = form.querySelectorAll('[id$="Message"]');
+        messageDisplays.forEach(msg => {
+            if (msg.tagName === 'P' || msg.tagName === 'DIV') {
+                msg.textContent = '';
+            }
+        });
+    }
 
 }
 
@@ -358,13 +374,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 regMessage.textContent = `Erro: ${error.message}`;
                 regMessage.style.color = 'red';
             } else if (data.user) {
-                regMessage.textContent = 'Sucesso! Verifique o seu e-mail para confirmar a sua conta.';
-                regMessage.style.color = 'var(--color-primary)';
-                // Fechar o modal de registo após sucesso
-                setTimeout(() => closeModal(registerModal), 4000);
+                regMessage.textContent = 'Info: O seu e-mail já se encontra registado! Caso não se lembre da sua senha, selecione a opção "Esqueceu sua senha?" na página de login.';
+                regMessage.style.color = 'blue';
+                // setTimeout(() => closeModal(registerModal), 4000);
             } else {
                 regMessage.textContent = 'O seu registo foi enviado. Por favor, verifique o seu e-mail.';
                 regMessage.style.color = 'var(--color-primary)';
+                // Fechar o modal de registo após sucesso
                 setTimeout(() => closeModal(registerModal), 4000);
             }
         });
@@ -391,7 +407,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // IMPORTANTE: URL para onde o utilizador será redirecionado
         // CRIE esta página para concluir o processo de redefinição
-        const REDIRECT_TO_URL = window.location.origin + '/website/index.html?content=reset-password.html';
+        const REDIRECT_TO_URL = window.location.origin + '/index.html?content=reset-password.html';
 
         recoverPasswordForm.addEventListener('submit', async (e) => {
             e.preventDefault();

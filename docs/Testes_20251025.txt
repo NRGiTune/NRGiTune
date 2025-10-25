@@ -1,0 +1,33 @@
+20251025 - 001 - Teste Processo de registo; autenticação e recuperação de senha
+...
+1. Registo de novo utilizador com um email já registado
+	ERRO: 	Permitiu registar o user e devolveu mensagem para consultar email para confirmação;
+		Msg: Sucesso! Verifique o seu e-mail para confirmar a sua conta.
+		eMail não enviado
+
+2. Login com utilizador não registado
+	OK:	Mensagem de erro "Erro: Invalid login credentials"
+	OK:	Esconder/Mostrar senha
+	DEV:	Apresentar mensagem na lingua correta
+		Limpar sempre o conteúdo do formulário ao fechar
+
+3. Registo de utilizador com um email não registado
+	OK:	email inválido sem @
+	OK:	Senha (mínimo 6 caracteres)
+	OK:	Esconder/Mostrar senha
+	DEV:	Apresentar mensagens na lingua correta
+	OK:	Email corretamente enviado para o inbox e de acordo com o apresentação desenhada
+	ERRO:	Ao redirecionar após confirmação
+
+4. Login com utilizador registado após registo
+	ERRO:	Mensagem de erro "Erro: Invalid login credentials"
+	DEV:	Apresentar mensagem na lingua correta
+
+
+4. Reinicializarão da senha
+	OK:	Envio do pedido
+	DEV:	Mensagem vai para o SPAM e necessita de tradução para PT
+	ERRO:	Redirecionamento para o formulário de nova senha falha
+
+	
+	
