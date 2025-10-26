@@ -1,5 +1,5 @@
-# Trigger redeploy on 2025-10-25
-name: Deploy Website + App to GitHub Pages
+# Trigger redeploy on 2025-10-26
+name: Deploy NRGiTune Website + Apps
 
 on:
   push:
