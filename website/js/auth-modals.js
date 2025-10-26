@@ -60,7 +60,7 @@ async function checkAuthStatus() {
 
     if (session && session.user) {
         const user = session.user;
-        userName = user.user_metadata?.nome || user.email;
+        userName = user.user_metadata?.full_name || user.email;
         userEmail = session.user.email;
         isLoggedIn = true;
     }
