@@ -42,17 +42,17 @@ jobs:
           mkdir -p artifact/pwrmatch-app/webapp
           rsync -av apps/pwrmatch-app/ artifact/pwrmatch-app/
 
-      # 4️. Fazer upload do artefacto
+      # 4. Criar ficheiro CNAME para GitHub Pages
+      - name: Add CNAME file
+        run: echo "nrgitune.pt" > artifact/CNAME
+
+      # 5. Fazer upload do artefacto
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: artifact
 
-      # 5. Deploy para GitHub Pages
+      # 6. Deploy para GitHub Pages
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
-
-      # 6. Criar ficheiro CNAME para GitHub Pages
-      - name: Add CNAME file
-        run: echo "nrgitune.pt" > artifact/CNAME
