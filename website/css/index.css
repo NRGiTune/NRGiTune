@@ -71,15 +71,21 @@ body {
 }
 
 .avatar-button {
-    /* Fundo verde e texto branco conforme pedido */
+    /* Fundo verde e texto branco */
     background-color: var(--color-primary);
     color: var(--color-background);
-    border: none;
-    padding: 10px 10px;
+    border: none;    
+    /* === Usar dimensões fixas === */
+    width: 40px;      /* Define uma largura fixa (ajuste este valor) */
+    height: 40px;     /* Define uma altura fixa igual à largura */    
+    padding: 0;       /* Remove o padding, pois agora usamos width/height */    
+    /* === PROPRIEDADES DE CÍRCULO E CENTRAGEM === */
     border-radius: 50%;
     cursor: pointer;
     font-size: 16px;
     font-weight: 500;
+    /* Garante que o texto (iniciais) fique centrado perfeitamente */
+    display: flex; /* Adicione display: flex se não estiver já definido */
     justify-content: center;
     align-items: center;
 }
