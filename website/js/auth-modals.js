@@ -371,17 +371,32 @@ document.addEventListener('DOMContentLoaded', function () {
             regSubmitButton.textContent = 'Registar';
 
             if (error) {
-                regMessage.textContent = `Erro: ${error.message}`;
-                regMessage.style.color = 'red';
+                let errorMessage = `Erro: ${error.message}`;
+
+                // === VERIFICAÇÃO CHAVE PARA UTILIZADOR EXISTENTE ===
+                if (error.message.includes('already registered')) {
+                    // Mensagem amigável para o utilizador
+                    errorMessage = 'Este endereço de e-mail já se encontra registado. Por favor, inicie sessão ou recupere a sua senha.';
+                    regMessage.style.color = 'orange'; // Alerta
+                } else {
+                    // Outros erros (ex: password muito fraca, erro de servidor)
+                    regMessage.style.color = 'red';
+                }
+
+                regMessage.textContent = errorMessage;
+                console.error(error);
             } else if (data.user) {
-                regMessage.textContent = 'Info: O seu e-mail já se encontra registado! Caso não se lembre da sua senha, selecione a opção "Esqueceu sua senha?" na página de login.';
-                regMessage.style.color = 'blue';
-                // setTimeout(() => closeModal(registerModal), 4000);
+                // Sucesso: Verifique o e-mail
+                regMessage.textContent = 'Sucesso! Verifique o seu e-mail para confirmar a sua conta.';
+                regMessage.style.color = 'var(--color-primary)';
+
+                setTimeout(() => closeModal(registerModal), 3000);
             } else {
+                // E-mail enviado, mas sem dados de utilizador imediatos (depende da configuração do Supabase)
                 regMessage.textContent = 'O seu registo foi enviado. Por favor, verifique o seu e-mail.';
                 regMessage.style.color = 'var(--color-primary)';
-                // Fechar o modal de registo após sucesso
-                setTimeout(() => closeModal(registerModal), 4000);
+
+                setTimeout(() => closeModal(registerModal), 3000);
             }
         });
     }

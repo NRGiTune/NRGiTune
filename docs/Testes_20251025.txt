@@ -6,8 +6,8 @@
 2. Login com utilizador não registado ou senha errada
 	OK:	Mensagem de erro "Erro: Invalid login credentials"
 	OK:	Esconder/Mostrar senha
-	DEV:	Apresentar mensagem na lingua correta
-		Limpar sempre o conteúdo do formulário ao fechar
+	DEV:	Apresentar mensagem na lingua correta??? Eventual alternativa usando javascript a <html lang="pt-PT"> não funciona
+	
 
 3. Registo de utilizador com um email não registado
 	OK:	email inválido sem @
@@ -24,8 +24,10 @@
 
 4. Reinicializarão da senha
 	OK:	Envio do pedido
-	DEV:	Mensagem vai para o SPAM e necessita de tradução para PT
-	ERRO:	Redirecionamento para o formulário de nova senha falha
+	OK:	Email com link para redefinição de senha
+	OK:	Redirecionamento para o formulário de nova senha falha
+	OK:	Alteração da senha
 
 	
 	
+https://citaewfnpsfjtnuolqyo.supabase.co/auth/v1/verify?token=2ce4d4844e8af30e1edd2f06c9854fdd2ed25e33c5da6c9a4fdb12bc&type=signup&redirect_to=https://pedromcneves.github.io/

@@ -17,15 +17,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Clonar o repositório
+      # 1. Clonar o repositório
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Configurar GitHub Pages
+      # 2. Configurar GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # 3️⃣ Preparar artefactos
+      # 3. Preparar artefactos
       - name: Copy Website and OpenUI5 App
         run: |
           # Copiar site para raiz
@@ -42,13 +42,17 @@ jobs:
           mkdir -p artifact/pwrmatch-app/webapp
           rsync -av apps/pwrmatch-app/ artifact/pwrmatch-app/
 
-      # 4️⃣ Fazer upload do artefacto
+      # 4️. Fazer upload do artefacto
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: artifact
 
-      # 5️⃣ Deploy para GitHub Pages
+      # 5. Deploy para GitHub Pages
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # 6. Criar ficheiro CNAME para GitHub Pages
+      - name: Add CNAME file
+        run: echo "nrgitune.pt" > artifact/CNAME
