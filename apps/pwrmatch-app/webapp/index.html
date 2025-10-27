@@ -11,12 +11,6 @@
 		}'>
 		</script>
 	<script src="libs/xlsx.full.min.js"></script>
-</head>
-
-<body class="sapUiBody" id="content">
-
-	<div data-sap-ui-component data-name="simulador" data-id="container" data-settings='{"id" : "simulador"}'></div>
-
 	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 	<script>
 		const SUPABASE_URL = 'https://citaewfnpsfjtnuolqyo.supabase.co';
@@ -27,11 +21,16 @@
 		const savedSession = localStorage.getItem("supabaseSession");
 		if (savedSession) {
 			supabaseClient.auth.setSession(JSON.parse(savedSession));
-			const { data: user } = await supabaseClient.auth.getUser();
+			const { data: user } = supabaseClient.auth.getUser();
 			console.log("User autenticado:", user);
 			alert("User autenticado: " + user);
 		}
 	</script>
+</head>
+
+<body class="sapUiBody" id="content">
+
+	<div data-sap-ui-component data-name="simulador" data-id="container" data-settings='{"id" : "simulador"}'></div>
 
 </body>
 
