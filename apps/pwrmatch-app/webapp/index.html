@@ -21,7 +21,7 @@
 		const savedSession = localStorage.getItem("supabaseSession");
 		if (savedSession) {
 			supabaseClient.auth.setSession(JSON.parse(savedSession));
-			const { data: user } = supabaseClient.auth.getUser();
+			const { data: user } = await supabaseClient.auth.getUser();
 			console.log("User autenticado:", user);
 			alert("User autenticado: " + user);
 		}
