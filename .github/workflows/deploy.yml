@@ -1,4 +1,4 @@
-# Trigger redeploy on 2025-10-26
+# Trigger redeploy on 2025-10-27
 name: Deploy NRGiTune Website + Apps
 
 on:
@@ -35,8 +35,8 @@ jobs:
           # Copiar PowerMatch app para subpasta
           # cp -r apps/powermatch-app/* artifact/powermatch-app/
           # mkdir -p artifact
-          #mkdir -p artifact/powermatch-app/webapp
-          #rsync -av apps/powermatch-app/ artifact/powermatch-app/
+          mkdir -p artifact/powermatch-app/webapp
+          rsync -av apps/powermatch-app/ artifact/powermatch-app/
 
           # Copiar PWRMatch app para subpasta
           mkdir -p artifact/pwrmatch-app/webapp

@@ -37,6 +37,7 @@ function updateAuthUI(isLoggedIn, userName = null, userEmail = null) {
         btnAvatar.textContent = iniciais;
         userInfoName.value = userName;
         userInfoEmail.value = userEmail;
+        userInfoFormTitle.textContent = "Olá, " + userName + "!";
 
     } else {
         // Deslogado: Mostra Login Link, Esconde Avatar Link
@@ -147,11 +148,17 @@ async function closeModal(modalElement) {
     openModalTarget.openInNewTab = false;
 
     // === CÓDIGO PARA LIMPAR O FORMULÁRIO ===
+    const loginForm = document.getElementById('loginForm');
+    const registrationForm = document.getElementById('registrationForm');
+    const recoverPasswordForm = document.getElementById('recoverPasswordForm');
+    loginForm.reset();
+    registrationForm.reset();
+    recoverPasswordForm.reset();
     // 1. Encontra o primeiro formulário dentro do modal
     const form = modalElement.querySelector('form');
     if (form) {
         // 2. Utiliza o método .reset() do elemento form
-        form.reset();
+        //form.reset();
 
         // Opcional: Limpar mensagens de erro/sucesso que não são resetadas
         const messageDisplays = form.querySelectorAll('[id$="Message"]');
@@ -170,8 +177,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const btnLogout = document.getElementById('btnLogout');
     const btnAvatar = document.getElementById('btnAvatar');
-    const userInfoName = document.getElementById('userInfoName');
     const userInfoEmail = document.getElementById('userInfoEmail');
+    const userInfoName = document.getElementById('userInfoName');
+    const userInfoNewPassword = document.getElementById('newPassword');
+    const btnAtualizarDados = document.getElementById('btnAtualizarDados');
+    const logoutMessage = document.getElementById('logoutMessage');
+    const userInfoFormTitle = document.getElementById('userInfoFormTitle');
+    const btnDeleteAccount = document.getElementById('btnDeleteAccount');
+
+
 
     // Botão que abre o modal
     const btnLogIn = document.getElementById('btnLogIn');
@@ -200,6 +214,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const loginForm = document.getElementById('loginForm');
     const registrationForm = document.getElementById('registrationForm');
     const recoverPasswordForm = document.getElementById('recoverPasswordForm');
+    const userInfoForm = document.getElementById('userInfoForm');
 
     // === 2. FUNÇÕES DE GESTÃO DE MODAL ===
     /*
@@ -458,42 +473,126 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // === 7. LÓGICA ESPECÍFICA DO FORMULÁRIO DE USER INFO ===
-    const userAccLinks = document.querySelectorAll('#userAccountNav a');
-    userAccLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
-            // Previne o comportamento padrão do link (que é navegar para outra página)
-            event.preventDefault();
+    if (userInfoForm) {
+        const userAccLinks = document.querySelectorAll('#userAccountNav a');
+        userAccLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                // Previne o comportamento padrão do link (que é navegar para outra página)
+                event.preventDefault();
 
-            const url = event.currentTarget.getAttribute('data-url');
+                const url = event.currentTarget.getAttribute('data-url');
 
-            if (url) {
-                carregarConteudo(url);
-                //const userInfoModal = document.getElementById('userInfoModal');
-                closeModal(userInfoModal);
+                if (url) {
+                    carregarConteudo(url);
+                    //const userInfoModal = document.getElementById('userInfoModal');
+                    closeModal(userInfoModal);
+                }
+            });
+        });
+        // Atualizar Dados
+        btnAtualizarDados.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const newName = userInfoName.value.trim();
+            const newPassword = userInfoNewPassword.value.trim();
+            const updates = {};
+
+            // A. Atualizar Senha (se houver)
+            if (newPassword.length >= 8) {
+                updates.password = newPassword;
+            }
+
+            // B. Atualizar Metadados (Nome)
+            if (newName) {
+                updates.data = { full_name: newName };
+            }
+
+            if (Object.keys(updates).length === 0) {
+                logoutMessage.textContent = 'Nenhuma alteração a ser salva.';
+                return;
+            }
+
+            const { data, error } = await supabaseClient.auth.updateUser(updates);
+
+            if (error) {
+                logoutMessage.textContent = `Erro ao atualizar: ${error.message}`;
+            } else {
+                logoutMessage.textContent = 'Dados da conta atualizados com sucesso!';
+                userInfoNewPassword.value = ''; // Limpa o campo de senha
+                checkAuthStatus();
+                setTimeout(() => closeModal(userInfoModal), 3000);
             }
         });
-    });
 
-    // Check user log status
-    checkAuthStatus();
-    supabaseClient.auth.onAuthStateChange((event, session) => {
-        if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
-            const user = session?.user;
-            if (user) {
-                const userName = user.user_metadata?.full_name || user.email;
-                //updateAuthUI(true, userName, user.email);
+        // Delete NRGiTune acount
+        btnDeleteAccount.addEventListener('click', async (e) => {
+            e.preventDefault();
+            // Pop-up de Confirmação
+            const isConfirmed = window.confirm(
+                "Tem certeza absoluta que deseja apagar a sua conta NRGiTune?\n" +
+                "Esta ação é irreversível e todos os seus dados serão perdidos."
+            );
+
+            if (isConfirmed) {
+                // 3. Chamar a função para Apagar
+                try {
+                    // A Supabase Auth (goTrue) NÃO permite apagar a conta diretamente do lado do cliente
+                    // por razões de segurança. É obrigatório chamar uma função de base de dados (RPC).
+
+                    const { error } = await supabaseClient.rpc('delete_current_user');
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    alert("Sua conta foi apagada com sucesso! Redirecionando para a página inicial.");
+                    await supabaseClient.auth.signOut();
+                    // Opcional: Redirecionar após sucesso
+                    window.location.href = window.location.href;
+
+                } catch (error) {
+                    console.error("Erro ao apagar conta:", error);
+                    alert("Ocorreu um erro ao apagar a conta. Tente novamente mais tarde.");
+                }
+            } else {
+                console.log("Exclusão de conta cancelada.");
             }
-        } else if (event === 'SIGNED_OUT') {
-            //updateAuthUI(false);
-        }
-    });
-    // Ação de Terminar Sessão (Logout)
-    btnLogout.addEventListener('click', async (event) => {
-        event.preventDefault();
-        await supabaseClient.auth.signOut();
-        closeModal(userInfoModal);
+        });
+
+        // Check user log status
         checkAuthStatus();
-    });
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+                const user = session?.user;
+                if (user) {
+                    const userName = user.user_metadata?.full_name || user.email;
+                    //updateAuthUI(true, userName, user.email);
+                }
+            } else if (event === 'SIGNED_OUT') {
+                //updateAuthUI(false);
+            }
+        });
+
+        // Ação de Terminar Sessão (Logout)
+        btnLogout.addEventListener('click', async (event) => {
+            event.preventDefault();
+            await supabaseClient.auth.signOut();
+            closeModal(userInfoModal);
+            checkAuthStatus();
+        });
+
+    }
+
+    // Lógica de Visualização da Senha (user info)
+    const toggleUserInfoNewPassword = document.getElementById('toggleUserInfoNewPassword');
+    if (toggleUserInfoNewPassword && userInfoNewPassword) {
+        toggleUserInfoNewPassword.addEventListener('click', function () {
+            const type = userInfoNewPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            userInfoNewPassword.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    }
 
 });
 

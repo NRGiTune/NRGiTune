@@ -179,3 +179,31 @@
 .policy-links a:hover {
     color: var(--color-primary);
 }
+
+/* Delete Icon & Link */
+.icon-delete {
+    display: inline-block;
+    padding: 5px;
+    color: var(--color-primary); /* color: #dc3545; Cor de ação destrutiva */
+    font-size: 16px;
+    text-decoration: none;
+    line-height: 1; /* Garante que o ícone fica bem alinhado */
+}
+
+.icon-delete:hover {
+    /* color: #a71d2a; /* Vermelho mais escuro no hover */
+}
+
+.icon-link {
+    display: inline-block;
+    padding: 5px;
+    color: var(--color-primary); /* Cor de ação destrutiva */
+    font-size: 16px;
+    text-decoration: none;
+    line-height: 1; /* Garante que o ícone fica bem alinhado */
+}
+
+.icon-link:hover {
+    color: #dc3545; /* color: #a71d2a; Vermelho mais escuro no hover */
+    text-decoration: underline;
+}

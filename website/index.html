@@ -100,7 +100,8 @@
             <div class="policy-links">
                 Ao continuar, você concorda com os
                 <a href="index.html?content=termos-condicoes.html">Termos e Condições</a> e a
-                <a href="index.html?content=politica-privacidade.html">Política de Privacidade</a> da NRGiTune e em receber e-mails periódicos com atualizações.
+                <a href="index.html?content=politica-privacidade.html">Política de Privacidade</a> da NRGiTune e em
+                receber e-mails periódicos com atualizações.
             </div>
         </div>
     </div>
@@ -120,9 +121,10 @@
                     <input type="email" id="reg-email" class="form-input" required>
                 </div>
                 <div class="form-group">
-                    <label for="reg-password">Senha (mínimo 6 caracteres)</label>
+                    <label for="reg-password">Senha (mínimo 8 carateres, letras (aA), dígitos, Símbolos)</label>
                     <input class="form-input" type="password" id="reg-password" placeholder="••••••••" required
-                        minlength="6">
+                        minlength="8"
+                        title="RECOMENDADO: Mais de 8 carateres; letras minúsculas/maiúsculas (aA); dígitos (123) e símbolos (#*!)">
                     <i class="fas fa-eye-slash password-toggle" id="toggleRegPassword"></i>
                 </div>
                 <div class="form-group">
@@ -141,7 +143,8 @@
             <div class="policy-links">
                 Ao continuar, você concorda com os
                 <a href="index.html?content=termos-condicoes.html">Termos e Condições</a> e a
-                <a href="index.html?content=politica-privacidade.html">Política de Privacidade</a> da NRGiTune e em receber e-mails periódicos com atualizações.
+                <a href="index.html?content=politica-privacidade.html">Política de Privacidade</a> da NRGiTune e em
+                receber e-mails periódicos com atualizações.
             </div>
         </div>
     </div>
@@ -177,19 +180,35 @@
     <div class="modal hidden" id="userInfoModal">
         <div class="modal-content">
             <span class="close-button" id="closeUserInfoModal">&times;</span>
-            <h2>Utilizador</h2>
+            <h2 id="userInfoFormTitle">Olá</h2>
+            <p class="subtitle">Atualize os seus dados ou termine a sua sessão.</p>
             <form id="userInfoForm" class="auth-form">
                 <div class="form-group">
-                    <label for="userInfoName">Nome</label>
-                    <input class="form-input" type="email" id="userInfoName" readonly>
+                    <label for="userInfoEmail">eMail</label>
+                    <input class="form-input" type="email" id="userInfoEmail" disabled readonly>
                 </div>
                 <div class="form-group">
-                    <label for="userInfoEmail">eMail</label>
-                    <input class="form-input" type="email" id="userInfoEmail" readonly>
+                    <label for="userInfoName">Nome</label>
+                    <input class="form-input" type="text" id="userInfoName">
                 </div>
+                <div class="form-group">
+                    <label for="newPassword">Nova Senha (mínimo 8 carateres, letras (aA), dígitos, Símbolos)</label>
+                    <input class="form-input" type="password" id="newPassword" name="new_password"
+                        placeholder="••••••••" minlength="8"
+                        title="RECOMENDADO: Mais de 8 carateres; letras minúsculas/maiúsculas (aA); dígitos (123) e símbolos (#*!)">
+                    <i class="fas fa-eye-slash password-toggle" id="toggleUserInfoNewPassword"></i>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-trash-alt icon-delete"></i>
+                    <a class="icon-link" href="#" id="btnDeleteAccount">Apagar conta NRGiTune</a>
+                </div>
+                <button class="main-auth-button" type="submit" id="btnAtualizarDados">Atualizar Dados</button>
+                <p class="auth-message" id="logoutMessage"></p>
+                <!--<button class="main-auth-button" type="submit" id="btnLogout">Terminar sessão</button>-->
 
-                <button class="main-auth-button" type="submit" id="btnLogout">Terminar sessão</button>
-                <p id="logoutMessage" class="auth-message"></p>
+                <div class="auth-footer-links">
+                    <p><a href="#" id="btnLogout">Terminar sessão</a></p>
+                </div>
                 <!--
                 <nav class="auth-footer-links" id="userAccountNav">
                     <p>Ir para detalhes da sua
