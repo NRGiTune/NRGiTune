@@ -5,6 +5,7 @@ sap.ui.define([
   "simulador/util/fileParserERSE"
 ], function (UIComponent, JSONModel, models, fileParserERSE) {
   "use strict";
+
   return UIComponent.extend("simulador.Component", {
     metadata: {
       manifest: "json"
@@ -30,4 +31,6 @@ sap.ui.define([
       this.getRouter().initialize();
     }
   });
-});
+}
+
+);
