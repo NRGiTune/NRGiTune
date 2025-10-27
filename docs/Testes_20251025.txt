@@ -18,7 +18,7 @@
 	ERRO:	Ao redirecionar após confirmação
 
 4. Login com utilizador registado após registo
-	ERRO:	Mensagem de erro "Erro: Invalid login credentials"
+	OK:	Mensagem de erro "Erro: Invalid login credentials"
 	DEV:	Apresentar mensagem na lingua correta
 
 

@@ -329,6 +329,10 @@ document.addEventListener('DOMContentLoaded', function () {
             loginSubmitButton.disabled = false;
             loginSubmitButton.textContent = 'Entrar';
 
+            if (data?.session) {
+                localStorage.setItem("supabaseSession", JSON.stringify(data.session));
+            }
+
             if (error) {
                 loginMessage.textContent = `Erro: ${error.message}`;
                 loginMessage.style.color = 'red';

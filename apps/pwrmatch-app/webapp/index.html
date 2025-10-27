@@ -17,6 +17,22 @@
 
 	<div data-sap-ui-component data-name="simulador" data-id="container" data-settings='{"id" : "simulador"}'></div>
 
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+	<script>
+		const SUPABASE_URL = 'https://citaewfnpsfjtnuolqyo.supabase.co';
+		const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpdGFld2ZucHNmanRudW9scXlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc2MDcxMjMsImV4cCI6MjA3MzE4MzEyM30.JJ90UzR3_DLu6-YcWGZq623B-hXcPFBUrwg2gOLFOcI';
+		const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+		// Restaurar sessão do utilizador ao carregar
+		const savedSession = localStorage.getItem("supabaseSession");
+		if (savedSession) {
+			supabaseClient.auth.setSession(JSON.parse(savedSession));
+			const { data: user } = await supabaseClient.auth.getUser();
+			console.log("User autenticado:", user);
+			alert("User autenticado: " + user);
+		}
+	</script>
+
 </body>
 
 </html>
