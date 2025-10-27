@@ -16,8 +16,8 @@
 		async function checkLoggedUser() {
 			if (supabaseClient) {
 				const { data: user } = await supabaseClient.auth.getUser();
-				console.log("User autenticado:", user);
-				alert("User autenticado: " + user);
+				console.log("User autenticado:", user.user.user_metadata.full_name);
+				alert("User autenticado: " + user.user.user_metadata.full_name);
 			}
 		};
 		const SUPABASE_URL = 'https://citaewfnpsfjtnuolqyo.supabase.co';
